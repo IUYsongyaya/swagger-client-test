@@ -1,0 +1,7 @@
+时间戳:
+
+from datetime import datetime
+r = datetime.datetime.utcnow()
+datetime.datetime.timestamp(r)
+ts = 1540969074000
+print(datetime.utcfromtimestamp(ts/1000).strftime('%Y-%m-%d %H:%M:%S'))

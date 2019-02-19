@@ -1,0 +1,66 @@
+    # def update_address_balance():
+    #     rv = Recharge.find_one(
+    #         {'coin_type': coin_type, 'register': RegisterEnum.NO}
+    #     )
+    #     for each in rv:
+    #         address = each['to_address']
+    #         amount = each['amount']
+    #         res = Recharge.find_one({'coin_type': coin_type, 'address': address})
+    #         # 如果确认数够了冲了值但状态为未通知,则往账户余额表插入记录
+    #         if res:
+    #             record = {
+    #                 'address': address,
+    #                 'balance': amount,
+    #                 'coin_type': coin_type
+    #             }
+    #             ab = AccountBalance(**record)
+    #             try:
+    #                 ab.insert()
+    #             except Exception as e:
+    #                 logger.error(f'插入余额表失败{ab}')
+    #                 logger.exception(e)
+    #
+    #         # 否则更新余额
+    #         else:
+    #             res['balance'] = res['balance'] + amount
+    #             AccountBalance.replace_one({'id': res['id']}, res, for_update=True)
+###################################################bug#####################################################
+  File "/home/liheng/Workspace/venv/lib/python3.6/site-packages/source/command/main.py", line 80, in run
+    run_poll(coin_type, special_poll)
+  File "/home/liheng/Workspace/venv/lib/python3.6/site-packages/source/command/poll_assistant.py", line 36, in run_poll
+    poll_model.main()
+  File "/home/liheng/Workspace/venv/lib/python3.6/site-packages/source/poll/xlm_poll/recharge_poll.py", line 104, in main
+    check_recharge_poll.check_recharge()
+  File "/home/liheng/Workspace/venv/lib/python3.6/site-packages/source/poll/xlm_poll/recharge_poll.py", line 30, in check_recharge
+    res_list = xlm.get_operations(config.xlm_cb_address)
+  File "/home/liheng/Workspace/venv/lib/python3.6/site-packages/source/common/chain_driver/xlm.py", line 172, in get_operations
+    res = self.client.account_operations(address, params=param)
+  File "/home/liheng/Workspace/venv/lib/python3.6/site-packages/stellar_base/horizon.py", line 185, in account_operations
+    return self._get(endpoint, params=params, sse=sse, **kwargs)
+  File "/home/liheng/Workspace/venv/lib/python3.6/site-packages/stellar_base/horizon.py", line 80, in _get
+    return self._request('GET', endpoint, **kwargs)
+  File "/home/liheng/Workspace/venv/lib/python3.6/site-packages/stellar_base/horizon.py", line 69, in _request
+    return resp.json()
+  File "/home/liheng/Workspace/venv/lib/python3.6/site-packages/requests/models.py", line 897, in json
+    return complexjson.loads(self.text, **kwargs)
+  File "/usr/local/lib/python3.6/json/__init__.py", line 354, in loads
+    return _default_decoder.decode(s)
+  File "/usr/local/lib/python3.6/json/decoder.py", line 339, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/local/lib/python3.6/json/decoder.py", line 357, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+
+
+
+
+
+
+
+
+
+
+

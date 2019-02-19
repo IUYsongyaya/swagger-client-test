@@ -1,0 +1,26 @@
+pub_key = 'SBSU3BAO2ZV72VS4IOSPBD4XB6K453HSVVSK2AZB2QBSA3BV4WDBX7VY', 
+
+seed = 'GBKSNK34T7I6LZM5OZJNB22WSCEHXFTT6UUFX7ZMEZBYYFFTRYCJSWE4'
+
+export PATH=$PATH:/usr/local/go/bin
+
+export GOPATH=/usr/local/go
+
+export GOPATH=$HOME/go
+export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+source ~/.bashrc
+
+/home/liheng/go/src/github.com/stellar/go
+
+
+./horizon --db-url  postgres://localhost/postgres  --stellar-core-db-url  postgres://localhost/postgres  --stellar-core-url   http://localhost:11626
+
+
+postgresql://[user[:password]@][netloc][:port][/dbname][?param1=value1&...]
+
+DATABASE_URL              = "postgres://localhost/horizon_development?sslmode=disable"
+STELLAR_CORE_DATABASE_URL = "postgres://localhost/hayashi_development?sslmode=disable"
+STELLAR_CORE_URL          = "http://localhost:8080"
+
+
+~/Desktop/working_wallet/stellar$ stellar-core --conf ./stellar-core.cfg

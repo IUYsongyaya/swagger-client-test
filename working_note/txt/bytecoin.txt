@@ -1,0 +1,163 @@
+启动命令
+cd /home/liheng/Desktop/working_wallet/bcndev/bytecoin/bin
+
+./bytecoind --net=stage
+./walletd --wallet-file=./wallet_data --bytecoind-remote-address=127.0.0.1:8081 --net=stage 
+
+password:617094
+HTTP authorization <user>:<password>: kingli:617094
+
+
+created wallet with address created wallet with address 2982KtQqoUDhySMLCqvpbVAk5xGpYrdQeERr7HyDNFdrWQ9tHP1fmczRLDNLMdhyJKDu41Afd4wG3PHEPeBmw6YpETx7a7p
+地址和密钥管理
+**********************************************************
+create_address 将地址添加到钱包文件中
+
+curl -s -u kingli:617094 -X POST http://127.0.0.1:8070/json_rpc -H 'Content-Type: application/json-rpc' -d '{
+  "jsonrpc": "2.0",
+  "id": "0",
+  "method": "create_addresses",
+  "params": { "secret_spend_keys": [] }
+}'
+****************return****************************
+{"id":"0","jsonrpc":"2.0","result":{"addresses":["271AfCf1wUm9vzT85676Wz2EHuoPhDkXCYmnBsLzWwFMWAo4jrBYWsBhqz6MLm563UcNiKDSvkVne8vFrtLmyYGW6SW8Z6V","26Kd9wzaNUqWneU96bbFcn3WfBC7nyaqFMdMwZmQnLzEX1JRotH1ZCmhqz6MLm563UcNiKDSvkVne8vFrtLmyYGW6Rzb3Hq"],"secret_spend_keys":["2fffdff219b9ef93d3b276af7c993e9dc4f36dce0ffc5d03bf22367752497c0e","ac3029b2a3b0bf0f5002016565fc7f481b81136aa6bfc94a138f02aa6fa2d904"]}}
+
+
+**************************************************
+get_adderss  返回从钱包文件中提取的地址列表
+
+curl -s -u kingli:617094 -X POST http://127.0.0.1:8070/json_rpc -H 'Content-Type: application/json-rpc' -d '{
+  "jsonrpc": "2.0",
+  "id": "0",
+  "method": "get_addresses",
+  "params": {}
+}'
+
+**************************************************
+get_view_key_pair  返回地址共享的视图密钥对
+
+curl -s -u kingli:617094 -X POST http://127.0.0.1:8070/json_rpc -H 'Content-Type: application/json-rpc' -d '{
+  "jsonrpc": "2.0",
+  "id": "0",
+  "method": "get_view_key_pair",
+  "params": {}
+}'
+
+***************************************************
+交易历史和余额查询                                 *  
+***************************************************
+get_status 获取有关walletd和bytecoind状态的状态
+
+curl -s -u kingli:617094 -X POST http://127.0.0.1:8070/json_rpc -H 'Content-Type: application/json-rpc' -d '{
+  "jsonrpc": "2.0",
+  "id": "0",
+  "method": "get_status",
+  "params": {}
+}'
+
+*****************************return****************
+{"id":"0","jsonrpc":"2.0","result":{"top_block_hash":"adf2891cea92c4879b1952b8cab31a1dd20b09ed056fe6989e33c648495a6bfd","transaction_pool_version":3,"outgoing_peer_count":8,"incoming_peer_count":0,"lower_level_error":"","top_block_height":1655039,"top_block_difficulty":71131021191,"top_block_cumulative_difficulty":6083872048207083,"top_block_timestamp":1541574060,"top_block_timestamp_median":1541567691,"recommended_fee_per_byte":100,"next_block_effective_median_size":100000,"top_known_block_height":1655039}}
+
+*********************************************
+get_balance  获取账户余额
+
+curl -s -u kingli:617094 -X POST http://127.0.0.1:8070/json_rpc -H 'Content-Type: application/json-rpc' -d '{
+  "jsonrpc": "2.0",
+  "id": "1",
+  "method": "get_balance",
+  "params": {"address":"271AfCf1wUm9vzT85676Wz2EHuoPhDkXCYmnBsLzWwFMWAo4jrBYWsBhqz6MLm563UcNiKDSvkVne8vFrtLmyYGW6SW8Z6V"}}' | jq
+
+*********************return:****************
+{"id":"0","jsonrpc":"2.0","result":{"spendable":0,"spendable_dust":0,"locked_or_unconfirmed":0,"spendable_outputs":0,"spendable_dust_outputs":0,"locked_or_unconfirmed_outputs":0}}
+
+*************************************************
+get_transaction
+
+curl -s -u kingli:617094 -X POST http://127.0.0.1:8070/json_rpc -H 'Content-Type: application/json-rpc' -d '{
+  "jsonrpc": "2.0",
+  "id": "0",
+  "method": "get_balance",
+  "params": { "address": "271AfCf1wUm9vzT85676Wz2EHuoPhDkXCYmnBsLzWwFMWAo4jrBYWsBhqz6MLm563UcNiKDSvkVne8vFrtLmyYGW6SW8Z6V" }
+}' | jq 
+
+**********************return**********************
+{"id":"0","jsonrpc":"2.0","result":
+{"transaction":
+{"unlock_block_or_timestamp":0,"unlock_time":0,"amount":0,"fee":0,"public_key":"","payment_id":"","anonymity":0,"extra":"","hash":"","coinbase":false,"block_height":0,"block_hash":"","timestamp":0,"size":0,"binary_size":0}
+}
+} 
+
+
+************************************************
+create_transaction
+
+curl -s -u kingli:617094 -X POST http://127.0.0.1:8070/json_rpc -H 'Content-Type: application/json-rpc' -d '{
+  "jsonrpc": "2.0",
+  "id": "0",
+  "method": "create_transaction",
+  "params": {
+    "transaction": {
+      "anonymity": 0,
+      "payment_id": "",
+      "transfers": [
+        {
+          "address": "26Kd9wzaNUqWneU96bbFcn3WfBC7nyaqFMdMwZmQnLzEX1JRotH1ZCmhqz6MLm563UcNiKDSvkVne8vFrtLmyYGW6Rzb3Hq",
+          "amount": 1
+        }
+      ]
+    },
+    "spend_addresses": [
+      "271AfCf1wUm9vzT85676Wz2EHuoPhDkXCYmnBsLzWwFMWAo4jrBYWsBhqz6MLm563UcNiKDSvkVne8vFrtLmyYGW6SW8Z6V"
+    ],
+    "change_address": "26Kd9wzaNUqWneU96bbFcn3WfBC7nyaqFMdMwZmQnLzEX1JRotH1ZCmhqz6MLm563UcNiKDSvkVne8vFrtLmyYGW6Rzb3Hq",
+    "optimization": "minimal"
+  }
+}'
+
+
+****************************************************************
+get_status
+
+curl -s -u kingli:617094 -X POST http://127.0.0.1:8070/json_rpc -H 'Content-Type: application/json-rpc' -d '{
+  "jsonrpc": "2.0",
+  "id": "0",
+  "method": "get_status",
+  "params": {}
+}'
+
+*************************************return*********************
+{"id":"0","jsonrpc":"2.0","result":{"top_block_hash":"f9fe811b88f3f497454f7e2f1752f15c6ef9b4797a24086bb1a29caf39353e49","transaction_pool_version":8,"outgoing_peer_count":8,"incoming_peer_count":0,"lower_level_error":"","top_block_height":1655131,"top_block_difficulty":68450846538,"top_block_cumulative_difficulty":6090378522875054,"top_block_timestamp":1541588212,"top_block_timestamp_median":1541584312,"recommended_fee_per_byte":100,"next_block_effective_median_size":100000,"top_known_block_height":1655131}}
+
+
+
+****************************************************************
+get_transfers
+curl -s -u kingli:617094 -X POST http://127.0.0.1:8070/json_rpc -H 'Content-Type: application/json-rpc' -d '{
+  "jsonrpc": "2.0",
+  "id": "0",
+  "method": "get_transfers",
+  "params": {
+    "address": "271AfCf1wUm9vzT85676Wz2EHuoPhDkXCYmnBsLzWwFMWAo4jrBYWsBhqz6MLm563UcNiKDSvkVne8vFrtLmyYGW6SW8Z6V"
+  }
+}' | jq
+
+
+
+
+
+85.25.201.95:8080,85.25.196.145:8080,85.25.196.146:8080,85.25.196.144:8080,5.199.168.138:8080,62.75.236.152:8080，85.25.194.245:8080,95.211.224.160:8080,144.76.200.44:8080,45.76.29.96:8080,45.32.156.183:8080
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,250 @@
+protoc --python_out=. api/api.proto  #protoc 编译代码
+pip install protobuf 
+./protoc --version 查看但前版本
+pip uninstall protobuf 卸载软件
+unzip protoc-3.6.1-linux-x86_64.zip -d protoc3  #unzip
+
+sudo cp protoc3/bin/* /usr/local/bin/   #usr目录下的命令是针对全局的,所以要移到这里的bin目录下
+md5sum
+
+java -jar FullNode.jar -c config.conf
+java -jar SolidityNode.jar -c config.conf
+
+ln -s /usr/local/bin/docker-compsoe /use/bin/docker-compose  local没有权限设定,bin下面会有权限问题
+sudo dc up influxdb  启动db服务
+
+export PYTHONPATH=$PYTHONPATH:/home/liheng/Desktop/working_wallet/protocol/api 使用ipython的时候配置环境变量告诉系统这个位置
+
+git config -l 查看git配置信息
+git config --unset core.edit　删除配置信息
+git config --global alias.st status　配置git全局快捷键
+git config --global core.editor vim　配置git编辑模式
+
+systemctl restart docker　重启docker
+docker ps 查看docker进程
+一般改了配置文件，一定要重启相关应用
+
+安装python3
+cd /Python3   ./configure --with-ssl   sudo make   sudo make install
+
+查看docker状态
+systemctl status docker
+
+加入docker组
+sudo usermod -aG docker liheng
+
+删除虚拟环境
+cd Workspace/   
+rm -rf venv/
+创建虚拟环境
+python3 -m venv venv
+#进入虚拟环境
+source ~/Workspace/venv/bin/activate
+安装多个包
+pip install -r requirements.txt
+
+mysql配置文件目录
+/etc/mysql/mysql.conf.d
+ip:192.168.83.177:3008
+passw:lh123456
+
+mysql log目录
+error-log   /var/log/mysql/error.log
+general-log /var/log/mysql/mysql.log
+# 测试链接
+mysql -uroot --port 3008 -h 127.0.0.1 -p liheng
+
+# 1先打包
+python setup.py sdist --formats=zip
+# 2安装
+pip install dist/wallet-0.0.1.zip
+
+打断点:
+import pdb;pdb.set_trace()
+
+# 生成地址
+wallet_cli  address create -ct xlm -c 100
+
+# 设置代理
+vim ~/.bashrc
+export http_proxy=squid01.kinmall.lan:3128
+export https_proxy=squid01.kinmall.lan:3128
+
+# 取消代理
+unset http_proxy 
+unset https_proxy
+# 查看代理配置
+set| grep http
+# 查看代理配置文件
+vim ~/.bashrc
+# 更新资源
+sudo apt-get update
+
+# 远程链接
+ping 192.168.83.41
+
+# scp传输文件
+scp pyclear@192.168.83.41:/home/pyclear/mysql.tar .
+
+# 导入镜像,反之则倒出
+# docker load < mysql.tar
+
+# 安装明细
+pip install -v pytest
+
+# 查看具体文档信息
+tail -f app/log/record_log
+# 查看已开启的docker镜像
+docker ps -al
+# docker 启动镜像
+vim run.dv
+
+# -a查看所有容器,不加是查看在运行的容器
+docker ps -a |grep wallet_db
+
+# 重启容器
+docker wallet_db restart
+# 运行
+docker exec -it wallet_db bash
+
+# 关于log
+logger.info(f'start {start}xxxxxxxxxxxxxxxxxxxxxxxxxx {stop}')
+click.echo(f"批量创建{coin_type}币种的{count}地址已创建完毕")
+
+
+# 数据库配置路径
+/home/liheng/Desktop/working_test/java-crush-test2.0/swagger_client/main/configuration.py
+"http://192.168.83.88:8080"
+主平台8080 后台8081 租户平台8010 项目方 8082
+# self.host = "http://192.168.83.88:8080" # 主平台
+#self.host = "http://192.168.83.88:8010"  # 租户
+# self.host = "http://192.168.83.88:8082" # 项目方
+# self.host = "http://192.168.83.88:8081" # 后台
+
+# swagger_client日志路径及配置文件
+/home/liheng/Desktop/working_test/java-crush-test2.0/swagger_client/main/rest.py
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.WARNING)
+logger.addHandler(logging.StreamHandler())
+
+# 229
+# log response body
+logger.info("response body: %s", r.data)
+
+# 227行
+# 日志打印request参数
+logger.error(f"method: <{method}>, url: <{url}>, query_params: <{query_params}>, headers: <{headers}>, body: <{body}>, {post_params}")
+            raise ApiException(http_resp=r)
+
+
+# git 相关操作
+ 670  git commit 'test quotation'
+  671  git commit -m 'test quotation'
+  672  git pull
+  673  git push
+  674  git pull --help
+  675  git st
+  676  git commit -m 'update'
+  677  git br
+  678  git branch
+  679  git log
+  680  clea
+  681  git status
+  682  cd ..
+  683  ls
+  684  cd ..
+  685  ls
+  686  git status
+  687  cd java-crush-test2.0/
+  688  ls
+  689  git status
+  690  git stash --help
+  691  git stash list
+  692  git stash --help
+  693  git stash show
+  694  git stash --help
+  695  git stash create 'pull_store'
+  696  git stash --help
+  697  git status
+  698  git stash save 'stash store'
+  699  git status
+  700  git log
+  701  git checkout master
+  702  git sttaus
+  703  git status
+  704  git pull origin master
+  705  clear
+  706  git status
+  707  git log
+  708  git pull
+  709  git log
+  710  git stash list
+  711  git stash pop
+  712  history
+  713  git st
+  714  git commit -m 'update test'
+  715  git add test/
+  716  git status
+  717  git diff common/utils.py
+  718  git st
+  719  git commit -m 'update test'
+  720  git pull
+  721  git push
+  722  git st
+  723  history
+
+
+
+
+
+IN_REVIEW(0),//审核关闭中
+RUNNING(1),//运行中
+WAIT_CLOSE(2),//待关闭
+WAIT_RENEW(3),//待续费
+CLOSED_IN(4);//关闭中
+
+bug格式:
+平台名称：tenant 
+接口名称：/quotations/project 项目行情信息 
+问题描述：收藏项目或者交易所后，在收藏列表访问：/quotations/project项目行情信息，接口返回的字段全是null值。 
+   
+传参：{projectIds = "22,21,20";} 
+接口返回数据： result = ( 
+                { 
+            coinId = "<null>"; 
+            coinLogo = "<null>"; 
+            fullName = "<null>"; 
+            id = "<null>"; 
+            issuedVolume = "<null>"; 
+            listedExchange = "<null>"; 
+            shortName = "<null>"; 
+            volume = "<null>"; 
+        }, 
+                { 
+            coinId = "<null>"; 
+            coinLogo = "<null>"; 
+            fullName = "<null>"; 
+            id = "<null>"; 
+            issuedVolume = "<null>"; 
+            listedExchange = "<null>"; 
+            shortName = "<null>"; 
+            volume = "<null>"; 
+        }, 
+                { 
+            coinId = "<null>"; 
+            coinLogo = "<null>"; 
+            fullName = "<null>"; 
+            id = "<null>"; 
+            issuedVolume = "<null>"; 
+            listedExchange = "<null>"; 
+            shortName = "<null>"; 
+            volume = "<null>"; 
+        } 
+    ); 
+    statusCode = 200; 
+}
+
+
+
+　

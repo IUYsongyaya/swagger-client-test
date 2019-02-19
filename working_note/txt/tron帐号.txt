@@ -1,0 +1,55 @@
+账户2余额:16.9
+{"privateKey":"713ffa7a1e825a65d1a202e0939dc161465ba3149e8f1bbcaf190692b90d034b",
+"address":"TDCCjrC66CqCKvz55FUNa4r8x7xjrnopbv",
+"hexAddress":"41235d90e1d0a0ccfa268781f464e0252ba6112993"}
+
+账户1余额:1
+
+{"privateKey":"b45b4fe41a17c509393bc7a67a62f1404cc1ae91dd2028c5cf1cf56a22ee7115",
+"address":"TTt6dZJjmk2gjCK5h739Pxjuq6gPMv7zjR",
+"hexAddress":"41c47addc5b5dada1476a62d59e7901644d9ce20a1"}
+
+***********wallet/createtransaction *******************
+创建一个转账的Transaction，如果转账的to地址不存在，则在区块链上创建该账号
+curl -X POST  http://127.0.0.1:8090/wallet/createtransaction -d '{"to_address": "41c47addc5b5dada1476a62d59e7901644d9ce20a1", "owner_address": "41235d90e1d0a0ccfa268781f464e0252ba6112993", "amount": 1 }'
+
+*******************return************************
+{"txID":"f8f55bd5c8214605dafc4429aed253ea817c452ec0602f406ccbfefaa12a4d2b","raw_data":{"contract":[{"parameter":{"value":{"amount":1,"owner_address":"41235d90e1d0a0ccfa268781f464e0252ba6112993","to_address":"41c47addc5b5dada1476a62d59e7901644d9ce20a1"},"type_url":"type.googleapis.com/protocol.TransferContract"},"type":"TransferContract"}],"ref_block_bytes":"095a","ref_block_hash":"2746d8de9865ac85","expiration":1540969074000,"timestamp":1540969015455}}
+
+**************/wallet/gettransactionsign******************
+对交易签名
+curl -X POST  http://127.0.0.1:8090/wallet/gettransactionsign -d '{"transaction" : {"txID":"f8f55bd5c8214605dafc4429aed253ea817c452ec0602f406ccbfefaa12a4d2b","raw_data":{"contract":[{"parameter":{"value":{"amount":1,"owner_address":"41235d90e1d0a0ccfa268781f464e0252ba6112993","to_address":"41c47addc5b5dada1476a62d59e7901644d9ce20a1"},"type_url":"type.googleapis.com/protocol.TransferContract"},"type":"TransferContract"}],"ref_block_bytes":"095a","ref_block_hash":"2746d8de9865ac85","expiration":1540969074000,"timestamp":1540969015455}}, "privateKey": "713ffa7a1e825a65d1a202e0939dc161465ba3149e8f1bbcaf190692b90d034b"}'
+
+*************return**************************
+{"signature":["c11bae894fe848b6eaa903b59a60197bbf1a1c26b9fdd184032563180128c06f0c2e1fbb7a22024af9a249eef4bc0181baf12993f44e97b100a0b0ff90390fe800"],"txID":"f8f55bd5c8214605dafc4429aed253ea817c452ec0602f406ccbfefaa12a4d2b","raw_data":{"contract":[{"parameter":{"value":{"amount":1,"owner_address":"41235d90e1d0a0ccfa268781f464e0252ba6112993","to_address":"41c47addc5b5dada1476a62d59e7901644d9ce20a1"},"type_url":"type.googleapis.com/protocol.TransferContract"},"type":"TransferContract"}],"ref_block_bytes":"095a","ref_block_hash":"2746d8de9865ac85","expiration":1540969074000,"timestamp":1540969015455}}
+
+***********wallet/broadcasttransaction***************
+对签名后的transaction进行广播
+curl -X POST  http://127.0.0.1:8090/wallet/broadcasttransaction -d '{"signature":["c11bae894fe848b6eaa903b59a60197bbf1a1c26b9fdd184032563180128c06f0c2e1fbb7a22024af9a249eef4bc0181baf12993f44e97b100a0b0ff90390fe800"],"txID":"f8f55bd5c8214605dafc4429aed253ea817c452ec0602f406ccbfefaa12a4d2b","raw_data":{"contract":[{"parameter":{"value":{"amount":1,"owner_address":"41235d90e1d0a0ccfa268781f464e0252ba6112993","to_address":"41c47addc5b5dada1476a62d59e7901644d9ce20a1"},"type_url":"type.googleapis.com/protocol.TransferContract"},"type":"TransferContract"}],"ref_block_bytes":"095a","ref_block_hash":"2746d8de9865ac85","expiration":1540969074000,"timestamp":1540969015455}}'
+
+*************return**************************
+{"code": "TRANSACTION_EXPIRATION_ERROR","message": "7472616e73616374696f6e2065787069726564"}
+
+*************wallet/getaccount*******************************
+查询一个账号的信息
+curl -X POST  http://127.0.0.1:8090/wallet/getaccount -d '{"address": "41235d90e1d0a0ccfa268781f464e0252ba6112993"}'
+
+***************return**********************
+{"account_name": "7374757069645f6b6964","address": "41235d90e1d0a0ccfa268781f464e0252ba6112993","balance": 16900000,"asset": [{"key": "HuobiToken","value": 1},{"key": "IPFS","value": 1},{"key": "NBACoin","value": 1}],"create_time": 1540556346000,"latest_opration_time": 1540957890000,"free_asset_net_usage": [{"key": "HuobiToken","value": 0},{"key": "IPFS","value": 0},{"key": "NBACoin","value": 0}],"latest_consume_free_time": 1540785954000,"account_resource": {}}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

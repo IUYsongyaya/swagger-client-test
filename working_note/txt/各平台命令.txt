@@ -1,0 +1,21 @@
+后台登录要加上急验的参数:
+{
+"account": "admin",
+"password": "Lx123456",
+"challenge": "123qwer234",
+"seccode": "123qwer234",
+"validate": "123qwer234"
+}
+
+"baseToken": "eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyVHlwZSI6IkxPR0lOIiwiZXhwIjoxNTQ0MjU2NzA1LCJ1c2VySWQiOjY5LCJ0b2tlbiI6ImEwNjY3YWJjLWE2ZjAtNGQxYy04OTA5LTdjZDU5ZmUyNzQ0ZCJ9.BRf1x5QLT1KN_izpl55OaLqOd6LRrjaRVNOfBc5zrP3GEebm0GbNU6DO6jxea707WT6-FpGbSG5d1K_x-BWXTA",
+
+# 关于市场
+市场就是交易币对,前后币对,后面为买方币种,前面为卖方币种,如果是下买单的话要先冲 / 后面的,如果是卖方的话要先冲前面的,拿前面的去买后面的
+
+gitlab:120.78.219.118:8888
+confluence:120.78.219.118:8090
+jira:120.78.219.118:8080
+
+
+origin	git@gitlab.kinmall.lan:crush-backend-test/java-crush-test2.0.git (fetch)
+origin	git@gitlab.kinmall.lan:crush-backend-test/java-crush-test2.0.git (push)
