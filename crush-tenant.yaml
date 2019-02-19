@@ -1,0 +1,6366 @@
+paths:
+  /accounts/invites:
+    get:
+      tags:
+      - account
+      summary: 邀请记录
+      description: 邀请记录
+      parameters:
+      - in: query
+        name: page
+        default: 1
+        description: 页码
+        type: integer
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/GetInvitesListResponse'
+      security:
+      - api_key: []
+  /accounts/init-captcha:
+    get:
+      tags:
+      - verification
+      summary: 极验初始化
+      description: 极验初始化
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/initCaptchaResponse'
+        400:
+          description: 极验初始化失败
+  /accounts/init-googleauth:
+    post:
+      tags:
+      - verification
+      summary: 谷歌验证初始化
+      description: 谷歌验证初始化
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/initGoogleResponse'
+        400:
+          description: 谷歌验证初始化失败
+  /accounts/verify:
+    post:
+      tags:
+      - verification
+      summary: 验证码验证
+      description: 验证码验证（绑定、修改、修改资产，支付，修改密码）
+      parameters:
+      - in: body
+        name: verifyInfo
+        required: true
+        schema:
+          required:
+          - challenge
+          - seccode
+          - validate
+          - account
+          - code
+          - type
+          properties:
+            challenge:
+              type: string
+              description: 极验服务端需要用到的参数
+              example: 048ebbe51f829995db76ac4b81546403
+            seccode:
+              type: string
+              description: 极验服务端需要用到的参数
+              example: 048ebbe51f829995db76ac4b81546403
+            validate:
+              type: string
+              description: 极验服务端需要用到的参数
+              example: 'true'
+            account:
+              type: string
+              description: 账号，邮箱不超过64个字符，手机不超过16
+              example: mailto:hello.world@email.com, number:18645511111 , google:XXXXXX
+              minLength: 16
+              maxLength: 64
+            code:
+              type: string
+              description: 默认验证码若存在两个code，此为关闭手机的谷歌验证或者邮件验证
+              example: '666666'
+              minLength: 6
+              maxLength: 6
+            secondCode:
+              description: 如关闭手机接口此为关闭手机的验证码
+              type: string
+              example: Ls1w1w1
+              maxLength: 200
+            type:
+              type: string
+              description: 验证码类型,根据类型调用不同的短信模板
+              enum:
+              - edit_login_pwd
+              - edit_asset_pwd
+              - bind_phone
+              - alter_phone
+              - alter_google
+              - withdraw
+              - bind_google
+              - pay
+              - close_market
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/verifyRequest'
+        400:
+          description: 验证失败
+        403:
+          description: 未授权
+          schema:
+            $ref: '#/definitions/verifyResponse'
+      security:
+      - api_key: []
+  /accounts/verifyLoginOrPassword:
+    post:
+      tags:
+      - verification
+      summary: 验证码验证
+      description: 验证码验证（登录和忘记密码用）
+      parameters:
+      - in: body
+        name: verifyInfo
+        required: true
+        schema:
+          required:
+          - account
+          - code
+          - type
+          - token
+          properties:
+            challenge:
+              type: string
+              description: 极验服务端需要用到的参数
+              example: 048ebbe51f829995db76ac4b81546403
+            seccode:
+              type: string
+              description: 极验服务端需要用到的参数
+              example: 048ebbe51f829995db76ac4b81546403
+            validate:
+              type: string
+              description: 极验服务端需要用到的参数
+              example: 'true'
+            account:
+              type: string
+              description: 账号，邮箱不超过64个字符，手机不超过16
+              example: mailto:hello.world@email.com, number:18645511111 , google:XXXXXX
+              minLength: 16
+              maxLength: 64
+            token:
+              description: 登录返回的toekn或忘记密码
+              type: string
+              example: Ls1w1w1
+              maxLength: 256
+            password:
+              description: secondToken传入新密码
+              type: string
+              example: ppsasas
+              minLength: 8
+              maxLength: 16
+            code:
+              type: string
+              description: 验证码
+              example: '666666'
+              minLength: 6
+              maxLength: 6
+            type:
+              type: string
+              description: 验证码类型,根据类型调用不同的短信模板
+              enum:
+              - login
+              - forget_pwd
+              - edit_login_pwd
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/verifyRequest'
+        400:
+          description: 验证失败
+        401:
+          description: 忘记密码二次验证
+          schema:
+            $ref: '#/definitions/verifyResponse'
+  /accounts/login:
+    post:
+      tags:
+      - account
+      summary: 账户登录
+      description: 账户登录
+      parameters:
+      - in: body
+        name: body
+        description: 账户登录
+        required: true
+        schema:
+          $ref: '#/definitions/PostLoginRequest'
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/PostLoginResponse'
+          description: OK
+        '401':
+          description: 需要更多认证
+          schema:
+            $ref: '#/definitions/PostUnauthorizedAccountResponse'
+        '400':
+          description: message:"账号或密码不存在"
+        '500':
+          description: 服务器内部错误
+  /accounts/logout:
+    post:
+      tags:
+      - account
+      summary: 账户注销
+      description: 账户注销
+      responses:
+        '200':
+          description: OK
+        '403':
+          description: 注销失败已经注销过了
+        '500':
+          description: 服务器内部错误
+      security:
+      - api_key: []
+  /accounts/register:
+    post:
+      tags:
+      - account
+      summary: 注册用户
+      description: 注册账户（密码有强度不够不许注册）
+      operationId: createUser
+      parameters:
+      - in: body
+        name: body
+        description: 请求新建用户
+        required: true
+        schema:
+          $ref: '#/definitions/PostRegisterRequest'
+      responses:
+        '200':
+          description: ok
+        '400':
+          description: 错误请求重复提交
+        '401':
+          schema:
+            $ref: '#/definitions/PostUnauthorizedResponse'
+          description: 需要更多认证
+        '500':
+          description: 服务器内部错误
+  /accounts/platform-register:
+    post:
+      tags:
+      - account
+      summary: 平台用户注册如项目方id不存在提示用户需授权调用这个接口（除了主平台）
+      description: 注册账户（密码有强度不够不许注册）
+      operationId: createPlatform
+      parameters:
+      - in: body
+        name: body
+        description: 授权登录
+        schema:
+          $ref: '#/definitions/PostPlatFormRegisterRequest'
+      responses:
+        '200':
+          description: ok
+        '403':
+          description: 身份过期
+        '400':
+          description: 已注册过
+        '500':
+          description: 服务器内部错误
+  /accounts/account-info:
+    get:
+      tags:
+      - account
+      summary: 获取账户状态信息
+      description: 获取账户状态信息
+      responses:
+        200:
+          schema:
+            $ref: '#/definitions/GetAccountInfoResponse'
+          description: OK
+        403:
+          description: 身份过期
+        500:
+          description: 服务器内部错误
+      security:
+      - api_key: []
+  /accounts/send-verification-code:
+    post:
+      tags:
+      - account
+      summary: 发送验证码
+      description: 绑定手机号码
+      parameters:
+      - in: body
+        name: body
+        description: 请求手机号码
+        required: true
+        schema:
+          $ref: '#/definitions/PostSendverificationCodeRequest'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PostCodeResponse'
+        '400':
+          description: 发送失败
+        '500':
+          description: 服务器内部错误
+  /accounts/bind-phone:
+    post:
+      tags:
+      - account
+      summary: 绑定手机号码
+      description: 绑定手机号码
+      parameters:
+      - in: body
+        name: body
+        description: 请求手机号码
+        required: true
+        schema:
+          $ref: '#/definitions/PostBindPhoneRequest'
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: 绑定手机号码失败重复提交
+        403:
+          description: 身份无效
+        500:
+          description: 服务器内部错误
+      security:
+      - api_key: []
+  /accounts/alter-phone:
+    post:
+      tags:
+      - account
+      summary: 修改手机号码
+      description: 修改手机号码
+      parameters:
+      - in: body
+        name: body
+        description: 请求手机号码
+        required: true
+        schema:
+          $ref: '#/definitions/PostEditPhoneRequest'
+      responses:
+        200:
+          description: OK
+        400:
+          description: 修改手机号码码失败重复提交
+        401:
+          schema:
+            $ref: '#/definitions/PostbindPhoneUnauthorizedResponse'
+          description: 需要继续验证
+        403:
+          description: 身份无效
+        500:
+          description: 服务器内部错误
+      security:
+      - api_key: []
+  /accounts/set-password:
+    post:
+      tags:
+      - account
+      summary: 修改登录密码
+      description: 修改登录密码（修改后其他平台的要同步注销掉登录）
+      parameters:
+      - in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/PostSetPasswordRequest'
+      responses:
+        200:
+          description: OK
+        400:
+          description: message:"密码错误"
+        403:
+          description: 身份过期
+        500:
+          description: 服务器内部错误
+      security:
+      - api_key: []
+  /accounts/reset-password:
+    post:
+      tags:
+      - account
+      summary: 重置密码
+      description: 重置密码信息
+      parameters:
+      - name: body
+        in: body
+        description: 重置密码信息二次校验相关信息
+        required: true
+        schema:
+          $ref: '#/definitions/PostResetPasswordRequest'
+      responses:
+        201:
+          description: OK
+        400:
+          description: message:"账号不存在"
+        401:
+          schema:
+            $ref: '#/definitions/PostResetPhoneUnauthorizedResponse'
+          description: 二次验证信息
+        403:
+          description: 身份过期
+        500:
+          description: 服务器内部错误
+  /accounts/certifications/individual:
+    post:
+      tags:
+      - account
+      summary: 申请个人实名认证
+      description: 申请个人实名认证
+      operationId: requestIndividualCertification
+      parameters:
+      - in: body
+        name: body
+        description: 申请个人实名认证的请求
+        required: true
+        schema:
+          $ref: '#/definitions/PostIndividualCertificationRequest'
+      responses:
+        200:
+          description: OK
+        400:
+          description: message:"提交信息不完整"
+        403:
+          description: 禁止访问
+        500:
+          description: 服务器内部错误
+      security:
+      - api_key: []
+  /accounts/certifications/company:
+    post:
+      tags:
+      - account
+      summary: 申请企业实名认证
+      description: 申请企业实名认证
+      operationId: requestEnterpriseCertification
+      parameters:
+      - in: body
+        name: body
+        description: 申请企业实名认证的请求
+        required: true
+        schema:
+          $ref: '#/definitions/PostEnterpriseCertificationRequest'
+      responses:
+        200:
+          description: OK
+        400:
+          description: 创建失败
+        403:
+          description: 参数不对，身份过期
+        500:
+          description: 服务器内部错误
+      security:
+      - api_key: []
+  /accounts/company:
+    get:
+      tags:
+      - account
+      summary: 查看账户企业业申请信息
+      description: 查看账户企业申请信息
+      responses:
+        200:
+          schema:
+            $ref: '#/definitions/GetEnterpriseResponse'
+          description: OK
+        '403':
+          description: 参数不对，身份过期
+        404:
+          description: 账号不存在
+      security:
+      - api_key: []
+  /accounts/individual:
+    get:
+      tags:
+      - account
+      summary: 查看账户个人申请信息
+      description: 查看账户个人申请信息
+      responses:
+        200:
+          schema:
+            $ref: '#/definitions/GetPersonalResponse'
+          description: OK
+        '403':
+          description: 参数不对，身份过期
+        404:
+          description: 账号不存在
+      security:
+      - api_key: []
+  /accounts/bind-google-authenticator:
+    post:
+      tags:
+      - account
+      summary: 绑定谷歌验证器
+      description: 绑定谷歌验证器
+      parameters:
+      - in: body
+        name: word
+        required: true
+        schema:
+          $ref: '#/definitions/PostBindGoogleAuthenticatorRequest'
+      responses:
+        200:
+          description: OK
+        400:
+          description: 绑定谷歌验证失败
+        '403':
+          description: 身份过期
+        '500':
+          description: 服务器内部错误
+      security:
+      - api_key: []
+  /accounts/alter-google-authenticator:
+    post:
+      tags:
+      - account
+      summary: 修改谷歌验证器
+      description: 修改谷歌验证器
+      parameters:
+      - in: body
+        name: word
+        required: true
+        schema:
+          $ref: '#/definitions/PostBindGoogleAuthenticatorRequest'
+      responses:
+        200:
+          description: OK
+        400:
+          description: 绑定谷歌验证失败
+        '403':
+          description: 身份过期
+        '401':
+          schema:
+            $ref: '#/definitions/PostBaseTokenUnauthorizedResponse'
+          description: 验证信息
+        '500':
+          description: 服务器内部错误
+      security:
+      - api_key: []
+  /accounts/open-google-authenticator:
+    post:
+      tags:
+      - account
+      summary: 开启谷歌验证
+      description: 开启谷歌验证
+      parameters:
+      - in: body
+        name: word
+        required: false
+        schema:
+          $ref: '#/definitions/PostOpenGoogleAuthenticatorRequest'
+      responses:
+        200:
+          description: OK
+        400:
+          description: '{message：开启谷歌验证失败}'
+        '500':
+          description: 服务器内部错误
+      security:
+      - api_key: []
+  /accounts/open-phone-authenticator:
+    post:
+      tags:
+      - account
+      summary: 开启电话验证
+      description: 开启电话验证
+      parameters:
+      - in: body
+        name: word
+        required: false
+        schema:
+          $ref: '#/definitions/PostOpenPhoneAuthenticatorRequest'
+      responses:
+        200:
+          description: OK
+        400:
+          description: '{message：开启电话验证失败}'
+        '500':
+          description: 服务器内部错误
+      security:
+      - api_key: []
+  /accounts/close-google-authenticator:
+    post:
+      tags:
+      - account
+      summary: 关闭谷歌验证
+      description: 关闭谷歌验证
+      parameters:
+      - in: body
+        name: word
+        required: false
+        schema:
+          $ref: '#/definitions/PostCloseGoogleAuthenticatorRequest'
+      responses:
+        200:
+          description: OK
+        400:
+          description: '{message：关闭谷歌验证失败}'
+        '500':
+          description: 服务器内部错误
+      security:
+      - api_key: []
+  /accounts/close-phone-authenticator:
+    post:
+      tags:
+      - account
+      summary: 关闭电话验证
+      description: 关闭电话验证
+      parameters:
+      - in: body
+        name: word
+        required: false
+        schema:
+          $ref: '#/definitions/PostClosePhoneAuthenticatorRequest'
+      responses:
+        200:
+          description: OK
+        400:
+          description: '{message：关闭谷歌验证失败}'
+        '500':
+          description: 服务器内部错误
+      security:
+      - api_key: []
+  /accounts/get-bind-status:
+    get:
+      tags:
+      - account
+      summary: 查看开启的验证方式（401弹出对话框相关）
+      description: 查看验证方式
+      responses:
+        200:
+          schema:
+            $ref: '#/definitions/GetbindStatuesRequest'
+          description: OK
+        400:
+          description: message：验证失败
+        '500':
+          description: 服务器内部错误
+      security:
+      - api_key: []
+  /accounts/get-login-history:
+    get:
+      tags:
+      - account
+      summary: 查看登录历史记录（分页每页5条）
+      description: 查看登录历史记录
+      parameters:
+      - in: query
+        name: page
+        description: 页数从1开始
+        type: string
+        default: 1
+        required: false
+      responses:
+        200:
+          schema:
+            $ref: '#/definitions/PostloginHistoryRespones'
+          description: OK
+        400:
+          description: message：验证失败
+        '500':
+          description: 服务器内部错误
+      security:
+      - api_key: []
+  /asset-mgmt/assets:
+    get:
+      tags:
+      - asset-management
+      summary: 获取账户资产
+      description: 获取账户资产
+      responses:
+        200:
+          schema:
+            $ref: '#/definitions/GetAssetsResponse'
+          description: OK
+        404:
+          description: 发送失败
+      security:
+      - api_key: []
+  /asset-mgmt/assets/{coinId}:
+    get:
+      tags:
+      - asset-management
+      summary: 获取单个币种资产
+      description: 获取单个币种资产
+      parameters:
+      - in: path
+        name: coinId
+        description: 币种Id
+        type: string
+        required: true
+      responses:
+        200:
+          schema:
+            $ref: '#/definitions/GetAssetByCoinIdResponse'
+          description: OK
+      security:
+      - api_key: []
+  /asset-mgmt/balance/{coinId}:
+    get:
+      tags:
+      - asset-management
+      summary: 获取单个币种余额
+      description: 获取单个币种余额
+      parameters:
+      - in: path
+        name: coinId
+        description: 币种Id
+        type: string
+        required: true
+      responses:
+        200:
+          schema:
+            $ref: '#/definitions/GetBalanceByCoinIdResponse'
+          description: OK
+      security:
+      - api_key: []
+  /asset-mgmt/asset-password:
+    get:
+      tags:
+      - asset-management
+      summary: 查询是否设置资金密码
+      description: 查询是否设置资金密码
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/GetAssetPasswordResponse'
+          description: OK
+      security:
+      - api_key: []
+    put:
+      tags:
+      - asset-management
+      summary: 修改资金密码
+      description: 修改资金密码
+      parameters:
+      - in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/PutAssetsPasswordRequest'
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: 重复提交
+        '403':
+          description: 身份过期
+        '401':
+          schema:
+            $ref: '#/definitions/PostUnauthorizedResponse'
+          description: 验证信息
+        '500':
+          description: 服务器内部错误
+      security:
+      - api_key: []
+  /asset-mgmt/asset-password/check:
+    post:
+      tags:
+      - asset-management
+      summary: 资金密码校验
+      description: 资金密码校验
+      parameters:
+      - in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/PostAssetsPasswordCheckRequest'
+      responses:
+        200:
+          schema:
+            $ref: '#/definitions/PostAssetsPasswordCheckResponse'
+          description: success
+        400:
+          description: 发送失败
+      security:
+      - api_key: []
+  /asset-mgmt/journals:
+    get:
+      tags:
+      - asset-management
+      summary: 获取收支记录
+      description: 获取收支记录
+      parameters:
+      - in: query
+        name: page
+        default: 1
+        description: 页码
+        type: integer
+      - in: query
+        name: pageSize
+        description: 每页条数
+        required: false
+        type: integer
+        enum:
+        - 5
+        - 10
+        - 20
+        - 50
+      - in: query
+        name: subjectType
+        type: string
+        description: 科目类型
+        enum:
+        - C2C
+        - RECHARGE
+        - WITHDRAW
+        - ACTIVITY_IN
+        - ACTIVITY_OUT
+        - COMMISSION
+        - FEE
+        - BUY_COMMODITY
+        - SERVICE
+        - OTC_TRANSFER_IN
+        - OTC_TRANSFER_OUT
+        required: false
+      - in: query
+        name: coinId
+        type: string
+        description: 币种ID
+        required: false
+      responses:
+        200:
+          schema:
+            $ref: '#/definitions/GetJournalsResponse'
+          description: success
+        400:
+          description: 发送失败
+      security:
+      - api_key: []
+  /asset-mgmt/recharge-records:
+    get:
+      tags:
+      - asset-management
+      summary: 获取账户充币记录
+      description: 获取账户充币记录
+      parameters:
+      - in: query
+        name: page
+        default: 1
+        description: 页码
+        type: integer
+      - in: query
+        name: pageSize
+        description: 每页条数
+        required: false
+        type: integer
+        enum:
+        - 5
+        - 10
+        - 20
+        - 50
+      - in: query
+        name: coinId
+        description: 币种Id
+        type: string
+        required: false
+      - in: query
+        name: status
+        type: string
+        description: 充币状态
+        enum:
+        - SUCCEED
+        - FAILED
+        - CONFIRMING
+        required: false
+      responses:
+        200:
+          schema:
+            $ref: '#/definitions/GetRechargeRecordsResponse'
+          description: OK
+      security:
+      - api_key: []
+  /asset-mgmt/withdraw-records:
+    get:
+      tags:
+      - asset-management
+      summary: 获取账户提币记录
+      description: 获取账户提币记录
+      parameters:
+      - in: query
+        name: page
+        default: 1
+        description: 页码
+        type: integer
+      - in: query
+        name: pageSize
+        description: 每页条数
+        required: false
+        type: integer
+        enum:
+        - 5
+        - 10
+        - 20
+        - 50
+      - in: query
+        name: coinId
+        description: 币种Id
+        type: string
+        required: false
+      - in: query
+        name: status
+        type: string
+        description: 提币状态
+        enum:
+        - WAIT_REVIEW
+        - REVIEWING
+        - SUCCEED
+        - FAILED
+        - CONFIRMING
+        - CANCEL
+        - REFUSAL
+        required: false
+      responses:
+        200:
+          schema:
+            $ref: '#/definitions/GetWithdrawRecordsResponse'
+          description: OK
+      security:
+      - api_key: []
+  /asset-mgmt/coins/{coinId}:
+    get:
+      tags:
+      - asset-management
+      summary: 获取单个币信息
+      description: 获取单个币信息
+      parameters:
+      - in: path
+        name: coinId
+        description: 币种Id
+        type: string
+        required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/GetCoinByIdResponse'
+        400:
+          description: 发送失败
+  /asset-mgmt/coins/rechargeable-lists:
+    get:
+      tags:
+      - asset-management
+      summary: 获取可充币列表
+      description: 获取可充币列表
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/GetRechargeableListsResponse'
+        400:
+          description: 发送失败
+      security:
+      - api_key: []
+  /asset-mgmt/recharge-addresses:
+    get:
+      tags:
+      - asset-management
+      summary: 获取单个币种的充币地址
+      description: 获取单个币种的充币地址
+      parameters:
+      - in: query
+        name: coinId
+        description: 币种id
+        type: string
+        required: false
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/GetRechargeAddressesResponse'
+        400:
+          description: 发送失败
+      security:
+      - api_key: []
+  /asset-mgmt/coins/withdrawable-lists:
+    get:
+      tags:
+      - asset-management
+      summary: 获取可提币列表
+      description: 获取可提币列表
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/GetWithdrawableListsResponse'
+        400:
+          description: 发送失败
+      security:
+      - api_key: []
+  /asset-mgmt/withdraw-addresses:
+    get:
+      tags:
+      - asset-management
+      summary: 获取提币地址
+      description: 获取提币地址
+      parameters:
+      - in: query
+        name: coinId
+        description: 币种id
+        type: string
+        required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/GetWithdrawAddressesResponse'
+        400:
+          description: 发送失败
+      security:
+      - api_key: []
+    post:
+      tags:
+      - asset-management
+      summary: 新增提币地址
+      description: 新增提币地址
+      parameters:
+      - in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/PostWithdrawAddressRequest'
+      responses:
+        200:
+          description: success
+        400:
+          description: 发送失败
+      security:
+      - api_key: []
+  /asset-mgmt/withdraw-addresses-all:
+    get:
+      tags:
+      - asset-management
+      summary: 获取所有提币地址
+      description: 获取所有提币地址
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/GetAllWithdrawAddressesResponse'
+        400:
+          description: 发送失败
+      security:
+      - api_key: []
+  /asset-mgmt/withdraw:
+    post:
+      tags:
+      - asset-management
+      summary: 提币
+      description: 提币
+      parameters:
+      - in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/PostWithdrawRequest'
+      responses:
+        200:
+          description: OK
+        401:
+          description: 需要更多认证
+        403:
+          description: 其他错误信息
+      security:
+      - api_key: []
+  /asset-mgmt/withdraw/withdraw-total:
+    get:
+      tags:
+      - asset-management
+      summary: 查询当日提币总数
+      description: 查询当日提币总数
+      parameters:
+      - in: query
+        name: coinId
+        description: 币种id
+        type: string
+        required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/GetWithdrawTotalResponse'
+      security:
+      - api_key: []
+  /asset-mgmt/withdraw/{id}/cancel:
+    post:
+      tags:
+      - asset-management
+      summary: 撤销提币
+      description: 撤销提币
+      parameters:
+      - name: id
+        in: path
+        description: 提币记录id
+        required: true
+        type: string
+      responses:
+        200:
+          description: OK
+      security:
+      - api_key: []
+  /asset-mgmt/withdraw-addresses/{id}:
+    put:
+      tags:
+      - asset-management
+      summary: 删除提币地址
+      description: 删除提币地址
+      parameters:
+      - name: id
+        in: path
+        description: 地址id
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: 地址不存在
+      security:
+      - api_key: []
+  /invites/invite-info:
+    get:
+      tags:
+      - invite
+      summary: 邀请好友
+      description: 邀请好友
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/GetInviteInfoResponse'
+      security:
+      - api_key: []
+  /invites/ranking-list:
+    get:
+      tags:
+      - invite
+      summary: 邀请排行榜（前三）
+      description: 邀请排行榜
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/GetRankingListResponse'
+  /invites/reward-list:
+    get:
+      tags:
+      - invite
+      summary: 奖励记录
+      description: 奖励记录
+      parameters:
+      - in: query
+        name: page
+        default: 1
+        description: 页码
+        type: integer
+      - in: query
+        name: accountId
+        description: 账户Id
+        type: string
+        required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/GetRewardListResponse'
+      security:
+      - api_key: []
+  /system-setting/main-app-version:
+    get:
+      tags:
+      - system-setting
+      description: app版本
+      parameters:
+      - in: query
+        name: versionNumber
+        description: 当前版本号
+        type: string
+        required: true
+      - in: query
+        name: equipmentType
+        description: 设备类型
+        type: string
+        enum:
+        - ANDROID
+        - IOS
+        required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/GetAppVersionResponse'
+  /system-setting/trading-pair/precision:
+    get:
+      tags:
+      - system-setting
+      description: 交易对精度
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/GetTradingpairPrecisionResponse'
+  /projects/{id}:
+    get:
+      tags:
+      - project
+      summary: 获取项目详情
+      description: 获取项目详情（项目方、交易所、主平台、用户管理后台）
+      parameters:
+      - name: id
+        in: path
+        description: 项目ID
+        required: true
+        type: string
+      responses:
+        200:
+          schema:
+            $ref: '#/definitions/GetProjectResponse'
+          description: OK
+  /projects/coins/{init}:
+    get:
+      tags:
+      - project
+      summary: 获取币种列表
+      description: 获取币种列表
+      parameters:
+      - in: path
+        name: init
+        description: 是否初始化
+        type: boolean
+        required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/GetCoinListsResponse'
+        400:
+          description: 发送失败
+  /file/upload:
+    post:
+      tags:
+      - file-upload
+      summary: 文件上传、图片上传
+      operationId: upload
+      consumes:
+      - multipart/form-data
+      parameters:
+      - name: file
+        in: formData
+        type: file
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PostFileResponse'
+        400:
+          description: 参数错误
+        500:
+          description: 服务器内部出错
+      security:
+      - api_key: []
+  /file/{key}:
+    get:
+      tags:
+      - file-upload
+      summary: 由key来获取对应资源的URL
+      description: 由key来获取对应资源的URL
+      parameters:
+      - in: path
+        name: key
+        description: 文件key
+        type: string
+        required: true
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/GetUrlResponse'
+        400:
+          description: 参数错误
+        500:
+          description: 服务器内部出错
+      security:
+      - api_key: []
+  /file/{key}/zoom/{zoom}:
+    get:
+      tags:
+      - file-upload
+      summary: 由key来获取对应图片
+      description: 由key来获取对应图片，并缩放
+      parameters:
+      - in: path
+        name: key
+        description: 文件key
+        type: string
+        required: true
+      - in: path
+        name: zoom
+        description: 缩放大小，合理的取值为：0，1，2，3，分别表示原图，小图，中图，大图，图的尺寸通过配置。
+        type: string
+        required: true
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/GetUrlResponse'
+        400:
+          description: 参数错误
+        500:
+          description: 服务器内部出错
+      security:
+      - api_key: []
+  /faceid/token:
+    get:
+      tags:
+      - face++
+      summary: 获取Token（Web 端）
+      description: 获取Token（Web 端）
+      operationId: faceid
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/FaceIdTokenResponse'
+        400:
+          description: 参数出错
+      security:
+      - api_key: []
+  /faceid/url:
+    get:
+      tags:
+      - face++
+      summary: 获取url（手机App）
+      description: 获取url（手机App）
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/FaceIdUrlResponse'
+        400:
+          description: 参数出错
+      security:
+      - api_key: []
+  /faceid/result:
+    get:
+      tags:
+      - face++
+      summary: 获取检测结果（Web 端）
+      description: 获取检测结果（Web 端）
+      parameters:
+      - in: query
+        name: biz_id
+        description: 获取token时候返回的token_id
+        type: string
+        required: true
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/FaceIdResultResponse'
+        400:
+          description: 参数出错
+          schema:
+            $ref: '#/definitions/FaceIdResultErrorResponse'
+        403:
+          description: 调用出错，可能原因：1. api_key和api_secret不匹配。2. api_key被停用、调用次数超限、没有调用此API的权限，或者没有以当前方式调用此API的权限。3. 并发数超过限制。
+          schema:
+            $ref: '#/definitions/FaceIdResultErrorResponse'
+        404:
+          description: 所调用的API不存在
+        500:
+          description: 服务器内部错误
+      security:
+      - api_key: []
+  /quotation/{id}/overview:
+    get:
+      tags:
+      - quotation
+      summary: 单一币种在各交易所的行情概要
+      description: 单一币种在各交易所的行情概要
+      parameters:
+      - name: id
+        in: path
+        description: 币种id
+        required: true
+        type: string
+      responses:
+        200:
+          schema:
+            $ref: '#/definitions/GetCoinOverviewResponse'
+          description: OK
+      security:
+      - api_key: []
+  /orders:
+    get:
+      tags:
+      - asset-management
+      summary: 获取订单列表
+      description: 获取订单列表
+      parameters:
+      - in: query
+        name: page
+        default: 1
+        description: 页码
+        type: integer
+      - in: query
+        name: type
+        description: 类型
+        type: string
+        enum:
+        - ADD_MARKET
+        - RECHARGE_MARKET
+      responses:
+        200:
+          schema:
+            $ref: '#/definitions/GetOrderResponse'
+          description: OK
+      security:
+      - api_key: []
+  /orders/details/add-market/{id}:
+    get:
+      tags:
+      - order-management
+      summary: 获取新增市场订单详情
+      description: 获取新增市场订单详情
+      parameters:
+      - name: id
+        in: path
+        description: 订单id
+        required: true
+        type: string
+      responses:
+        200:
+          schema:
+            $ref: '#/definitions/GetAddMarketOrderDetailResponse'
+          description: OK
+      security:
+      - api_key: []
+  /orders/details/recharge-market/{id}:
+    get:
+      tags:
+      - order-management
+      summary: 获取续费市场订单详情
+      description: 获取续费市场订单详情
+      parameters:
+      - name: id
+        in: path
+        description: 订单id
+        required: true
+        type: string
+      responses:
+        200:
+          schema:
+            $ref: '#/definitions/GetRechargeMarketOrderDetailResponse'
+          description: OK
+      security:
+      - api_key: []
+  /announcements/exchanges:
+    get:
+      tags:
+      - exchange-announcement
+      summary: 获取交易所公告列表
+      description: 获取交易所公告列表
+      parameters:
+      - in: query
+        name: page
+        default: 1
+        description: 页码
+        type: integer
+      - in: query
+        name: language
+        type: string
+        description: 语种：中文zh_cn 英文en_us 马来文ms_my 韩文ko_kr 柬埔寨文km_kh
+        enum:
+        - zh_cn
+        - en_us
+        - ms_my
+        - ko_kr
+        - km_kh
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/GetNoticesResponse'
+          description: OK
+        '400':
+          description: 查询失败
+      security:
+      - api_key: []
+  /announcements:
+    post:
+      tags:
+      - exchange-announcement
+      summary: 发送交易所公告
+      description: 发送交易所公告
+      parameters:
+      - in: body
+        name: body
+        description: 发送公告
+        required: true
+        schema:
+          $ref: '#/definitions/PostNoticesRequest'
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: 提交失败
+      security:
+      - api_key: []
+  /announcements/{id}:
+    get:
+      tags:
+      - exchange-announcement
+      summary: 查看公告详情
+      description: 查看公告详情
+      parameters:
+      - name: id
+        in: path
+        description: 公告ID
+        required: true
+        type: string
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/GetNoticeResponse'
+          description: OK
+        '400':
+          description: 查询失败
+      security:
+      - api_key: []
+    put:
+      tags:
+      - exchange-announcement
+      summary: 修改交易所公告
+      description: 修改交易所公告
+      parameters:
+      - name: id
+        in: path
+        description: 公告ID
+        required: true
+        type: string
+      - in: body
+        name: body
+        description: 修改交易所公告
+        required: true
+        schema:
+          $ref: '#/definitions/PostNoticesRequest'
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: 修改失败
+      security:
+      - api_key: []
+    delete:
+      tags:
+      - exchange-announcement
+      summary: 删除交易所公告
+      description: 删除交易所公告
+      parameters:
+      - name: id
+        in: path
+        description: 公告ID
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: 删除失败
+      security:
+      - api_key: []
+  /announcements/{id}/enable:
+    put:
+      tags:
+      - exchange-announcement
+      summary: 修改公告状态
+      description: 修改公告状态
+      parameters:
+      - name: id
+        in: path
+        description: 公告ID
+        required: true
+        type: string
+      - name: status
+        in: query
+        description: 状态
+        required: true
+        type: boolean
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: 修改失败
+      security:
+      - api_key: []
+  /banners:
+    get:
+      tags:
+      - banner-management
+      summary: 轮播列表
+      description: 轮播列表
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/GetBannerListResponse'
+          description: OK
+        '400':
+          description: 查询失败
+      security:
+      - api_key: []
+    post:
+      tags:
+      - banner-management
+      summary: 添加轮播广告
+      description: 添加轮播广告
+      parameters:
+      - in: body
+        name: body
+        description: 轮播广告信息
+        required: true
+        schema:
+          $ref: '#/definitions/PostBannerRequest'
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: 添加失败
+      security:
+      - api_key: []
+  /banners/{id}:
+    get:
+      tags:
+      - banner-management
+      summary: 轮播信息详情
+      description: 轮播信息详情
+      parameters:
+      - in: path
+        name: id
+        description: 轮播信息Id
+        type: string
+        required: true
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/GetBannerResponse'
+          description: OK
+        '400':
+          description: 查询失败
+      security:
+      - api_key: []
+    put:
+      tags:
+      - banner-management
+      summary: 修改轮播信息
+      description: 修改轮播信息
+      parameters:
+      - in: path
+        name: id
+        description: 轮播信息Id
+        type: string
+        required: true
+      - in: body
+        name: body
+        description: 轮播广告信息
+        required: true
+        schema:
+          $ref: '#/definitions/PostBannerRequest'
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: 修改失败
+      security:
+      - api_key: []
+    delete:
+      tags:
+      - banner-management
+      summary: 删除轮播信息
+      description: 删除轮播信息
+      parameters:
+      - in: path
+        name: id
+        description: 轮播信息Id
+        type: string
+        required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: 删除失败
+      security:
+      - api_key: []
+  /banners/{id}/status:
+    put:
+      tags:
+      - banner-management
+      summary: 修改轮播状态
+      description: 修改轮播状态
+      parameters:
+      - in: path
+        name: id
+        description: 轮播信息Id
+        type: string
+        required: true
+      - in: query
+        name: status
+        description: 状态
+        type: boolean
+        required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: 修改失败
+      security:
+      - api_key: []
+  /banners/{id}/reduction:
+    put:
+      tags:
+      - banner-management
+      summary: 还原轮播信息
+      description: 还原轮播信息
+      parameters:
+      - in: path
+        name: id
+        description: 轮播信息Id
+        type: string
+        required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: 还原失败
+      security:
+      - api_key: []
+  /exchange/entrusts:
+    get:
+      tags:
+      - exchange-entrust
+      summary: 获取委托订单列表 - 袁世伦
+      description: 获取委托订单列表
+      parameters:
+      - name: page
+        in: query
+        type: integer
+        description: 页码
+        default: 1
+      - name: startAt
+        in: query
+        type: string
+        format: date
+        description: 开始时间
+      - name: endAt
+        in: query
+        type: string
+        format: date
+        description: 结束时间
+      - name: uid
+        in: query
+        description: 账户ID
+        type: string
+        maxLength: 64
+      - name: entrustId
+        in: query
+        description: 委托订单号
+        type: string
+        maxLength: 64
+      - name: tradingPair
+        in: query
+        type: string
+        description: 交易币对 ETH/USDT
+        maxLength: 16
+      - name: tradeType
+        in: query
+        type: string
+        description: 挂单方向
+        enum:
+        - buy
+        - sell
+      - name: entrustChannel
+        in: query
+        type: string
+        description: 挂单渠道
+        enum:
+        - '1'
+        - '2'
+      - name: entrustType
+        in: query
+        type: string
+        description: 委托类型 limit限价 market市价 profit_loss止盈止损  time_limit限时委托
+        enum:
+        - limit
+        - market
+        - profit_loss
+        - time_limit
+      - name: status
+        in: query
+        type: string
+        description: 状态
+        enum:
+        - all
+        - entrusting
+        - cancelled
+        - done
+        - triggering
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/GetEntrustsResponse'
+      security:
+      - api_key: []
+  /exchange/trade-history:
+    get:
+      tags:
+      - exchange-entrust
+      summary: 获取成交记录列表 - 袁世伦
+      description: 获取成交记录列表
+      parameters:
+      - name: page
+        in: query
+        type: integer
+        description: 页码
+        default: 1
+      - name: startAt
+        in: query
+        type: string
+        format: date
+        description: 开始时间
+      - name: endAt
+        in: query
+        type: string
+        format: date
+        description: 结束时间
+      - name: tradeHistoryId
+        in: query
+        type: string
+        description: 成交记录号
+      - name: orderId
+        in: query
+        type: string
+        description: 委托ID
+        maxLength: 64
+      - name: tradingPair
+        in: query
+        type: string
+        description: 交易币对
+        maxLength: 16
+      - name: uid
+        in: query
+        type: string
+        description: 用户ID
+        maxLength: 40
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/GetTradeHistoryResponse'
+        '404':
+          description: 查询成交记录列表失败
+      security:
+      - api_key: []
+  /exchange/fee-history:
+    get:
+      tags:
+      - exchange-entrust
+      summary: 获取手续费记录列表 - 袁世伦
+      description: 获取手续费记录列表
+      parameters:
+      - name: page
+        in: query
+        type: integer
+        description: 页码
+        default: 1
+      - name: startAt
+        in: query
+        type: string
+        format: date
+        description: 开始时间
+      - name: endAt
+        in: query
+        type: string
+        format: date
+        description: 结束时间
+      - name: tradeHistoryId
+        in: query
+        description: 交易记录id
+        type: string
+      - name: tradingPair
+        in: query
+        type: string
+        description: 交易币对
+        maxLength: 16
+      - name: uid
+        in: query
+        type: string
+        description: 用户ID
+        maxLength: 40
+      - name: feeType
+        in: query
+        type: string
+        enum:
+        - buy
+        - ell
+        description: 手续费类型buy币币交易买方,sell币币交易卖方
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/GetFeeHistoryResponse'
+        '404':
+          description: 查询成交记录列表失败
+      security:
+      - api_key: []
+  /projects:
+    get:
+      tags:
+      - project
+      summary: 获取项目列表
+      description: 获取项目列表
+      parameters:
+      - name: page
+        in: query
+        description: 页码
+        required: false
+        type: integer
+        default: 1
+      - name: coinName
+        in: query
+        description: 币种简称
+        required: false
+        type: string
+        maxLength: 16
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/GetProjectsResponse'
+  /contacts/{projectId}/status:
+    get:
+      tags:
+      - contacts
+      summary: 获取项目和交易所的状态
+      description: 获取项目和交易所的状态
+      parameters:
+      - name: projectId
+        in: path
+        description: 项目id
+        required: true
+        type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            description: 获取项目和交易所的状态
+            properties:
+              status:
+                type: string
+                description: 对接状态 accepted：接受，rejected：拒绝，pending：待处理
+                enum:
+                - accepted
+                - rejected
+                - pending
+                example: pending
+              contactId:
+                type: string
+                description: 对接ID
+                example: '1'
+        400:
+          description: 获取失败
+        500:
+          description: 服务器错误
+      security:
+      - api_key: []
+  /dashboard/quotation/historical-data:
+    post:
+      tags:
+      - dashboard
+      summary: 获取历史数据
+      description: 用于K线
+      parameters:
+      - in: body
+        name: body
+        description: 获取dashboard成交量
+        required: true
+        schema:
+          $ref: '#/definitions/GetDashboardHistoricalDataRequest'
+      responses:
+        200:
+          schema:
+            $ref: '#/definitions/GetDashboardHistoricalDataResponse'
+          description: OK
+      security:
+      - api_key: []
+  /dashboard/quotations/summary:
+    get:
+      tags:
+      - dashboard
+      summary: 获取行情列表
+      description: 获取行情列表
+      parameters:
+      - name: pageNo
+        in: query
+        description: 页码
+        required: true
+        type: integer
+      - name: pageSize
+        in: query
+        description: 条数
+        required: true
+        type: integer
+      - name: sellerCoin
+        in: query
+        type: string
+        description: 卖方币种
+        maxLength: 10
+      responses:
+        200:
+          schema:
+            $ref: '#/definitions/GetQuotationListResponse'
+          description: OK
+      security:
+      - api_key: []
+  /dashboard/daily-statistics:
+    get:
+      tags:
+      - dashboard
+      summary: 获取dashboard当日统计数-邹凌威
+      description: 获取dashboard当日统计数
+      parameters: []
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/GetDailyStatisticsResponse'
+        404:
+          description: 获取失败
+      security:
+      - api_key: []
+  /tags:
+    get:
+      tags:
+      - exchange-management
+      summary: 获取标签信息-邹凌威
+      description: 获取标签信息
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/Tags'
+        404:
+          description: 标签不存在
+  /exchange/order-market:
+    post:
+      tags:
+      - exchange-management
+      summary: 生成新增市场的订单-邹凌威
+      description: 生成新增市场的订单
+      parameters:
+      - in: body
+        name: body
+        description: 生成新增市场的订单
+        required: true
+        schema:
+          $ref: '#/definitions/PostOrderMarketRequest'
+      responses:
+        200:
+          description: 成功
+          schema:
+            type: object
+            description: 订单ID
+            properties:
+              orderId:
+                type: string
+                description: 订单ID
+        400:
+          description: 失败
+      security:
+      - api_key: []
+    put:
+      tags:
+      - exchange-management
+      summary: 支付新增市场的订单-邹凌威
+      description: 支付新增市场的订单
+      parameters:
+      - in: body
+        name: body
+        description: 支付新增市场的订单
+        required: true
+        schema:
+          $ref: '#/definitions/PutOrderMarketRequest'
+      responses:
+        200:
+          description: 成功
+        400:
+          description: 失败
+      security:
+      - api_key: []
+  /exchange/order-market-renew:
+    post:
+      tags:
+      - exchange-management
+      summary: 生成市场续费的订单-邹凌威
+      description: 生成市场续费的订单
+      parameters:
+      - in: body
+        name: body
+        description: 生成市场续费的订单
+        required: true
+        schema:
+          $ref: '#/definitions/PostOrderMarketRenewRequest'
+      responses:
+        200:
+          description: 成功
+          schema:
+            type: object
+            description: 订单ID
+            properties:
+              orderId:
+                type: string
+                description: 订单ID
+        400:
+          description: 失败
+      security:
+      - api_key: []
+    put:
+      tags:
+      - exchange-management
+      summary: 支付市场续费的订单单-邹凌威
+      description: 支付市场续费的订单
+      parameters:
+      - in: body
+        name: body
+        description: 支付市场续费的订单
+        required: true
+        schema:
+          $ref: '#/definitions/PutOrderMarketRequest'
+      responses:
+        200:
+          description: 成功
+        400:
+          description: 失败
+      security:
+      - api_key: []
+  /exchange/exchange-name-verify:
+    get:
+      tags:
+      - exchange-management
+      summary: 验证交易所名称状态-邹凌威
+      description: 验证交易所名称状态
+      parameters:
+      - name: name
+        in: query
+        type: string
+        description: 交易所名称
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/VerifyResponse'
+        400:
+          description: 失败
+      security:
+      - api_key: []
+  /exchange/exchange-status:
+    get:
+      tags:
+      - exchange-management
+      summary: 获取交易所状态-邹凌威
+      description: 获取交易所状态
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/ExchangeStatus'
+        400:
+          description: 交易所不存在
+      security:
+      - api_key: []
+  /exchange/exchange-id:
+    get:
+      tags:
+      - exchange-management
+      summary: 获取交易所id-邹凌威
+      description: 获取交易所id
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/ExchangeId'
+        400:
+          description: 交易所不存在
+      security:
+      - api_key: []
+  /exchange/exchange-coin:
+    get:
+      tags:
+      - exchange-management
+      summary: 获取交易所买卖方币种列表-邹凌威
+      description: 获取交易所买卖方币种列表
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/ExchangeCoin'
+        400:
+          description: 交易所不存在
+      security:
+      - api_key: []
+  /exchange:
+    get:
+      tags:
+      - exchange-management
+      summary: 获取交易所详情-邹凌威
+      description: 获取交易所详情
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/ExchangeRequest'
+        400:
+          description: 交易所不存在
+      security:
+      - api_key: []
+    post:
+      tags:
+      - exchange-management
+      summary: 提交交易所申请信息-邹凌威
+      description: 提交交易所申请信息
+      parameters:
+      - in: body
+        name: body
+        description: 请求交易所申请
+        required: true
+        schema:
+          $ref: '#/definitions/GetExchangeRequest'
+      responses:
+        200:
+          description: 成功申请交易所
+        400:
+          description: 创建失败
+          schema:
+            type: object
+            description: 错误信息
+            properties:
+              message:
+                type: string
+                description: 错误信息
+      security:
+      - api_key: []
+    put:
+      tags:
+      - exchange-management
+      summary: 更新交易所信息-邹凌威
+      description: 更新交易所信息
+      parameters:
+      - in: body
+        name: body
+        description: 修改交易所申请
+        required: true
+        schema:
+          $ref: '#/definitions/GetExchangeRequest'
+      responses:
+        200:
+          description: 交易所信息更新成功
+        400:
+          description: 交易所信息更新失败
+        404:
+          description: 交易所不存在
+      security:
+      - api_key: []
+  /service-rate:
+    get:
+      tags:
+      - market-management
+      summary: 获取交易服务费率-邹凌威
+      description: 获取交易服务费率
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/ServiceRate'
+        404:
+          description: 获取交易服务费率不存在
+      security:
+      - api_key: []
+  /markets:
+    get:
+      tags:
+      - market-management
+      summary: 获取交易对市场列表-邹凌威
+      description: 获取交易对市场列表
+      parameters:
+      - name: page
+        in: query
+        description: 页码
+        required: false
+        type: integer
+        default: 1
+      - name: symbol
+        in: query
+        description: 市场标识
+        required: false
+        type: string
+      - name: createdAtSort
+        in: query
+        description: 创建时间排序类型
+        required: false
+        type: string
+        enum:
+        - asc
+        - desc
+      - name: disabledAtSort
+        in: query
+        description: 失效时间排序类型
+        required: false
+        type: string
+        enum:
+        - asc
+        - desc
+      - name: status
+        in: query
+        description: 状态
+        required: false
+        type: string
+        enum:
+        - in_review
+        - running
+        - wait_close
+        - wait_renew
+        - closed_in
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/GetMarketListResponse'
+      security:
+      - api_key: []
+  /markets/deep-sharing-verify:
+    get:
+      tags:
+      - market-management
+      summary: 验证交易对市场是否是深度共享-邹凌威
+      description: 验证交易对市场是否深度共享
+      parameters:
+      - name: buyerCoinId
+        in: query
+        description: 买方币种ID
+        required: true
+        type: string
+        minLength: 1
+        maxLength: 32
+      - name: sellerCoinId
+        in: query
+        description: 卖方币种ID
+        required: true
+        type: string
+        minLength: 1
+        maxLength: 32
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/VerifyResponse'
+        400:
+          description: 失败
+  /markets/trading-coins-verify:
+    get:
+      tags:
+      - market-management
+      summary: 验证交易对市场是否存在-邹凌威
+      description: 验证交易对市场是否存在
+      parameters:
+      - name: buyerCoinId
+        in: query
+        description: 买方币种ID
+        required: true
+        type: string
+        minLength: 1
+        maxLength: 32
+      - name: sellerCoinId
+        in: query
+        description: 卖方币种ID
+        required: true
+        type: string
+        minLength: 1
+        maxLength: 32
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/VerifyResponse'
+        400:
+          description: 失败
+      security:
+      - api_key: []
+  /markets/price:
+    get:
+      tags:
+      - market-management
+      summary: 获取交易对市场单价-邹凌威
+      description: 获取交易对市场单价
+      parameters:
+      - name: buyerCoinId
+        in: query
+        description: 买方币种ID
+        required: true
+        type: string
+        minLength: 1
+        maxLength: 32
+      - name: sellerCoinId
+        in: query
+        description: 卖方币种ID
+        required: true
+        type: string
+        minLength: 1
+        maxLength: 32
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/MarketPrice'
+        400:
+          description: 市场已存在
+      security:
+      - api_key: []
+  /markets/trading-coins:
+    get:
+      tags:
+      - market-management
+      summary: 获取交易币种-邹凌威
+      description: 获取交易币种
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/TradingCoins'
+        404:
+          description: 市场不存在
+  /markets/{id}:
+    get:
+      tags:
+      - market-management
+      summary: 获取市场详情-邹凌威
+      description: 获取市场详情
+      parameters:
+      - name: id
+        in: path
+        description: 市场ID
+        required: true
+        type: string
+        minLength: 1
+        maxLength: 32
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/GetMarketResponse'
+        404:
+          description: 市场不存在
+      security:
+      - api_key: []
+    put:
+      tags:
+      - market-management
+      summary: 修改市场信息-邹凌威
+      description: 修改市场信息
+      parameters:
+      - name: id
+        in: path
+        description: 市场ID
+        required: true
+        type: string
+        minLength: 1
+        maxLength: 32
+      - name: feeRate
+        in: query
+        description: 手续费率
+        required: true
+        type: string
+        minLength: 1
+        maxLength: 16
+      responses:
+        200:
+          description: OK
+        404:
+          description: 修改失败
+      security:
+      - api_key: []
+  /markets/close:
+    post:
+      tags:
+      - market-management
+      summary: 关闭市场(待确认关闭原因是否是枚举)-邹凌威
+      description: 关闭市场
+      parameters:
+      - in: body
+        name: body
+        description: 请求新建交易对市场
+        required: true
+        schema:
+          $ref: '#/definitions/PostMarketCloseRequest'
+      responses:
+        200:
+          description: OK
+        401:
+          description: 二次验证
+        404:
+          description: 关闭失败
+      security:
+      - api_key: []
+  /markets/{id}/open:
+    put:
+      tags:
+      - market-management
+      summary: 开启市场(更新状态)-邹凌威
+      description: 开启市场(更新状态)
+      parameters:
+      - name: id
+        in: path
+        description: 市场ID
+        required: true
+        type: string
+        minLength: 1
+        maxLength: 32
+      responses:
+        200:
+          description: OK
+        404:
+          description: 开启失败
+      security:
+      - api_key: []
+  /quotation/historical-data:
+    post:
+      tags:
+      - quotation
+      summary: K线数据
+      description: 获取K线数据
+      parameters:
+      - in: body
+        name: body
+        description: 获取行情概要
+        required: true
+        schema:
+          $ref: '#/definitions/GetHistoricalDataRequest'
+      responses:
+        200:
+          schema:
+            $ref: '#/definitions/GetHistoricalDataResponse'
+          description: OK
+      security:
+      - api_key: []
+  /quotation/coins/{id}:
+    get:
+      tags:
+      - quotation
+      summary: 单一币种在单一交易所所有币对的行情统计（24小时）（交易所成交量占比）
+      description: 单一币种在单一交易所所有币对的行情统计（24小时）（交易所成交量占比）
+      parameters:
+      - name: id
+        in: path
+        description: 币种id
+        required: true
+        type: string
+        format: int64
+      responses:
+        200:
+          schema:
+            $ref: '#/definitions/GetCoinTradeSummaryResponse'
+          description: OK
+      security:
+      - api_key: []
+  /contacts/projects/{exchangeId}:
+    get:
+      tags:
+      - contacts
+      summary: 获取交易所对接的项目列表
+      description: 获取交易所对接的项目列表（交易所、用户管理后台）
+      parameters:
+      - in: path
+        required: true
+        name: exchangeId
+        type: string
+      - name: status
+        in: query
+        description: 对接状态 accepted：接受，rejected：拒绝，pending：待处理
+        required: true
+        type: string
+        enum:
+        - accepted
+        - rejected
+        - pending
+      - in: query
+        name: page
+        default: 1
+        description: 页码
+        type: integer
+      - in: query
+        name: coinName
+        description: 币简称
+        type: string
+        maxLength: 16
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/GetContactProjectsResponse'
+          description: OK
+      security:
+      - api_key: []
+  /contacts:
+    post:
+      tags:
+      - contacts
+      summary: 申请对接
+      description: 申请对接（交易所、项目方）
+      parameters:
+      - in: body
+        name: body
+        required: true
+        schema:
+          type: object
+          description: 对接请求
+          properties:
+            exchangeId:
+              type: string
+              description: 交易所ID
+              example: 1
+            projectId:
+              type: string
+              description: 项目ID
+              example: 1
+            sponsor:
+              type: string
+              description: 发起方[tenant交易所,venture项目方]
+              enum:
+              - tenant
+              - venture
+              example: tenant
+      responses:
+        '200':
+          description: 发送成功
+      security:
+      - api_key: []
+    put:
+      tags:
+      - contacts
+      summary: 处理对接邀请
+      description: 处理对接邀请（交易所、项目方）
+      parameters:
+      - in: body
+        name: body
+        required: true
+        schema:
+          type: object
+          description: 处理对接邀请
+          properties:
+            contactId:
+              type: string
+              description: 对接ID
+              example: 1
+            status:
+              type: string
+              enum:
+              - accepted
+              - rejected
+              description: accepted接受，rejected拒绝
+              example: accepted
+      responses:
+        '200':
+          description: OK
+      security:
+      - api_key: []
+  /contacts/check:
+    get:
+      tags:
+      - contacts
+      summary: 判断项目与交易所是否已经申请对接
+      description: 判断项目与交易所是否已经申请对接（交易所、项目方）
+      parameters:
+      - in: query
+        name: projectId
+        description: 项目ID
+        required: true
+        type: string
+      - in: query
+        name: exchangeId
+        description: 交易所ID
+        required: true
+        type: string
+      responses:
+        '200':
+          schema:
+            type: object
+            description: 返回值
+            properties:
+              result:
+                type: boolean
+                example: true
+                description: 是否对接
+          description: OK
+      security:
+      - api_key: []
+host: crush-tenant.crush-deploy.lan
+produces:
+- application/json
+schemes:
+- http
+securityDefinitions:
+  api_key:
+    type: apiKey
+    name: apikey
+    in: header
+definitions:
+  GetRechargeRecordQuery:
+    type: object
+    description: 获取账户充币记录搜索条件
+    properties:
+      status:
+        type: string
+        description: 充币状态,
+        enum:
+        - SUCCEED
+        - FAILED
+        - CONFIRMING
+        example: SUCCEED
+      coinId:
+        type: string
+        description: 币id
+        example: '546464'
+  GetAccountInfoResponse:
+    type: object
+    description: 获取账户状态信息
+    properties:
+      accountInfo:
+        $ref: '#/definitions/AccountInfoRespones'
+      certificationAudit:
+        $ref: '#/definitions/CertificationAudit'
+  GetCoinListsResponse:
+    type: array
+    description: 获取币种列表
+    items:
+      type: object
+      description: 获取币种列表
+      properties:
+        coinId:
+          type: string
+          description: 币ID
+          example: '1'
+        logoKey:
+          type: string
+          description: 币图标KEY
+        logoUrl:
+          type: string
+          description: 币图标URL
+        shortName:
+          type: string
+          description: 币简称
+          example: ETH
+        fullName:
+          type: string
+          description: 币全称
+  GetEntrustsResponse:
+    type: object
+    description: 获取委托列表
+    properties:
+      meta:
+        $ref: '#/definitions/Pagination'
+      query:
+        $ref: '#/definitions/GetEntrustsQuery'
+      items:
+        type: array
+        description: 委托列表
+        items:
+          type: object
+          description: 委托记录
+          properties:
+            orderId:
+              type: string
+              description: 委托单id
+              example: '1111111'
+            createdAt:
+              type: string
+              description: 创建时间
+              format: date-time
+              example: '2017-01-22T09:28:33Z'
+            exchangeName:
+              type: string
+              description: 交易所名称
+              example: 万象交易所
+            tradeType:
+              type: string
+              description: 交易类型 buy:买入 sell:买出
+              enum:
+              - buy
+              - sell
+              example: buy
+            entrustType:
+              type: string
+              description: 委托类型 limit限价 market市价 profit_loss止盈止损  time_limit限时委托
+              enum:
+              - limit
+              - market
+              - profit_loss
+              - time_limit
+              example: buy
+            tradingPair:
+              type: string
+              description: 交易对
+              example: ETH/BTC
+            price:
+              type: string
+              description: 价格
+              example: '33.4444444'
+            entrustVolume:
+              type: string
+              description: 委托数量
+              example: '33333.33333'
+            volume:
+              type: string
+              description: 成交数量
+              example: '1.00002'
+            amount:
+              type: string
+              description: 成交金额
+              example: '83838.83838'
+            status:
+              type: string
+              description: 状态
+              enum:
+              - entrusting
+              - cancelled
+              - done
+              - triggering
+              example: entrusting
+            triggerPrice:
+              type: string
+              description: 触发价
+              example: '83838.83838'
+            autoCancelAt:
+              type: string
+              description: 自动撤单时间
+              example: '2018-10-12 17:32:54'
+            accountId:
+              type: string
+              description: 用户id
+              example: '1111111'
+  PostMarketCloseRequest:
+    type: object
+    description: 获取项目和交易所的状态
+    properties:
+      token:
+        type: string
+        description: token
+      id:
+        type: string
+        description: 市场ID
+        example: '1'
+        minLength: 1
+        maxLength: 32
+      closingReason:
+        type: string
+        description: 关闭原因
+        example: '2'
+        minLength: 1
+        maxLength: 400
+  PostloginHistoryRespones:
+    description: 登录记录
+    properties:
+      meta:
+        $ref: '#/definitions/Pagination'
+      items:
+        type: array
+        description: 登录记录列表
+        items:
+          type: object
+          description: 登录记录
+          properties:
+            id:
+              type: string
+              description: id
+              format: string
+              example: '1111111'
+            loginAt:
+              type: string
+              description: 登录时间
+              example: '2018-08-08 12:00:00'
+            location:
+              type: string
+              description: 登录位置
+              example: 北京
+            ip:
+              type: string
+              description: ip地址
+              example: 192.168.83.88
+            loggedIn:
+              type: string
+              description: 是否登录成功
+              example: true
+            equipmentType:
+              type: string
+              description: 设备类型
+              example: Desktop桌面，Tablet平板，Moblie 移动端
+            accessSide:
+              type: string
+              description: 登录的设备
+              example: google浏览器
+  GetbindStatuesRequest:
+    properties:
+      googleAuthenticator:
+        type: integer
+        description: 谷歌开启状态
+      phoneAuthenticator:
+        type: integer
+        description: 电话开启状态
+      emailAuthenticator:
+        type: integer
+        description: 邮箱开启状态
+  GetCoinOverviewResponse:
+    type: object
+    description: 单一币种在这个平台的行情概要(24小时)
+    properties:
+      projectName:
+        type: string
+        description: 币种名称
+      avgUsdprice:
+        type: string
+        description: USD平均成交价
+      avgCnyPrice:
+        type: string
+        description: CNY平均成交价
+      highestPrice:
+        type: string
+        description: 最高价
+      lowestPrice:
+        type: string
+        description: 最低价
+      usdChangeExtent:
+        type: string
+        description: usd日涨跌幅度
+      cnyChangeExtent:
+        type: string
+        description: cny日涨跌幅度
+      changePct:
+        type: string
+        description: 日涨跌幅
+      volume:
+        type: string
+        description: 整个平台成交量
+      listedExchangeCount:
+        type: integer
+        description: 已上线交易所数量
+      usdAmount:
+        type: string
+        description: 折合USD交易额
+      cnyAmount:
+        type: string
+        description: 折合CNY交易额
+      usdMarketValue:
+        type: string
+        description: 折合USD市值
+      cnyMarketValue:
+        type: string
+        description: 折合CNY市值
+  GetAppVersionResponse:
+    type: object
+    description: 获取app版本信息
+    properties:
+      hasNewVersion:
+        type: boolean
+        description: 是否有更新
+        example: true
+      versionNumber:
+        type: integer
+        description: 版本号
+        example: 156
+      versionName:
+        type: string
+        description: 当前版本
+        example: V1.1.1
+      downloadUrl:
+        type: string
+        description: 下载链接
+        example: 123123.com
+      appSize:
+        type: string
+        description: 软件大小
+        example: 123123Mb
+      forcedUpdate:
+        type: boolean
+        description: 是否强制更新
+        example: true
+      logCh:
+        type: string
+        description: 更新log中文
+        example: '123123123'
+      logEn:
+        type: string
+        description: 更新log英文
+        example: '123123123'
+      createdAt:
+        type: string
+        description: 创建时间
+        format: date-time
+  PostEditPhoneRequest:
+    type: object
+    description: 修改手机号
+    required:
+    - phoneNumber
+    - verificationCode
+    - areaCode
+    - token
+    properties:
+      phoneNumber:
+        description: 手机号
+        type: string
+        example: '1864550666'
+        minLength: 8
+        maxLength: 16
+      verificationCode:
+        description: 验证码
+        type: string
+        example: '11111'
+        minLength: 6
+        maxLength: 6
+      areaCode:
+        description: 地区
+        type: string
+        example: '+86'
+        minLength: 2
+        maxLength: 128
+      token:
+        description: 二次验证token
+        type: string
+        example: eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyVHlwZSI6IkFMVEVSX1BIT05FIiwiZXhwIjoxNTQzMDQ5MzYzLCJ1c2VySWQiOjF9.bG44J_ExA9uB_HsT0cpbSK_SIh1F47fNR-QmmjEx58tAuwfuARPn0Meoob0QjV-ayUebsqtgaZOvORsdYKaacw
+        minLength: 10
+        maxLength: 256
+  GetWithdrawAddressesResponse:
+    type: array
+    description: 提币地址列表
+    items:
+      type: object
+      description: 提币地址记录
+      properties:
+        id:
+          type: string
+          description: 提币地址ID
+        coinId:
+          type: string
+          description: 币id
+        addressTag:
+          type: string
+          description: 地址标签
+        remark:
+          type: string
+          description: 地址备注
+        address:
+          type: string
+          description: 提币地址
+  PostFileResponse:
+    type: object
+    description: 返回文件上传对应的key值
+    properties:
+      key:
+        description: the key to file
+        type: string
+        example: '201809171111'
+      url:
+        description: file url
+        type: string
+        example: http://xxxx/xxx.png
+  Tags:
+    type: object
+    description: 标签信息
+    properties:
+      tags:
+        type: array
+        description: 标签
+        items:
+          type: string
+  GetJournalsQuery:
+    type: object
+    description: 获取资金流动记录查询条件
+    properties:
+      subjectType:
+        type: string
+        description: 科目类型,
+        enum:
+        - C2C
+        - RECHARGE
+        - WITHDRAW
+        - ACTIVITY_IN
+        - ACTIVITY_OUT
+        - COMMISSION
+        - FEE
+        - BUY_COMMODITY
+        - SERVICE
+        - OTC_TRANSFER_IN
+        - OTC_TRANSFER_OUT
+        example: C2C
+      coinId:
+        type: string
+        description: 币种Id
+        example: '4646'
+  GetProjectResponse:
+    type: object
+    description: 获取项目详情
+    properties:
+      sponsorInfo:
+        type: object
+        properties:
+          sponsorId:
+            description: 保荐方ID
+            type: string
+            example: 1
+          sponsorName:
+            description: 保荐方名称
+            type: string
+            example: xxx保荐机构
+          sponsorLogoUrl:
+            description: 保荐方图标URL
+            type: string
+            example: xxx.jpg
+      projectInfo:
+        type: object
+        properties:
+          id:
+            description: 项目ID
+            type: string
+            example: 123
+          projectName:
+            description: 项目名
+            type: string
+            example: 比特币
+          whitePaperKey:
+            description: 白皮书key
+            type: string
+            example: url/pdf123455
+          whitePaperUrl:
+            description: 白皮书url
+            type: string
+            example: url/pdf123455
+          officialWebsite:
+            description: 官方网站
+            type: string
+            example: www.xxxx.com
+          communities:
+            type: array
+            description: 社群
+            items:
+              type: object
+              description: 记录项
+              properties:
+                type:
+                  type: string
+                  description: 社群类型
+                value:
+                  type: string
+                  description: 地址(若是图片就传KEY)
+                url:
+                  type: string
+                  description: 二维码图片URL地址
+            example:
+            - type: QQ
+              value: http://editoasda.asafa.sd
+            - type: github
+              value: http://editoasda.asafa.sd
+            - type: facebook
+              value: http://editoasda.asafa.sd
+          email:
+            description: 电子邮箱
+            type: string
+            example: 1234832456@qq.com
+          appliedAt:
+            type: string
+            description: 申请时间
+            format: date-time
+            example: '2018-08-08T10:51:02Z'
+          listedExchange:
+            type: integer
+            description: 上架交易所
+            example: '190'
+          usdMarketValue:
+            type: string
+            description: 市值USDT
+            example: 180000
+          cnyMarketValue:
+            type: string
+            description: 市值CNY
+            example: 180000
+          volume:
+            type: string
+            description: 成交额
+            example: 180000
+          usdPrice:
+            type: string
+            description: 最新成交价USDT
+            example: 180
+          cnyPrice:
+            type: string
+            description: 最新成交价CNY
+            example: 180
+          usdChangePct:
+            type: string
+            description: 24H涨跌幅
+            example: 0.88
+          areaCode:
+            description: 电话区号
+            type: string
+            example: '+86'
+          cellphone:
+            description: 手机号
+            type: string
+            example: '13510022445'
+          telephone:
+            description: 固定电话号
+            type: string
+            example: 12874846
+          projectPosterKey:
+            description: 项目广告图KEY
+            type: string
+            example: xxxxx
+          projectPosterUrl:
+            description: 项目广告图URL
+            type: string
+            example: xxxxx.jpg
+          description:
+            type: string
+            description: 项目简介
+            example: 以太坊（英文Ethereum）是一个开源的有智能合约功能的公共区块链平台，通过其专用加密货币以太币（Ether）提供去中心化的虚拟机（“以太虚拟机” Ethereum Virtual Machine）来处理点对点合约。
+          open:
+            description: 是否公示
+            type: boolean
+            example: false
+          init:
+            description: 是否已初始化
+            type: boolean
+            example: false
+          accessMethod:
+            description: 接入方式（refuse：拒绝接入、verification：需要验证、accept：无需验证）
+            type: string
+            enum:
+            - refuse
+            - verification
+            - accept
+            example: verification
+          createdBy:
+            description: 创建用户
+            type: string
+            example: 123456
+      coinInfo:
+        type: object
+        properties:
+          id:
+            description: 币ID
+            type: string
+            example: 123
+          shortName:
+            description: 币简称
+            type: string
+            example: BTC
+          fullName:
+            description: 币全称
+            type: string
+            example: BitCoin
+          issuePrice:
+            description: 发行价
+            type: string
+            example: 2.24545
+          issuedVolume:
+            description: 发行量
+            type: string
+            example: 1000000
+          circulationVolume:
+            description: 流通量
+            type: string
+            example: 1000000
+          issuedDate:
+            type: string
+            description: 发行时间
+            format: date
+            example: 2018-08-08T00:00:00Z
+          blockchainType:
+            description: 区块链类型
+            type: string
+            enum:
+            - public_chain
+            - private_chain
+            - smart_contract
+            example: public_chain
+          dataLink:
+            description: 资料链接
+            type: string
+            example: www.baidu.com
+          blockBrowser:
+            description: 区块浏览器
+            type: string
+            example: www.baidu.com
+          logoKey:
+            description: 币图标KEY
+            type: string
+            example: 122121
+          logoUrl:
+            description: 币图标URL
+            type: string
+            example: xxx.jpg
+          holdersNumber:
+            description: 持有人数
+            type: string
+            example: 100
+  FaceIdTokenResponse:
+    type: object
+    description: 返回文件上传对应的URL
+    properties:
+      biz_id:
+        description: 业务流串号，可以用于反查比对结果
+        type: string
+      token:
+        description: token
+        type: string
+        example: 12341234234asdfasd
+      error_message:
+        description: 当请求失败时才会返回此字符串，否则此字段不存在。
+        type: string
+  GetAssetByCoinIdResponse:
+    type: object
+    description: 获取单个币种资产信息
+    properties:
+      coinId:
+        type: string
+        description: 币种id
+        example: '20'
+      coinName:
+        type: string
+        description: 币种名称
+        example: fadsf4654
+      total:
+        type: string
+        description: 总计
+        example: 10.0
+      balance:
+        type: string
+        description: 可用金额
+        example: 11.0
+      frozen:
+        type: string
+        description: 冻结金额
+        example: 12.0
+      estimates:
+        type: object
+        description: 资产估算信息
+        properties:
+          usdt:
+            type: string
+            description: 折算usdt
+            example: 1564988.651651
+          cny:
+            type: string
+            description: 折算cny
+            example: 1564988.651651
+          btc:
+            type: string
+            description: 折算btc
+            example: 1564988.651651
+  TradingCoins:
+    type: object
+    description: 获取交易币种简称列表
+    properties:
+      buyerCoin:
+        type: array
+        description: 买方币种
+        items:
+          type: object
+          properties:
+            id:
+              type: integer
+              description: 币种ID
+              example: 12
+            name:
+              type: string
+              description: 币种名称
+              example: CCEC
+      sellerCoin:
+        type: array
+        description: 卖方币种
+        items:
+          type: object
+          properties:
+            id:
+              type: integer
+              description: 币种ID
+              example: 12
+            name:
+              type: string
+              description: 币种名称
+              example: CCEC
+  PostOrderMarketRequest:
+    type: object
+    description: 生成新增市场的订单
+    properties:
+      sellerCoinId:
+        type: integer
+        description: 卖方币种ID
+        example: '2'
+        minLength: 1
+        maxLength: 32
+      buyerCoinId:
+        type: integer
+        description: 买方币种ID
+        example: '1'
+        minLength: 1
+        maxLength: 32
+      allottedTime:
+        type: integer
+        description: 购买期限
+        example: '6'
+      feeRate:
+        type: number
+        description: 手续费收益率
+        format: double
+  PostUnauthorizedResponse:
+    type: object
+    description: 账户详情
+    properties:
+      Authorization:
+        type: string
+        format: Authorization
+        description: 验证
+        example: 'HTTP/1.1 401 Unauthorized Date: Wed, 21 Oct 2015 07:28:00 GMT WWW-Authenticate:
+          Basic realm=Access to staging site;type=geetest'
+  PostBindGoogleAuthenticatorRequest:
+    required:
+    - googleCode
+    - token
+    description: 绑定或者修改谷歌验证
+    properties:
+      googleCode:
+        type: string
+        description: 谷歌验证码
+        example: '789456'
+        minLength: 6
+        maxLength: 6
+      token:
+        description: 二次验证token
+        type: string
+        example: eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyVHlwZSI6IkFMVEVSX1BIT05FIiwiZXhwIjoxNTQzMDQ5MzYzLCJ1c2VySWQiOjF9.bG44J_ExA9uB_HsT0cpbSK_SIh1F47fNR-QmmjEx58tAuwfuARPn0Meoob0QjV-ayUebsqtgaZOvORsdYKaacw
+        minLength: 10
+        maxLength: 256
+  GetAllWithdrawAddressesResponse:
+    type: array
+    description: 提币地址记录
+    items:
+      type: object
+      description: 提币记录实体
+      properties:
+        id:
+          type: string
+          description: 提币地址ID
+        coinId:
+          type: string
+          description: 币id
+        coinName:
+          type: string
+          description: 币id
+        addressTag:
+          type: string
+          description: 地址标签
+        remark:
+          type: string
+          description: 地址备注
+        address:
+          type: string
+          description: 提币地址
+  GetDashboardHistoricalDataRequest:
+    type: object
+    description: 获取dashboard成交量数据传参
+    properties:
+      tradingAreaId:
+        type: string
+        description: 交易分区id
+      scope:
+        type: string
+        description: 时间间隔
+        enum:
+        - 1w
+        - 1m
+        - 3m
+  initGoogleResponse:
+    type: object
+    description: 谷歌初始化反馈
+    properties:
+      uri:
+        type: string
+        description: 生成二维码的字符串
+        example: otpauth://totp/tp/544832037@qq.com?sec?secret=ZHMP6Z5LUYEEV6UT
+      key:
+        type: string
+        description: 私钥
+        example: ZHMP6Z5LUYEEV6UT
+  PostOpenGoogleAuthenticatorRequest:
+    required:
+    - googleCode
+    description: 开启谷歌验证码
+    properties:
+      googleCode:
+        type: string
+        description: 谷歌验证码
+        example: '789456'
+        minLength: 6
+        maxLength: 6
+  FaceIdResultResponse:
+    type: object
+    description: 移动端URL信息
+    properties:
+      request_id:
+        description: request-id
+        type: string
+        example: 1462259763,e2d2f8d6-204b-4c43-92ea-1d62b071f83c
+      status:
+        description: status，参考https://faceid.com/pages/documents/5680488
+        type: string
+        example: OK
+      biz_info:
+        description: buz info，说明如下
+        type: object
+        properties:
+          biz_extra_data:
+            type: string
+          biz_id:
+            type: string
+            example: 1462259748,52b13fb5-8dfb-4537-a62b-a641d5e929f1
+          biz_no:
+            type: string
+            example: cc47190f-5502-44a2-ab74-ea4f0f649f61
+      idcard_info:
+        description: idcard info
+        type: object
+        properties:
+          idcard_mode:
+            type: string
+            example: '1'
+          idcard_uneditable_feild:
+            type: string
+            example: idcard_number,idcard_valid_date
+          idcard_number:
+            type: string
+            example: '412827198808080111'
+          idcard_name:
+            type: string
+            example: 杨大侠
+          idcard_issued_by:
+            type: string
+            example: 北京市公安局
+          front_side:
+            type: object
+            properties:
+              ocr_result:
+                type: object
+                properties:
+                  address:
+                    type: string
+                    example: 北京市海淀区XXXX
+                  birthday:
+                    type: object
+                    properties:
+                      day:
+                        type: string
+                        example: '22'
+                      month:
+                        type: string
+                        example: '12'
+                      year:
+                        type: string
+                        example: '1988'
+                  gender:
+                    type: string
+                    example: 男
+                  id_card_number:
+                    type: string
+                    example: '412827198808080111'
+                  name:
+                    type: string
+                    example: 杨大侠
+                  race:
+                    type: string
+                    example: 汉
+                  legality:
+                    type: object
+                    properties:
+                      ID Photo:
+                        type: number
+                        example: 0.855
+                      'Temporary ID Photo ':
+                        type: number
+                        example: 0
+                      Photocopy:
+                        type: number
+                        example: 0.049
+                      Screen:
+                        type: number
+                        example: 0.096
+                      Edited:
+                        type: number
+                        example: 0
+              upload_times:
+                type: number
+                example: 1
+          back_side:
+            type: object
+            properties:
+              ocr_result:
+                type: object
+                properties:
+                  issued_by:
+                    type: string
+                    example: 北京市公安局海淀分局
+                  valid_date:
+                    type: string
+                    example: 2010.11.13-2020.11.13
+              upload_times:
+                type: number
+                example: 1
+              legality:
+                type: object
+                properties:
+                  ID Photo:
+                    type: number
+                    example: 0.855
+                  'Temporary ID Photo ':
+                    type: number
+                    example: 0
+                  Photocopy:
+                    type: number
+                    example: 0.049
+                  Screen:
+                    type: number
+                    example: 0.096
+                  Edited:
+                    type: number
+                    example: 0
+      liveness_result:
+        type: object
+        properties:
+          procedure_type:
+            type: string
+            example: video
+          result:
+            type: string
+            enum:
+            - PASS
+            - FAIL
+            - TIMEOUT
+            example: PASS
+          details:
+            type: object
+            properties:
+              UPLOAD_TIMES:
+                type: number
+                example: 5
+              FACE_NOT_FOUND:
+                type: number
+                example: 0,
+              LOW_FACE_QUALITY:
+                type: number
+                example: 0,
+              INVALID_VIDEO_DURATION:
+                type: number
+                example: 1
+              SR_ERROR:
+                type: number
+                example: 2
+              NOT_SYNCHRONIZED:
+                type: number
+                example: 1
+              VIDOE_FORMAT_UNSUPPORTED:
+                type: number
+                example: 0
+              NO_AUDIO:
+                type: number
+                example: 0
+          face_genuineness:
+            type: object
+            properties:
+              synthetic_face_confidence:
+                type: number
+                example: 0.88
+              synthetic_face_threshold:
+                type: number
+                example: 0.5,
+              mask_confidence:
+                type: number
+                example: 0.32,
+              mask_threshold:
+                type: number
+                example: 0.5,
+              screen_replay_confidence:
+                type: number
+                example: 0,
+              screen_replay_threshold:
+                type: number
+                example: 0.5
+      verify_result:
+        type: object
+        properties:
+          result_faceid:
+            type: object
+            properties:
+              confidence:
+                type: number
+                example: 68.918
+              thresholds:
+                type: object
+                properties:
+                  '1e-3':
+                    type: number
+                    example: 64
+                  '1e-4':
+                    type: number
+                    example: 69,
+                  '1e-5':
+                    type: number
+                    example: 74,
+                  '1e-6':
+                    type: number
+                    example: 79.9
+          result_ref1:
+            type: object
+            properties:
+              confidence:
+                type: number
+                example: 68.918
+              thresholds:
+                type: object
+                properties:
+                  '1e-3':
+                    type: number
+                    example: 64
+                  '1e-4':
+                    type: number
+                    example: 69,
+                  '1e-5':
+                    type: number
+                    example: 74,
+                  '1e-6':
+                    type: number
+                    example: 79.9
+          result_idcard_photo:
+            type: object
+            properties:
+              confidence:
+                type: number
+                example: 68.918
+              thresholds:
+                type: object
+                properties:
+                  '1e-3':
+                    type: number
+                    example: 64
+                  '1e-4':
+                    type: number
+                    example: 69,
+                  '1e-5':
+                    type: number
+                    example: 74,
+                  '1e-6':
+                    type: number
+                    example: 79.9
+          result_idcard_datasource:
+            type: object
+            properties:
+              confidence:
+                type: number
+                example: 68.918
+              thresholds:
+                type: object
+                properties:
+                  '1e-3':
+                    type: number
+                    example: 64
+                  '1e-4':
+                    type: number
+                    example: 69,
+                  '1e-5':
+                    type: number
+                    example: 74,
+                  '1e-6':
+                    type: number
+                    example: 79.9
+          id_exceptions:
+            type: object
+            properties:
+              id_attacked:
+                type: number
+                example: 0
+              id_photo_monochrome:
+                type: number
+                example: 0
+      images:
+        type: object
+        properties:
+          image_idcard_back:
+            type: string
+            example: 'data: image/jpeg;base64,...'
+          image_idcard_front:
+            type: string
+            example: 'data: image/jpeg;base64,...'
+          image_best:
+            type: string
+            example: 'data: image/jpeg;base64,...'
+      time_used:
+        type: number
+        example: 93
+  PostLoginRequest:
+    type: object
+    description: 登录传的参数
+    required:
+    - account
+    - password
+    - challenge
+    - seccode
+    - validate
+    properties:
+      account:
+        type: string
+        description: 邮箱或者手机号吗
+        example: mailto:hello.world@email.com or number:13457894561
+        minLength: 8
+        maxLength: 64
+      password:
+        type: string
+        description: 密码
+        example: ABCD1234$#@!
+        format: password
+        minLength: 8
+        maxLength: 16
+      challenge:
+        type: string
+        description: 极验参数
+        example: 87a2661cb8458e5cee1a5741c13eb218k7
+      seccode:
+        type: string
+        description: 极验参数
+        example: 9be85a4934b0abd5302cf8493feaffa8|jordan
+      validate:
+        type: string
+        description: 极验参数
+        example: 9be85a4934b0abd5302cf8493feaffa8
+  PostWithdrawAddressRequest:
+    type: object
+    description: 提币地址信息
+    properties:
+      coinId:
+        description: 币种id
+        type: string
+      remark:
+        description: 备注
+        type: string
+        minLength: 0
+        maxLength: 128
+      address:
+        description: 提币地址
+        type: string
+        maxLength: 128
+  FaceIdResultErrorResponse:
+    type: object
+    description: 移动端URL信息
+    properties:
+      error_message:
+        description: |
+          错误消息:
+            * `RESULT_NOT_FOUND` - 400, 传入的业务编号错误。
+            * `MISSING_ARGUMENTS: <key>` - 400, 缺少某个必选参数。
+            * `MISSING_ARGUMENTS: <key>` - 400, 某个参数解析出错（比如必须是数字，但是输入的是非数字字符串; 或者长度过长，etc.）。
+            * `AUTHENTICATION_ERROR` - 403, api_key和api_secret不匹配。
+            * `AUTHENTICATION_ERROR:Denied` - 403, api_key被停用、调用次数超限、没有调用此API的权限，或者没有以当前方式调用此API的权限。
+            * `CONCURRENCY_LIMIT_EXCEEDED` - 403, 并发数超过限制。
+            * `API_NOT_FOUND` - 404, 所调用的API不存在。
+            * `INTERNAL_ERROR` - 500,  服务器内部错误，当此类错误发生时请再次请求，如果持续出现此类错误，请及时联系FaceID客服或商务。
+        type: string
+      request_id:
+        description: request id
+        type: string
+        example: 1462259901,fa79992d-ca61-48de-aa50-ea337c6aad42
+  GetAssetPasswordResponse:
+    type: object
+    description: 获取是否设置资产密码
+    properties:
+      isSet:
+        type: boolean
+        description: 是否设置
+        example: true
+  PostOrderMarketRenewRequest:
+    type: object
+    description: 生成新增市场的订单
+    properties:
+      marketId:
+        type: string
+        description: 市场id
+        example: '2'
+        minLength: 1
+        maxLength: 32
+      allottedTime:
+        type: integer
+        description: 购买期限
+        example: '6'
+  PostSetPasswordRequest:
+    type: object
+    description: 修改登录密码请求
+    required:
+    - oldPassword
+    - newPassword
+    properties:
+      oldPassword:
+        description: 旧密码
+        type: string
+        example: ABCD1234!@#$
+        format: password
+        minLength: 8
+        maxLength: 16
+      newPassword:
+        type: string
+        example: 1234ABCD$#@!
+        format: password
+        minLength: 8
+        maxLength: 16
+  MarketListRequest:
+    type: object
+    description: 获取市场列表请求参数
+    properties:
+      symbol:
+        type: string
+        description: 市场标识
+      createdAtSort:
+        type: string
+        description: 创建时间排序类型
+        enum:
+        - asc
+        - desc
+      disabledAtSort:
+        type: string
+        description: 失效时间排序类型
+        enum:
+        - asc
+        - desc
+  GetDailyStatisticsResponse:
+    type: object
+    description: 获取dashboard当日统计数
+    properties:
+      day:
+        type: string
+        description: 当日日期
+        format: date-time
+        example: 2018/08/09
+      today:
+        type: object
+        description: 今日统计
+        properties:
+          orders:
+            type: integer
+            description: 订单量
+            example: 1200000
+          tradeNumber:
+            type: integer
+            description: 成交数量
+            example: 25000
+          browseUsers:
+            type: integer
+            description: 浏览用户
+            example: 100000
+          transactionUsers:
+            type: integer
+            description: 交易用户
+            example: 1000000
+          activityUsers:
+            type: number
+            description: 用户活跃度
+            example: 90%
+      yesterday:
+        type: object
+        description: 昨日统计
+        properties:
+          orders:
+            type: integer
+            description: 订单量
+            example: 1200000
+          tradeNumber:
+            type: integer
+            description: 成交数量
+            example: 25000
+          browseUsers:
+            type: integer
+            description: 浏览用户
+            example: 100000
+          transactionUsers:
+            type: integer
+            description: 交易用户
+            example: 1000000
+          activityUsers:
+            type: number
+            description: 用户活跃度
+            example: 80%
+  PostWithdrawRequest:
+    type: object
+    description: 提币请求
+    properties:
+      traPassword:
+        description: 资金密码
+        type: string
+        example: 64456df
+        minLength: 8
+        maxLength: 16
+      baseToken:
+        description: baseToken
+        type: string
+        example: 64456df
+      coinId:
+        description: 币种id
+        type: string
+        example: 64456df
+      amount:
+        description: 数量
+        type: string
+        example: 1.345
+      addressTag:
+        description: 地址标签
+        type: string
+        example: 以太坊地址
+        maxLength: 128
+      remark:
+        description: 地址备注
+        type: string
+        example: 以太坊地址
+        maxLength: 128
+      address:
+        description: 提币地址
+        type: string
+        example: 0x9hjfg8h23435hdfgudht45
+        maxLength: 128
+      isSaveAddress:
+        type: boolean
+        example: true
+  ServiceRate:
+    type: object
+    description: 获取交易服务费率
+    properties:
+      serviceRate:
+        type: number
+        description: 获取交易服务费率
+        format: double
+  GetInviteInfoResponse:
+    type: object
+    description: 邀请排行榜（前三）
+    properties:
+      rewardTotal:
+        type: string
+        description: 累计奖励
+        example: '1.69'
+      inviteTotal:
+        type: string
+        description: 邀请用户
+        example: '169'
+      inviteCode:
+        type: string
+        description: 邀请码
+        example: 4545AAA
+  GetAssetsResponse:
+    type: object
+    description: 获取资产信息
+    properties:
+      estimates:
+        type: object
+        description: 资产估算信息
+        properties:
+          usdt:
+            type: string
+            description: 折算usdt
+            example: 1564988.651651
+          cny:
+            type: string
+            description: 折算cny
+            example: 1564988.651651
+      itemNumber:
+        type: integer
+        description: 总条数
+        example: 156
+      assetInfo:
+        type: array
+        description: 资产详情列表
+        items:
+          type: object
+          description: 资产详情
+          properties:
+            coinId:
+              type: string
+              description: 币ID
+              example: '454'
+            warning:
+              type: string
+              description: 警示信息
+              example: 该币种由于**不支持提币
+            shortName:
+              type: string
+              description: 币简称
+              example: ETH
+            fullName:
+              type: string
+              description: 币简称
+              example: ETH
+            logo:
+              type: string
+              description: logo
+            isAllowRecharge:
+              type: boolean
+              description: 是否允许充值
+              example: true
+            isAllowWithdraw:
+              type: boolean
+              description: 是否允许提币
+              example: true
+            total:
+              type: string
+              description: 总计
+              example: 10.0
+            balance:
+              type: string
+              description: 可用金额
+              example: 11.0
+            frozen:
+              type: string
+              description: 冻结金额
+              example: 12.0
+            lock:
+              type: string
+              description: 锁定金额
+              example: 12.0
+  PostClosePhoneAuthenticatorRequest:
+    required:
+    - account
+    - verificationCode
+    - phoneCode
+    properties:
+      account:
+        type: string
+        description: mailto:1009820785@qq.com or google:1009820785@qq.com
+        format: string
+        example: mailto:1009820785@qq.com
+      verificationCode:
+        type: string
+        description: 邮箱或者谷歌验证码
+        example: '794568'
+        minLength: 6
+        maxLength: 6
+      phoneCode:
+        type: string
+        description: 电话验证码
+        example: '794568'
+        minLength: 6
+        maxLength: 6
+  GetNoticesResponse:
+    type: object
+    description: 获取交易所公告列表
+    properties:
+      meta:
+        $ref: '#/definitions/Pagination'
+      items:
+        type: array
+        description: 获取列表信息
+        items:
+          type: object
+          description: 获取列表信息
+          properties:
+            id:
+              type: string
+              description: 公告ID
+            title:
+              type: string
+              description: 标题
+            status:
+              type: boolean
+              description: 状态 1发布  0禁用
+            createdAt:
+              type: string
+              format: date-time
+              description: 创建时间
+            language:
+              type: string
+              description: 语种：中文zh_cn 英文en_us 马来文ms_my 韩文ko_kr 柬埔寨文km_kh
+              enum:
+              - zh_cn
+              - en_us
+              - ms_my
+              - ko_kr
+              - km_kh
+  GetMarketListResponse:
+    type: object
+    description: 获取市场列表
+    properties:
+      query:
+        $ref: '#/definitions/MarketListRequest'
+      meta:
+        $ref: '#/definitions/Pagination'
+      items:
+        type: array
+        description: 获取市场列表
+        items:
+          type: object
+          properties:
+            id:
+              type: string
+              description: 交易对市场ID
+              example: 578790
+            tradingPair:
+              type: string
+              description: 市场币对
+              example: CCEC/BTC
+            totalRate:
+              type: number
+              format: double
+              description: 总手续费率
+              example: 0.085
+            feeRate:
+              type: number
+              format: double
+              description: 手续费收益率
+              example: 0.085
+            createdAt:
+              type: string
+              format: date-time
+              description: 创建时间
+              example: '2018-08-08T10:51:02'
+            disabledAt:
+              type: string
+              format: date-time
+              description: 失效时间
+              example: '2018-08-08T10:51:02'
+            deepSharing:
+              type: boolean
+              description: 是否深度共享
+              example: true
+            status:
+              type: string
+              description: 状态
+              enum:
+              - in_review
+              - running
+              - wait_close
+              - wait_renew
+              - ' closed_in'
+              example: closed_in
+  GetOrderResponse:
+    type: object
+    description: 获取订单记录
+    properties:
+      meta:
+        $ref: '#/definitions/Pagination'
+      query:
+        $ref: '#/definitions/GetOrderQuery'
+      items:
+        type: array
+        description: 记录列表
+        items:
+          type: object
+          description: 记录实体
+          properties:
+            createdAt:
+              type: string
+              description: 创建时间
+              format: date-time
+            completedAt:
+              type: string
+              description: 完成时间
+              format: date-time
+            orderId:
+              type: string
+              description: 订单编号
+            accountId:
+              type: string
+              description: 账户Id
+            type:
+              type: string
+              description: 订单类型
+              enum:
+              - ADD_MARKET
+              - RECHARGE_MARKET
+            status:
+              type: string
+              description: 订单状态
+              enum:
+              - SUCCEED
+              - CANCEL
+              - UNPAID
+            coinName:
+              type: string
+              description: 币种
+              example: CCEC
+            amount:
+              type: string
+              description: 数量
+              example: 100.1
+  PostResetPasswordRequest:
+    type: object
+    description: 更新密码
+    required:
+    - uri
+    - challenge
+    - seccode
+    - validate
+    properties:
+      uri:
+        type: string
+        description: 电话或者邮箱, 例如：mailto:hello.world@email.com, number:18645511111, ...
+        example: number:18645511111
+      challenge:
+        type: string
+        description: 极验参数
+        example: 87a2661cb8458e5cee1a5741c13eb218k7
+      seccode:
+        type: string
+        description: 极验参数
+        example: 9be85a4934b0abd5302cf8493feaffa8|jordan
+      validate:
+        type: string
+        description: 极验参数
+        example: 9be85a4934b0abd5302cf8493feaffa8
+  PostIndividualCertificationRequest:
+    type: object
+    description: 申请个人实名认证的请求
+    required:
+    - nationalityCode
+    - name
+    - type
+    - number
+    - frontPhoto
+    - backPhoto
+    - handheldPhoto
+    properties:
+      nationalityCode:
+        type: string
+        format: nationalityCode
+        description: 国籍（证件所在区域）
+        example: CN
+        minLength: 2
+        maxLength: 128
+      name:
+        type: string
+        format: name
+        description: 姓名
+        example: 张三
+        minLength: 2
+        maxLength: 20
+      type:
+        type: string
+        format: type
+        description: 证件类型：identityCard-身份证；passport-护照
+        example: passport
+        enum:
+        - identityCard
+        - passport
+      number:
+        type: string
+        description: 证件号码
+        example: '232332199003111111'
+        minLength: 8
+        maxLength: 20
+      frontPhoto:
+        type: string
+        format: frontPhoto
+        description: 证件正面照
+        example: urlid
+      backPhoto:
+        type: string
+        format: backPhoto
+        description: 证件反面照
+        example: urlid
+      handheldPhoto:
+        type: string
+        format: handHeldPhoto
+        description: 手持证件照
+        example: urlid
+  GetExchangeRequest:
+    type: object
+    properties:
+      name:
+        type: string
+        example: 慕白
+        description: 交易所名字
+        minLength: 2
+        maxLength: 16
+      nationality:
+        type: string
+        example: '+86'
+        description: 交易所国家
+        minLength: 2
+        maxLength: 5
+      logo:
+        type: string
+        example: http://edioda.asafa.sd
+        description: 交易所logo
+      tags:
+        type: string
+        example: '标签1 × ,标签2 × '
+        description: 交易所标签
+      phone:
+        description: 手机号
+        type: string
+        example: '+8613510022445'
+        minLength: 8
+        maxLength: 16
+      email:
+        description: 电子邮箱
+        type: string
+        example: 1234832456@qq.com
+        minLength: 6
+        maxLength: 64
+  verifyRequest:
+    type: object
+    description: 二次验证成功返回
+    properties:
+      token:
+        type: string
+        description: 二次验证成功返回
+        example: d41d8cd98f00b204e9800998ecf8427e
+  GetBannerListResponse:
+    type: object
+    description: 轮播列表
+    properties:
+      items:
+        type: array
+        description: 列表
+        items:
+          type: object
+          description: 列表项
+          properties:
+            id:
+              type: string
+              description: id
+            banner:
+              type: string
+              description: 轮播图
+            title:
+              type: string
+              description: 标题
+            createdAt:
+              type: string
+              description: 创建时间
+            status:
+              type: boolean
+              description: 状态
+            internal:
+              type: boolean
+              description: 是否为内置
+  GetUrlResponse:
+    type: object
+    description: 返回文件上传对应的URL
+    properties:
+      url:
+        description: url
+        type: string
+        example: http://www.wanshare.com
+  GetCoinTradeSummaryResponse:
+    type: array
+    description: 单一币种在交易所内成交量在整个平台内成交量占比(24小时)
+    items:
+      type: object
+      description: 单一币种在交易所内成交量在整个平台内成交量占比(24小时)
+      properties:
+        exchangeName:
+          type: string
+          description: 交易所名称
+        volumePct:
+          type: string
+          description: 交易所内当前币种成交量在整个平台内成交量占比
+  PutAssetsPasswordRequest:
+    type: object
+    description: 修改资金密码请求
+    properties:
+      password:
+        description: 登录密码
+        type: string
+        example: ABCD1234!@#$
+        format: password
+        minLength: 8
+        maxLength: 16
+      traPassword:
+        description: 新密码
+        type: string
+        example: 1234ABCD$#@!
+        format: password
+        minLength: 8
+        maxLength: 16
+      baseToken:
+        description: baseToken
+        type: string
+        example: 1234AB
+        maxLength: 200
+  GetBalanceByCoinIdResponse:
+    type: object
+    description: 获取单个币种资产信息
+    properties:
+      balance:
+        type: string
+        description: 可用金额
+        example: 11.0
+  PostLoginResponse:
+    type: object
+    description: 账户信息
+    properties:
+      token:
+        description: 会话串
+        type: string
+        example: d41d8cd98f00b204e9800998ecf8427e
+      otcId:
+        description: 法币平台id
+        type: string
+        example: 1
+  GetWithdrawableListsResponse:
+    type: array
+    description: 可提币种信息
+    items:
+      type: object
+      description: 提币信息
+      properties:
+        coinId:
+          type: string
+          description: 币ID
+          example: '1'
+        logo:
+          type: string
+          description: 币logo
+        shortName:
+          type: string
+          description: 币简称
+        fullName:
+          type: string
+          description: 币全称
+        confirmationNumber:
+          type: integer
+          description: 区块确认数量
+        minWithdraw:
+          type: string
+          description: 单笔最小提币数量
+        maxWithdraw:
+          type: string
+          description: 单笔最大提币数量
+        withdrawRate:
+          type: string
+          description: 提币手续费率
+        minFee:
+          type: string
+          description: 提币最小手续费
+        maxWithdrawOneDay:
+          type: string
+          description: 每日提币最大数量
+  PostPlatFormRegisterRequest:
+    type: object
+    description: 新建账户请求
+    properties:
+      nickName:
+        type: string
+        description: 昵称
+        example: 废弃
+        minLength: 2
+        maxLength: 8
+  PostCodeResponse:
+    type: object
+    description: 验证码详情
+    properties:
+      code:
+        type: string
+        description: 验证码
+        format: '123321'
+        maxLength: 6
+  GetTradeHistoryResponse:
+    type: object
+    description: 获取成交记录列表
+    properties:
+      meta:
+        $ref: '#/definitions/Pagination'
+      query:
+        $ref: '#/definitions/GetTradeHistoryQuery'
+      items:
+        type: array
+        description: 成交记录列表
+        items:
+          type: object
+          description: 成交记录
+          properties:
+            createdAt:
+              type: string
+              description: 成交时间
+              format: date-time
+              example: '2017-01-22T09:28:33Z'
+            buyerExchangeId:
+              type: string
+              description: 买方交易所ID
+              example: '79646'
+            sellerExchangeId:
+              type: string
+              description: 卖方交易所ID
+              example: '79646'
+            tradeHistoryId:
+              description: 成交记录编号
+              type: string
+            tradingPair:
+              type: string
+              description: 市场
+              example: XRP/BTC
+            price:
+              type: string
+              description: 成交价格
+              example: '298.9'
+            volume:
+              type: string
+              description: 成交数量
+              example: '0.03716'
+            tradeAmount:
+              type: string
+              description: 成交金额
+              example: '298.9'
+            buyerFee:
+              type: string
+              description: 买方手续费
+              example: 298.900000 BTC
+            sellerFee:
+              type: string
+              description: 卖方手续费
+              example: 298.900000 BTC
+            buyerUid:
+              type: string
+              description: 买方UID
+              example: hashed-user-id
+            sellerUid:
+              type: string
+              description: 卖方ID
+              example: hashed-user-id
+  GetRankingListResponse:
+    type: object
+    description: 邀请排行榜（前三）
+    properties:
+      items:
+        type: array
+        description: 邀请排行榜
+        items:
+          type: object
+          properties:
+            account:
+              type: string
+              description: 账户名
+              example: 98798454@qq.com
+            rewardTotal:
+              type: string
+              description: 累计奖励
+              example: '1.69'
+  ExchangeCoin:
+    type: object
+    description: 获取交易币种简称列表
+    properties:
+      buyerCoin:
+        type: array
+        description: 买方币种
+        items:
+          type: object
+          properties:
+            id:
+              type: integer
+              description: 币种ID
+              example: 12
+            name:
+              type: string
+              description: 币种名称
+              example: CCEC
+      sellerCoin:
+        type: array
+        description: 卖方币种
+        items:
+          type: object
+          properties:
+            id:
+              type: integer
+              description: 币种ID
+              example: 12
+            name:
+              type: string
+              description: 币种名称
+              example: CCEC
+  PostbindPhoneUnauthorizedResponse:
+    type: object
+    description: 绑定手机
+    properties:
+      baseToken:
+        type: string
+        format: baseToken
+        description: 验证
+        example: eyJhbGciOiJIUzUxMiJ9.eyJjcmVhdGVkIjoxNTM3NDk4NTgzNTQzLCJleHAiOjE1Mzc2NzEzODMsInVzZXJpZCI6Ijk1Mjc0MjUwMjIyNDM2MzUyIiwidXNlcm5hbWUiOiIifQ.ibbEDl5OPXCNCpf7HLkwtaP1vieGgFG5GhH6tVtbUddyvj7QL3yS7G0lonSjUe_F75XKcQgv0MTmyncWfZoWVQ
+  Pagination:
+    type: object
+    description: 获取列表的源请求信息
+    properties:
+      requestedPage:
+        type: integer
+        description: 请求的页码
+        example: 1
+      page:
+        type: integer
+        description: 实际的页码
+      totalPage:
+        type: integer
+        description: 总页码数
+      itemsPerPage:
+        type: integer
+        description: 每页条目数
+      totalCount:
+        type: integer
+        description: 总条数
+      links:
+        type: array
+        description: 相关链接
+        items:
+          type: object
+          description: 链接信息
+          properties:
+            rel:
+              type: string
+              description: 相对于
+              enum:
+              - self
+              - first
+              - previous
+              - next
+              - last
+            link:
+              type: string
+              description: 链接
+  PutOrderMarketRequest:
+    type: object
+    description: 支付市场的订单
+    properties:
+      orderId:
+        type: string
+        description: 订单ID
+        example: '212312'
+        minLength: 1
+        maxLength: 32
+      token:
+        type: string
+        description: 二次验证token
+        example: 1124141asafqaw
+  PostRegisterRequest:
+    type: object
+    description: 新建账户请求
+    required:
+    - email
+    - password
+    - verificationCode
+    - nationalityCode
+    - challenge
+    - seccode
+    - validate
+    properties:
+      email:
+        type: string
+        description: 只能邮箱注册
+        example: hello.world@email.com"
+        minLength: 6
+        maxLength: 64
+      password:
+        type: string
+        description: 密码
+        example: ABCD1234$#@!
+        format: password
+        minLength: 8
+        maxLength: 16
+      promotionCode:
+        type: string
+        description: 邀请码
+        example: 2NbYYJiEb4npQ
+        minLength: 4
+        maxLength: 20
+      verificationCode:
+        type: string
+        description: 验证码
+        example: asbcfg
+        minLength: 6
+        maxLength: 6
+      nationalityCode:
+        type: string
+        description: 国籍
+        example: CN
+        minLength: 2
+        maxLength: 128
+      nickName:
+        type: string
+        description: 昵称
+        example: 会飞的企鹅
+        minLength: 2
+        maxLength: 8
+      challenge:
+        type: string
+        description: 极验参数
+        example: 87a2661cb8458e5cee1a5741c13eb218k7
+      seccode:
+        type: string
+        description: 极验参数
+        example: 9be85a4934b0abd5302cf8493feaffa8|jordan
+      validate:
+        type: string
+        description: 极验参数
+        example: 9be85a4934b0abd5302cf8493feaffa8
+  GetEnterpriseResponse:
+    type: object
+    description: 查看企业认证信息
+    properties:
+      companyName:
+        type: string
+        format: companyName
+        description: 企业名字
+        example: 中国银行
+      socialCode:
+        type: string
+        format: string
+        description: 社会统一编号
+        example: '121212'
+      name:
+        type: string
+        format: name
+        description: 联系人
+        example: 李二狗
+      phoneNumber:
+        type: string
+        format: phoneNumber
+        description: 联系电话
+        example: '18644444444'
+  GetRewardListResponse:
+    type: object
+    description: 奖励记录
+    properties:
+      meta:
+        $ref: '#/definitions/Pagination'
+      items:
+        type: array
+        description: 奖励记录
+        items:
+          type: object
+          properties:
+            account:
+              type: string
+              description: 账户名
+              example: 98798454@qq.com
+            reward:
+              type: string
+              description: 奖励金额
+              example: '3.22'
+            exchang:
+              type: string
+              description: 交易所
+              example: 大象牙交易所
+            rewardType:
+              type: string
+              description: 奖励类型
+              example: 邀请好友
+            tradeAt:
+              type: string
+              description: 交易时间
+              example: '2018-08-05 19:31:20'
+  GetInvitesListResponse:
+    type: object
+    description: 邀请记录
+    properties:
+      meta:
+        $ref: '#/definitions/Pagination'
+      items:
+        type: array
+        description: 邀请记录
+        items:
+          type: object
+          properties:
+            id:
+              type: string
+              description: 自增长id
+              example: '1'
+            promoterId:
+              type: string
+              description: 邀请码id
+              example: 12AQ
+            accountId:
+              type: string
+              description: 账户id
+              example: '2'
+            emailAddress:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: 注册时间
+                  example: 100@qq.com
+            createdAt:
+              format: datatime
+              example: '2018-10-13 17:48:32'
+  PostResetPhoneUnauthorizedResponse:
+    type: object
+    description: 绑定手机
+    properties:
+      baseToken:
+        type: string
+        format: baseToken
+        description: 验证
+        example: eyJhbGciOiJIUzUxMiJ9.eyJjcmVhdGVkIjoxNTM3NDk4NTgzNTQzLCJleHAiOjE1Mzc2NzEzODMsInVzZXJpZCI6Ijk1Mjc0MjUwMjIyNDM2MzUyIiwidXNlcm5hbWUiOiIifQ.ibbEDl5OPXCNCpf7HLkwtaP1vieGgFG5GhH6tVtbUddyvj7QL3yS7G0lonSjUe_F75XKcQgv0MTmyncWfZoWVQ
+      uri:
+        type: string
+        format: baseToken
+        description: 验证
+        example: 1009820785@qq.com
+  PostAssetsPasswordCheckResponse:
+    type: object
+    description: 资金密码校验
+    properties:
+      token:
+        type: string
+        description: 生成token
+        example: '123123123'
+  PostNoticesRequest:
+    type: object
+    description: 公告信息
+    properties:
+      title:
+        description: 标题
+        type: string
+        example: 标题1
+        minLength: 2
+        maxLength: 16
+      content:
+        description: 公告内容
+        example: 注意：这是公告的内容信息！
+        maxLength: 2048
+        type: string
+      language:
+        type: string
+        description: 语种：中文zh_cn 英文en_us 马来文ms_my 韩文ko_kr 柬埔寨文km_kh
+        enum:
+        - zh_cn
+        - en_us
+        - ms_my
+        - ko_kr
+        - km_kh
+  GetEntrustsQuery:
+    type: object
+    description: 查询条件返回值
+    properties:
+      exchangeId:
+        type: string
+        description: 交易所id
+        example: hasded-exchange-id
+      tradingPair:
+        type: string
+        description: 市场
+        example: ETH/BTC
+      tradeType:
+        type: string
+        description: 交易类型 both 全部   buy 买入   sell 买出
+        enum:
+        - both
+        - buy
+        - sell
+        example: both
+      status:
+        type: string
+        description: 委托单状态
+        enum:
+        - entrusting
+        - cancelled
+        - done
+        - triggering
+        example: cancelled,done
+      uid:
+        type: string
+        description: 用户id
+        example: '1234'
+  GetProjectsResponse:
+    type: object
+    description: 获取项目列表
+    properties:
+      meta:
+        $ref: '#/definitions/Pagination'
+      query:
+        type: object
+        description: 获取项目列表请求信息
+        properties:
+          coinName:
+            type: string
+            description: 币种简称
+      items:
+        type: array
+        description: 获取列表信息
+        items:
+          type: object
+          description: 链接信息
+          properties:
+            projectId:
+              type: string
+              description: 项目ID
+            shortName:
+              type: string
+              description: 币简称
+            fullName:
+              type: string
+              description: 币全称
+            coinLogoUrl:
+              type: string
+              description: 币种LOGO
+            issuePrice:
+              type: string
+              description: 发行价格
+            issuedVolume:
+              type: string
+              description: 发行量
+            holdersNumber:
+              type: string
+              description: 持有用户数
+            circulationVolume:
+              type: string
+              description: 流通量
+            officialWebsite:
+              type: string
+              description: 官方网站
+            blockBrowser:
+              type: string
+              description: 区块浏览器
+            accessMethod:
+              description: 接入方式（refuse：拒绝接入、verification：需要验证、accept：无需验证）
+              type: string
+              enum:
+              - refuse
+              - verification
+              - accept
+          example:
+          - projectId: 1
+            shortName: BTC
+            fullName: BTC COIN
+            coinLogoUrl: /xxx.jpg
+            issuePrice: 1
+            issuedVolume: 1000000
+            holdersNumber: 100
+            circulationVolume: 10000
+            officialWebsite: www.baidu.com
+            blockBrowser: www.baidu.com
+            accessMethod: refuse
+          - projectId: 2
+            shortName: ETH
+            fullName: ETH COIN
+            coinLogoUrl: /xxx.jpg
+            issuePrice: 1
+            issuedVolume: 1000000
+            holdersNumber: 100
+            circulationVolume: 10000
+            officialWebsite: www.baidu.com
+            blockBrowser: www.baidu.com
+  PostEnterpriseCertificationRequest:
+    type: object
+    description: 添加企业认证信息
+    required:
+    - companyName
+    - nationalityCode
+    - area
+    - address
+    - logo
+    - socialCode
+    - name
+    - phoneNumber
+    properties:
+      companyName:
+        type: string
+        format: companyName
+        description: 企业名字
+        example: 中国银行
+        minLength: 2
+        maxLength: 50
+      nationalityCode:
+        type: string
+        format: nationalityCode
+        description: 公司国籍（证件所在区域）
+        example: CN
+        minLength: 2
+        maxLength: 128
+      area:
+        type: string
+        description: 公司地区
+        example: 朝阳区
+        minLength: 2
+        maxLength: 128
+      address:
+        type: string
+        description: 公司地址
+        example: 北京丰台科技园
+        minLength: 2
+        maxLength: 128
+      logo:
+        type: string
+        format: logoUrl
+        description: logo
+        example: logoid
+      socialCode:
+        type: string
+        format: string
+        description: 社会统一编号
+        example: '121212'
+        minLength: 8
+        maxLength: 64
+      name:
+        type: string
+        format: name
+        description: 联系人姓名
+        example: 李二狗
+        minLength: 2
+        maxLength: 50
+      phoneNumber:
+        type: string
+        format: phoneNumber
+        description: 联系电话
+        example: '18644444444'
+        minLength: 8
+        maxLength: 16
+      taxNumber:
+        description: 税务登记证编号
+        type: string
+        minLength: 8
+        maxLength: 64
+      organizationCode:
+        description: 组织机构编号
+        type: string
+        minLength: 8
+        maxLength: 64
+      businessLicense:
+        description: 营业执照副本
+        type: string
+        minLength: 8
+        maxLength: 64
+  PostAssetsPasswordCheckRequest:
+    type: object
+    description: 资金密码校验
+    properties:
+      traPassword:
+        description: 资产密码
+        type: string
+        example: 1234ABCD$#@!
+        format: password
+        minLength: 8
+        maxLength: 16
+      coinId:
+        description: 币种
+        type: string
+        example: '10010'
+      amount:
+        description: 数量
+        type: string
+        example: '10010'
+  GetDashboardHistoricalDataResponse:
+    type: object
+    description: dashboard成交量数据
+    properties:
+      coinPair:
+        type: string
+        description: 币对名称
+      items:
+        $ref: '#/definitions/HistoricalDataResponse'
+  PostBaseTokenUnauthorizedResponse:
+    type: object
+    description: 账户详情
+    properties:
+      baseToken:
+        type: string
+        format: baseToken
+        description: 验证
+        example: eyJhbGciOiJIUzUxMiJ9.eyJjcmVhdGVkIjoxNTM3NDk4NTgzNTQzLCJleHAiOjE1Mzc2NzEzODMsInVzZXJpZCI6Ijk1Mjc0MjUwMjIyNDM2MzUyIiwidXNlcm5hbWUiOiIifQ.ibbEDl5OPXCNCpf7HLkwtaP1vieGgFG5GhH6tVtbUddyvj7QL3yS7G0lonSjUe_F75XKcQgv0MTmyncWfZoWVQ
+  phoneNumber:
+    type: object
+    description: 电话格式
+    properties:
+      areaCode:
+        type: string
+        description: 区域码
+      fullPhoneNumber:
+        type: string
+        description: 长手机号
+      shortPhoneNumber:
+        type: string
+        description: 短手机号
+  GetNoticeResponse:
+    type: object
+    description: 公告信息
+    properties:
+      title:
+        description: 标题
+        type: string
+        example: 标题1
+        minLength: 2
+        maxLength: 16
+      content:
+        description: 公告内容
+        example: 注意：这是公告的内容信息！
+        maxLength: 2048
+        type: string
+      createdAt:
+        type: string
+        format: date-time
+        description: 创建时间
+      language:
+        type: string
+        description: 语种：中文zh_cn 英文en_us 马来文ms_my 韩文ko_kr 柬埔寨文km_kh
+        enum:
+        - zh_cn
+        - en_us
+        - ms_my
+        - ko_kr
+        - km_kh
+  VerifyResponse:
+    type: object
+    description: 是否
+    properties:
+      bit:
+        type: boolean
+        description: 是否
+  GetRechargeRecordsResponse:
+    type: object
+    description: 获取账户充币记录
+    properties:
+      meta:
+        $ref: '#/definitions/Pagination'
+      query:
+        $ref: '#/definitions/GetRechargeRecordQuery'
+      items:
+        type: array
+        description: 充币记录列表
+        items:
+          type: object
+          description: 充币记录实体
+          properties:
+            coinId:
+              type: string
+              description: 币id
+              example: '64654'
+            shortName:
+              type: string
+              description: 币简称
+            fullName:
+              type: string
+              description: 币全称
+            logo:
+              type: string
+              description: 币Logo
+            confirmationNumber:
+              type: integer
+              description: 区块确认数
+            completedAt:
+              type: string
+              description: 完成时间
+              format: date-time
+              example: 2018-03-08 22:39
+            amount:
+              type: string
+              description: 充币数量
+              example: 1.0
+            address:
+              type: string
+              description: 充币地址
+              example: 0x89s7dfgiod8fgu9sdf8gdfg
+            txid:
+              type: string
+              description: 交易hash
+              example: 0x89s7dfgiod8fgu9sdf8gdfg
+            status:
+              type: string
+              description: 充币状态
+              enum:
+              - SUCCEED
+              - FAILED
+              - CONFIRMING
+              example: succeed
+            confirmedTimes:
+              type: integer
+              description: 区块确认次数
+              example: 30
+  GetAddMarketOrderDetailResponse:
+    type: object
+    description: 获取订单详情
+    properties:
+      market:
+        type: string
+        description: 市场
+        example: ETH/USDT
+      time:
+        type: string
+        description: 时长
+        example: 6个月
+      price:
+        type: string
+        description: 价格
+        example: 100TP/S
+  ExchangeStatus:
+    type: object
+    description: 获取交易所状态
+    properties:
+      reason:
+        type: string
+        description: 失败原因
+      status:
+        type: string
+        description: 状态
+        enum:
+        - wait_application
+        - pending
+        - initialize
+        - approved
+        - disapproved
+        example: pending
+  GetJournalsResponse:
+    type: object
+    description: 获取收支记录列表
+    properties:
+      meta:
+        $ref: '#/definitions/Pagination'
+      query:
+        $ref: '#/definitions/GetJournalsQuery'
+      items:
+        type: array
+        description: 收支记录列表
+        items:
+          type: object
+          description: 收支记录实体
+          properties:
+            coinId:
+              type: string
+              description: 币ID
+              example: 45613
+            logo:
+              type: string
+              description: 币logo
+            shortName:
+              type: string
+              description: 币简称
+              example: ETH
+            fullName:
+              type: string
+              description: 币全称
+              example: Ethereum
+            amount:
+              type: string
+              description: 变动资产数量
+              example: 4561.6546516
+            orderId:
+              type: string
+              description: 单号
+              example: 25asdfasdf
+            subjectType:
+              type: string
+              description: 科目类型
+              enum:
+              - C2C
+              - RECHARGE
+              - WITHDRAW
+              - ACTIVITY_IN
+              - ACTIVITY_OUT
+              - COMMISSION
+              - FEE
+              - BUY_COMMODITY
+              - SERVICE
+              - OTC_TRANSFER_IN
+              - OTC_TRANSFER_OUT
+              example: coinTrade
+            createdAt:
+              type: string
+              description: 创建时间
+              format: date
+              example: 2018-03-08 22:39
+            style:
+              type: string
+              description: 财务类型
+              enum:
+              - INCREASE
+              - DECREASE
+              example: INCREASE
+  GetOrderQuery:
+    type: object
+    description: 获取账户充币记录
+    properties:
+      serviceType:
+        type: string
+        description: 订单类型
+        enum:
+        - addMarket
+        - marketRecharge
+  initGoogleRequest:
+    required:
+    - account
+    description: 初始化谷歌
+    properties:
+      account:
+        type: string
+        description: 邮箱或是手机,邮箱不超过64个字符，手机不超过16
+        example: mailto:hello.world@email.com, nu, number:18645511111
+        minLength: 16
+        maxLength: 64
+  PostCloseGoogleAuthenticatorRequest:
+    required:
+    - account
+    - verificationCode
+    - googleCode
+    description: 关闭谷歌验证
+    properties:
+      account:
+        type: string
+        description: 邮箱或者手机号：mailto:1009820785@qq.com or number:+861864550202
+        format: string
+        example: mailto:1009820785@qq.com
+      verificationCode:
+        type: string
+        description: 邮箱或者电话号验证码
+        example: '461236'
+        minLength: 6
+        maxLength: 6
+      googleCode:
+        type: string
+        description: 谷歌验证码
+        example: '461236'
+        minLength: 6
+        maxLength: 6
+  ExchangeRequest:
+    type: object
+    properties:
+      name:
+        type: string
+        example: 慕白
+        description: 交易所名字
+        minLength: 2
+        maxLength: 16
+      nationality:
+        type: string
+        example: '+86'
+        description: 交易所国家
+        minLength: 2
+        maxLength: 5
+      logoKey:
+        type: string
+        example: http://edioda.asafa.sd
+        description: 交易所logoKey
+      logoUrl:
+        type: string
+        example: http://edioda.asafa.sd
+        description: 交易所logoUrl
+      tags:
+        type: string
+        example: '标签1 × ,标签2 × '
+        description: 交易所标签
+      email:
+        description: 电子邮箱
+        type: string
+        example: 1234832456@qq.com
+        minLength: 6
+        maxLength: 64
+      phone:
+        type: string
+        description: 电话对象没有字段为空
+        example: '{格式为json 仅供参考 areaCode:+86,shortPhone:18645506065,fullPhoneNumber:+8618645506065}'
+  GetMarketResponse:
+    type: object
+    description: 交易对市场详情
+    properties:
+      id:
+        type: string
+        description: 市场ID
+      tradingPair:
+        type: string
+        description: 市场标识
+      totalRate:
+        type: number
+        format: double
+        description: 总手续费率
+        example: 0.0085
+      feeRate:
+        type: number
+        format: double
+        description: 手续费收益率
+        example: 0.0045
+      serviceRate:
+        type: number
+        format: double
+        description: 交易服务费率
+        example: 0.004
+      disabledAt:
+        type: string
+        format: date-time
+        description: 失效时间
+        example: '2018-08-08T10:51:02'
+      buyerCoinId:
+        type: string
+        description: 买方币种ID
+        example: '1'
+        minLength: 1
+        maxLength: 32
+      sellerCoinId:
+        type: string
+        description: 卖方币种ID
+        example: '2'
+        minLength: 1
+        maxLength: 32
+  GetCoinByIdResponse:
+    type: object
+    description: 币种信息
+    properties:
+      coinId:
+        type: string
+        description: 币ID
+        example: '1'
+      logo:
+        type: string
+        description: 币logo
+      shortName:
+        type: string
+        description: 币简称
+        example: ETH
+      fullName:
+        type: string
+        description: 币全称
+      confirmationNumber:
+        type: integer
+        description: 区块确认数量
+        example: 30
+      minRechargeNumber:
+        type: string
+        description: 充币最小金额
+        example: 30.5
+      minWithdraw:
+        type: string
+        description: 单笔最小提币数量
+      maxWithdraw:
+        type: string
+        description: 单笔最大提币数量
+      withdrawRate:
+        type: string
+        description: 提币手续费率
+      minFee:
+        type: string
+        description: 提币最小手续费
+      maxWithdrawOneDay:
+        type: string
+        description: 每日提币最大数量
+  GetRechargeAddressesResponse:
+    type: object
+    description: 充币地址
+    properties:
+      coinId:
+        type: string
+        description: 币id
+        example: df456
+      coinAddress:
+        type: string
+        description: 充币地址
+        example: 0xskdfjlskdjglskdjfg2345345
+  GetWithdrawTotalResponse:
+    type: object
+    description: 当日提币总数
+    properties:
+      total:
+        description: 数量
+        type: string
+        example: 1.345
+  PostOpenPhoneAuthenticatorRequest:
+    required:
+    - phoneCode
+    properties:
+      phoneCode:
+        type: string
+        description: 电话验证码
+        minLength: 6
+        maxLength: 6
+  GetHistoricalDataRequest:
+    type: object
+    description: 获取K线数据传参
+    properties:
+      coinId:
+        type: string
+        description: 币种id
+      scope:
+        type: string
+        enum:
+        - 1w
+        - 30d
+        - 90d
+        description: 时间范围
+  initCaptchaResponse:
+    required:
+    - account
+    - verificationCode
+    - googleCode
+    description: 极验初始化
+    properties:
+      success:
+        type: string
+        description: 是否成功，成功返回1
+        example: '1'
+      challenge:
+        type: string
+        description: 极验服务端需要用到的参数
+        example: 048ebbe51f829995db76ac4b81546403
+      gt:
+        type: string
+        description: 极验服务端需要用到的参数
+        example: 048ebbe51f829995db76ac4b81546403
+      newCaptcha:
+        type: string
+        description: 极验服务端需要用到的参数
+        example: 'true'
+  GetTradingpairPrecisionResponse:
+    type: array
+    description: 交易币对精度
+    items:
+      type: object
+      description: 交易币对精度
+      properties:
+        tradingPair:
+          type: string
+          description: 交易对
+          example: ETH/USDT
+        sellerCoinId:
+          type: string
+          description: 卖方币种id
+          example: 156
+        buyerCoinId:
+          type: string
+          description: 买方币种id
+          example: 156
+        numberPlaces:
+          type: integer
+          description: 数量小数位数
+          example: 6
+        pricePlaces:
+          type: integer
+          description: 价格小数位数
+          example: 2
+  GetContactProjectsResponse:
+    type: object
+    description: 获取交易所对接的项目列表
+    properties:
+      meta:
+        $ref: '#/definitions/Pagination'
+      query:
+        type: object
+        description: 请求信息
+        properties:
+          status:
+            type: string
+            description: 查询状态
+            enum:
+            - accepted
+            - rejected
+            - pending
+          coinName:
+            type: string
+            description: 币简称
+      items:
+        type: array
+        description: 对接项目列表
+        items:
+          type: object
+          description: 记录项
+          properties:
+            id:
+              type: string
+              description: 对接ID
+            contactAt:
+              type: string
+              description: 接入时间
+              format: date-time
+            coinLogoKey:
+              type: string
+              description: 币种图标key
+            coinLogoUrl:
+              type: string
+              description: 币种图标URL
+            projectId:
+              type: string
+              description: 项目ID
+            fullName:
+              type: string
+              description: 币全称
+            shortName:
+              type: string
+              description: 币简称
+            issuePrice:
+              type: string
+              description: 发行价格
+            issuedVolume:
+              type: string
+              description: 发行量
+              example: 11111
+            holdersNumber:
+              type: string
+              description: 持有人数
+            circulationVolume:
+              type: string
+              description: 流通数量
+            officialWebsite:
+              type: string
+              description: 官网
+            blockBrowser:
+              type: string
+              description: 区块浏览器
+        example:
+        - id: 1
+          contactAt: '2018-11-11 09:00:11'
+          coinLogoKey: xxxx
+          coinLogoUrl: logo.jpg
+          projectId: 1
+          fullName: BTC_COIN
+          shortName: BTC
+          issuePrice: 11111
+          issuedVolume: 1111
+          holdersNumber: 111
+          circulationVolume: 111
+          officialWebsite: www.baidu.com
+          blockBrowser: www.baidu.com
+        - id: 2
+          contactAt: '2018-11-11 09:00:11'
+          coinLogoKey: 123456
+          coinLogoUrl: logo.jpg
+          projectId: 2
+          fullName: ETH_COIN
+          shortName: ETH
+          issuePrice: 11
+          issuedVolume: 11
+          holdersNumber: 11
+          circulationVolume: 1111
+          officialWebsite: www.google.cn
+          blockBrowser: www.google.cn
+  MarketPrice:
+    type: object
+    description: 市场单价
+    properties:
+      price:
+        type: string
+        description: 市场单价
+        example: '12'
+  HistoricalDataResponse:
+    type: array
+    description: dashboard成交量数据
+    items:
+      type: object
+      description: K线ticker数据
+      properties:
+        volume:
+          type: string
+          description: 成交量
+        time:
+          type: number
+          description: 时间戳（毫秒值）
+  verifyResponse:
+    type: object
+    description: 验证响应
+    properties:
+      token:
+        type: string
+        description: 用户登录的时候才返回token
+        example: d41d8cd98f00b204e9800998ecf8427e
+  GetFeeHistoryResponse:
+    type: object
+    description: 获取手续费记录列表
+    properties:
+      meta:
+        $ref: '#/definitions/Pagination'
+      query:
+        $ref: '#/definitions/GetFeeHistoryQuery'
+      items:
+        type: array
+        description: 手续费记录列表
+        items:
+          type: object
+          description: 成交记录
+          properties:
+            createdAt:
+              type: string
+              description: 产生时间
+              format: date-time
+              example: '2017-01-22T09:28:33Z'
+            tradeHistoryId:
+              type: string
+              description: 成交记录编号
+              example: '7986546'
+            uid:
+              type: string
+              description: 用户ID
+              example: '7897984'
+            tradingPair:
+              type: string
+              description: 交易对 市场
+              example: XRP/BTC
+            feeRate:
+              type: string
+              description: 手续费率
+              example: '0.125'
+            tradeType:
+              type: string
+              description: 手续费类型   buy币币交易买方,  sell币币交易卖方
+              enum:
+              - buy
+              - sell
+              example: buy
+            feeAmount:
+              type: string
+              description: 手续费额
+              example: '0.125'
+            unit:
+              type: string
+              description: 手续费币种名
+              example: ETH
+  GetRechargeableListsResponse:
+    type: array
+    description: 可充币币种信息
+    items:
+      type: object
+      description: 充币信息
+      properties:
+        coinId:
+          type: string
+          description: 币ID
+          example: '1'
+        logo:
+          type: string
+          description: 币logo
+        shortName:
+          type: string
+          description: 币简称
+          example: ETH
+        fullName:
+          type: string
+          description: 币全称
+        confirmationNumber:
+          type: integer
+          description: 区块确认数量
+          example: 30
+        minRechargeNumber:
+          type: string
+          description: 充币最小金额
+          example: 30.5
+  FaceIdUrlResponse:
+    type: object
+    description: 移动端URL信息
+    properties:
+      url:
+        description: 移动端访问的URL
+        type: string
+      token:
+        description: token
+        type: string
+        example: 12341234234asdfasd
+  GetQuotationListResponse:
+    type: array
+    description: 币对行情列表
+    items:
+      type: object
+      description: 行情信息
+      properties:
+        tradingAreaId:
+          type: string
+          description: 交易分区id
+        sellerCoin:
+          type: string
+          description: 卖方币种
+        buyerCoin:
+          type: string
+          description: 买方币种
+        latestPrice:
+          type: string
+          description: 最新成交价
+        volume:
+          type: string
+          description: 成交量
+        priceTrend:
+          $ref: '#/definitions/GetDashboardHistoricalDataResponse'
+  PostSendverificationCodeRequest:
+    type: object
+    description: 绑定手机号
+    required:
+    - uri
+    - type
+    properties:
+      uri:
+        type: string
+        description: 电话或者邮箱, 例如：mailto:hello.world@email.com, number:18645511111, ...
+        example: number:+8618645511111
+      type:
+        type: string
+        description: LOGIN("login"),REGISTER("register"), FORGET_PWD("forget_pwd"), EDIT_LOGIN_PWD("edit_login_pwd"),EDIT_ASSET_PWD("edit_asset_pwd"), BIND_EMAIL("bind_email"),CLOSE_EMAIL("close_email"),BIND_PHONE("bind_phone"),ALTER_PHONE("alter_phone"),CLOSE_PHONE("close_phone"),ALTER_GOOGLE("alter_google"),OPEN_PHONE("open_phone"), WITHDRAW("withdraw"),BIND_GOOGLE("bind_google"), CLOSE_GOOGLE("close_google"), CLOSE_MARKET("close_market"), OPEN_GOOGLE("open_google"),PAY("pay")
+        enum:
+        - login
+        - register
+        - forget_pwd
+        - edit_login_pwd
+        - edit_asset_pwd
+        - bind_phone
+        - alter_phone
+        - close_phone
+        - open_phone
+        - alter_google
+        - withdraw
+        - bind_google
+        - close_google
+        - open_google
+        - pay
+        - close_market
+        example: login
+  GetBannerResponse:
+    type: object
+    description: 轮播图信息
+    properties:
+      title:
+        type: string
+        description: 标题
+        minLength: 2
+        maxLength: 16
+      imageKey:
+        type: string
+        description: 轮播图Key
+      imageUrl:
+        type: string
+        description: 轮播图Url
+      url:
+        type: string
+        description: 跳转链接
+  AccountInfoRespones:
+    type: object
+    description: 账户基本信息
+    properties:
+      ventureId:
+        type: string
+        description: 项目方id
+        example: '2'
+      tenantId:
+        type: string
+        description: 租户id
+        example: '3'
+      investorId:
+        type: string
+        description: 主平台id
+        example: '4'
+      nationalityCode:
+        type: string
+        description: 账号注册的国家
+        example: CN
+      accountNumber:
+        type: string
+        description: 账号
+        example: '13978464413'
+      accountId:
+        type: string
+        description: UID
+        example: '567845'
+      email:
+        type: string
+        description: 邮箱对象
+        example: '{email:1009820785@qq.com}'
+      phoneNumber:
+        $ref: '#/definitions/phoneNumber'
+      createdAt:
+        type: string
+        description: 创建时间
+        format: date-time
+      googleAuthenticator:
+        type: boolean
+        description: 谷歌是否绑定(没绑定字段空;绑定为1)
+        example: true
+      areaCode:
+        type: string
+        description: 国际码
+        example: '+86'
+      promotionCode:
+        type: string
+        description: 邀请码
+        example: awsasq
+      exchangeId:
+        type: string
+        description: 交易所id
+        example: id
+      otcId:
+        type: string
+        description: 法币id
+        example: id
+  GetPersonalResponse:
+    type: object
+    description: 获取账号个人认证信息
+    properties:
+      nationalityCode:
+        type: string
+        format: nationalityCode
+        description: 国籍（证件所在区域）
+        example: CN
+      name:
+        type: string
+        format: name
+        description: 姓名
+        example: 张三
+      type:
+        type: string
+        format: type
+        description: 证件类型
+        example: 身份证
+      number:
+        type: string
+        description: 证件号码
+        example: '232332199003111111'
+  PostBindPhoneRequest:
+    type: object
+    description: 绑定手机号
+    required:
+    - phoneNumber
+    - verificationCode
+    - type
+    - areaCode
+    properties:
+      phoneNumber:
+        description: 手机号
+        type: string
+        example: '1864550666'
+        minLength: 8
+        maxLength: 16
+      verificationCode:
+        description: 验证码
+        type: string
+        example: '11111'
+        minLength: 6
+        maxLength: 6
+      areaCode:
+        description: 地区
+        type: string
+        example: '+86'
+        minLength: 2
+        maxLength: 128
+      token:
+        description: 二次验证token
+        type: string
+        example: eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyVHlwZSI6IkFMVEVSX1BIT05FIiwiZXhwIjoxNTQzMDQ5MzYzLCJ1c2VySWQiOjF9.bG44J_ExA9uB_HsT0cpbSK_SIh1F47fNR-QmmjEx58tAuwfuARPn0Meoob0QjV-ayUebsqtgaZOvORsdYKaacw
+        minLength: 10
+        maxLength: 256
+  GetWithdrawRecordsResponse:
+    type: object
+    description: 获取账户提币记录
+    properties:
+      meta:
+        $ref: '#/definitions/Pagination'
+      query:
+        $ref: '#/definitions/GetWithdrawRecordQuery'
+      items:
+        type: array
+        description: 提币记录列表
+        items:
+          type: object
+          description: 提币记录实体
+          properties:
+            id:
+              type: string
+              description: id
+              example: '6466654'
+            coinId:
+              type: string
+              description: 币id
+              example: '6466654'
+            shortName:
+              type: string
+              description: 币简称
+              example: eth
+            fullName:
+              type: string
+              description: 币全称
+            logo:
+              type: string
+              description: 币Logo
+            confirmationNumber:
+              type: integer
+              description: 区块确认数
+              example: 30
+            submittedAt:
+              type: string
+              description: 提交时间
+              format: date-time
+              example: 2018-03-08 22:39
+            completedAt:
+              type: string
+              description: 完成时间
+              format: date-time
+              example: 2018-03-08 22:39
+            amount:
+              type: string
+              description: 提币数量
+            fee:
+              type: string
+              description: 手续费
+            address:
+              type: string
+              description: 提币地址
+            txid:
+              type: string
+              description: 交易hash
+            status:
+              type: string
+              description: 提币状态
+              enum:
+              - WAIT_REVIEW
+              - REVIEWING
+              - SUCCEED
+              - CONFIRMING
+              - CANCEL
+              - REFUSAL
+              example: SUCCEED
+            confirmedTimes:
+              type: integer
+              description: 区块确认次数
+              example: 12
+            remark:
+              type: string
+              description: 失败原因
+              example: 丑
+  GetWithdrawRecordQuery:
+    type: object
+    description: 获取账户提币记录搜索条件
+    properties:
+      status:
+        type: string
+        description: 提币状态
+        enum:
+        - WAIT_REVIEW
+        - REVIEWING
+        - SUCCEED
+        - FAILED
+        - CONFIRMING
+        - CANCEL
+        - REFUSAL
+        example: SUCCEED
+      coinId:
+        type: string
+        description: 币id
+        example: '6466654'
+  PostUnauthorizedAccountResponse:
+    type: object
+    description: 账户401返回的信息
+    properties:
+      authMessage:
+        type: string
+        description: 当前用户绑定的验证方式
+      baseToken:
+        type: string
+        description: 账户ID
+      type:
+        type: string
+        description: 验证类型login
+      otcId:
+        type: string
+        description: 法币的id
+      validationRestrict:
+        type: string
+        description: 当前开启的验证方式
+  GetTradeHistoryQuery:
+    type: object
+    description: 查询条件返回值
+    properties:
+      startAt:
+        type: string
+        description: 开始时间
+        format: date
+        example: '2017-01-22T09:28:33Z'
+      endAt:
+        type: string
+        description: 结束时间
+        format: date
+        example: '2017-01-22T09:28:33Z'
+      exchangeId:
+        type: string
+        description: 交易所id
+        example: hashed-exchange-id
+      exchangeName:
+        description: 交易所名称
+        type: string
+      tradeHistoryId:
+        description: 成交记录编号
+        type: string
+      uid:
+        type: string
+        description: 用户id
+        example: hashed-user-id
+      trdingPair:
+        type: string
+        description: 交易币对
+        example: XRP/BTC
+  GetRechargeMarketOrderDetailResponse:
+    type: object
+    description: 获取订单详情
+    properties:
+      market:
+        type: string
+        description: 市场
+        example: ETH/USDT
+      time:
+        type: string
+        description: 时长
+        example: 6个月
+      price:
+        type: string
+        description: 价格
+        example: 100TP/S
+  CertificationAudit:
+    type: object
+    description: 实名认证状态信息
+    properties:
+      certificationStatus:
+        type: string
+        description: 当前认证状态
+        enum:
+        - none
+        - applied
+        - accepted
+        - rejected
+      certificationType:
+        type: string
+        description: 认证类型，当前没有认证时忽略此字段
+        enum:
+        - individual
+        - company
+      rejectedType:
+        type: string
+        description: 认证拒绝类型
+      rejectedReason:
+        type: string
+        description: 认证拒绝的原因
+      applicationDate:
+        type: string
+        description: 认证时间
+        format: date-time
+      certificatName:
+        type: string
+        description: 认证名字
+  GetFeeHistoryQuery:
+    type: object
+    description: 查询条件返回值
+    properties:
+      startAt:
+        type: string
+        description: 开始时间
+        format: date
+        example: '2018-03-08'
+      endAt:
+        type: string
+        description: 结束时间
+        format: date
+        example: '2018-03-08'
+      tradeHistoryId:
+        type: string
+        description: 成交记录编号
+        example: '879876'
+      marketMark:
+        type: string
+        description: 市场
+        example: XRP/BTC
+      accountId:
+        type: string
+        description: 用户ID
+        example: '6546546'
+  GetHistoricalDataResponse:
+    type: array
+    description: K线推送数据
+    items:
+      type: object
+      description: K线推送数据
+      properties:
+        highestPrice:
+          type: string
+          description: 最高成交价(USD)
+        openPrice:
+          type: string
+          description: 开盘价(USD)
+        lowestPrice:
+          type: string
+          description: 最低成交价(USD)
+        closePrice:
+          type: string
+          description: 收盘价(USD)
+        volume:
+          type: string
+          description: 成交量
+        time:
+          type: number
+          description: 时间戳（毫秒值）
+  ExchangeId:
+    type: object
+    description: 交易所id
+    properties:
+      id:
+        type: string
+        description: 交易所id
+        example: '12'
+  PostBannerRequest:
+    type: object
+    description: 列表项
+    properties:
+      title:
+        type: string
+        description: 标题
+        minLength: 2
+        maxLength: 16
+      banner:
+        type: string
+        description: 轮播图
+      url:
+        type: string
+        description: 跳转链接
+swagger: '2.0'
+info:
+  title: crush-tenant 平台接口(租户平台)
+  version: 2.0.0
+tags:
+- name: verification
+  description: 验证相关-李欣
+- name: account
+  description: 账号相关-李欣
+- name: asset-management
+  description: 资产管理(主平台,租户平台,项目方平台)
+- name: project
+  description: 项目相关-刘光荣
+- name: file-upload
+  description: 文件上传 - 杨高峰
+- name: face++
+  description: 身份识别
+  externalDocs:
+    description: faceid.com
+    url: https://faceid.com/pages/documents/5680502
+- name: quotation
+  description: 行情相关
+- name: asset-management
+  description: 资产管理(租户平台)
+- name: exchange-announcement
+  description: 交易所公告 - 尹亚苹
+- name: banner-management
+  description: Banner管理 - 尹亚苹
+- name: exchange-entrust
+  description: 委托 - 袁世伦
+- name: contacts
+  description: 对接相关-刘光荣
+- name: dashboard
+  description: dashboard行情相关 - 续安龙
+- name: dashboard
+  description: dashboard
+- name: exchange-management
+  description: 交易所管理-邹凌威
+- name: market-management
+  description: 交易所管理-市场管理-邹凌威
+consumes:
+- application/json

@@ -1,0 +1,113 @@
+request_individual_certification : pass
+exchange_tags_id_get : pass
+exchanges_exchanges_get : pass ( but paging param should change from exchange to items)
+contacts_project_id_status_get : pass
+announcements_id_put : pass
+announcements_projects_list_project_id_get : pass
+get_project_market_list : pass
+markets_id_open_put : pass
+asset_mgmt_assets_get : pass
+tenant_audits_audit_post : pass
+exchange_announcements_exchange_id_exchange_get : pass
+asset_mgmt_coins_id_recharge_put : pass
+contacts_check_get : pass
+banners_exchange_id_get : pass
+projects_id_contacts_get : pass
+exchanges_get : pass
+exchange_get : pass
+announcements_post : pass
+exchange_announcements_id_get : pass
+accounts_verify_login_or_password_post : pass
+contacts_invite_number_get : pass
+exchange_order_market_renew_post : pass
+tenant_audits_tasks_id_individual_re_audit_get : pass
+markets_trading_coins_get : pass
+banners_id_reduction_put : pass
+exchange_tags_id_delete : pass
+exchange_post : pass
+exchange_order_market_post : pass
+asset_mgmt_coins_id_withdraw_put : pass
+tenant_audits_results_id_individual_re_audit_get : pass
+applications_id_get : pass
+orders_details_recharge_market_id_get : pass
+announcements_exchanges_get : pass
+contacts_post : pass
+markets_id_get : pass
+accounts_individual_audits_get :pass
+projects_id_get : pass
+tenant_audits_re_audit_post : pass
+tenant_audits_results_id_individual_audit_get : pass
+accounts_verify_post : pass
+asset_mgmt_balance_coin_id_get : pass
+exchange_exchange_status_get : pass
+project_center_projects_id_markets_get : pass
+tenant_audits_tasks_id_individual_audit_get : pass
+create_user : pass
+banners_id_get : pass
+exchange_order_market_renew_put : pass
+sponsors_get : pass
+announcements_id_notice_get : pass
+exchange_tags_id_put : pass (but if other_language is None, shit happend!)
+accounts_bind_phone_post : pass
+banners_id_status_put : pass
+project_announcements_project_id_announcement_get : pass
+applications_post : pass
+applications_get : pass
+projects_coin_id_init_put : pass
+markets_suggestion_get : pass ( but request param in document is not clear enough )
+exchange_tags_post : pass (but if other_language is None, shit happend!)
+exchange_id_get : pass
+exchange_tags_get : pass
+announcements_id_delete : pass
+accounts_id_unlock_account_put : pass
+asset_mgmt_coins_rechargeable_lists_get : pass
+get_project_exchange_list : pass
+staff_sponsors_get : pass
+accounts_individual_audits_tasks_receive_get :pass
+login_post : pass
+tenant_audits_get : pass
+sponsor_login_post : pass
+banners_id_delete : pass
+exchange_recharge_market_put : pass
+markets_get : pass
+announcements_id_status_put : pass
+announcements_exchanges_list_exchange_id_get : pass
+contacts_put : pass
+announcements_id_get : pass
+announcements_id_enable_put : pass
+project_announcements_id_get : pass
+orders_details_add_market_id_get : pass
+staff_sponsors_post : pass
+accounts_login_post : pass
+exchange_exchange_id_get : pass
+announcements_id_notice_delete : pass
+applications_check_project_name_post : pass
+announcements_project_id_get : pass
+accounts_individual_audits_post :pass
+asset_mgmt_coins_id_put : pass
+markets_trading_coins_verify_get : pass
+tags_get : pass
+banners_get : pass
+markets_price_get : pass
+asset_mgmt_coins_get : pass
+banners_post : pass
+projects_sponsor_put : pass
+banners_id_put : pass
+accounts_account_info_get : pass
+applications_id_set_sponsor_put : pass
+accounts_individual_audits_id_get : pass
+exchange_order_market_put : pass
+projects_coins_init_get : pass
+accounts_individual_audits_tasks_audit_pending_num_get :pass
+contacts_projects_exchange_id_get : pass
+sponsor_login_verify_post : pass
+entrusts_get : pass
+
+orders_orders_get : NG ( issue: ValueError: Invalid value for `type` (ADD_MARKET), must be one of ['addMarket', 'marketRecharge']) [No JIRA, check with  boyang directly]
+orders_get : NG (reason : `status` (UNPAID), must be one of ['success', 'cancel', 'unpaid']) should use data , not orders [No JIRA, check with boyang directly ]
+applications_num_get : NG (issue : status -> 400, reason -> Unknown) [ No JIRA, status parameter should modify to required in swagger-doc, check with guangrong ]
+markets_id_close_put : NG (issue: status-> 400, message->{org.hibernate.validator.constraints.Length.message [CRUSTEST-375]
+projects_get : NG (issue: limit no usage, no meta ) [CRUSTEST-369]
+markets_close_post : NG ( issue: status -> 400, reason -> "constraints.Length.message") [CRUSTEST-374]
+projects_account_id_get : NG (issue: empty projects under account_id 6712 ) [CRUSTEST-372]
+projects_id_exchanges_get<venture.py list_exchanges_without_contact_by_project_id> : NG (issue: contacted exchange is in the list) [CRUSTEST-373]

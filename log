@@ -1,0 +1,81 @@
+#!/usr/bin/env python3
+
+# @Author  : xy.zhang
+# @Email   : zhangxuyi@wanshare.com
+# @Time    : 18-12-17
+from dateutil import tz
+import datetime
+import click
+from elasticsearch import Elasticsearch
+from elasticsearch_dsl import Search
+
+HOST = "kibana.kinmall.lan"
+PORT = 9200
+
+
+es = Elasticsearch(
+    hosts=[dict(host=HOST, port=PORT)],
+    use_ssl=False
+)
+
+
+INDEX = "filebeat-6.5.3-*"
+
+
+DEFAULT_TIME_RANGE = 5
+
+from_zone = tz.tzutc()
+to_zone = tz.tzlocal()
+
+
+@click.group()
+def cli():
+    pass
+
+
+def get_log(platform, minutes):
+    s = Search(using=es, index=INDEX) \
+        .query("term", source=f'/root/elasticsearch/logs/crush-{platform}.log')\
+        .filter('range', **{"@timestamp": {'gte': f'now-{minutes}m/m', 'lte': 'now/m'}})
+ 
+    msg = s.execute()
+    for hit in msg["hits"]["hits"]:
+        print("[%s]:  %s" % (
+            datetime.datetime.strftime(
+                datetime.datetime.strptime(hit["_source"]["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ").replace(
+                    tzinfo=from_zone).astimezone(to_zone),
+                "%Y-%m-%d %H:%M:%S.%fZ")[:-4], hit["_source"]["message"]))
+
+
+@cli.command()
+@click.option("--minutes", "-m", type=int, help="Get last n minutes logs", default=DEFAULT_TIME_RANGE)
+def main(minutes):
+    get_log("main", minutes)
+
+
+@cli.command()
+@click.option("--minutes", "-m", type=int, help="Get last n minutes logs", default=DEFAULT_TIME_RANGE)
+def staff(minutes):
+    get_log("staff", minutes)
+
+
+@cli.command()
+@click.option("--minutes", "-m", type=int, help="Get last n minutes logs", default=DEFAULT_TIME_RANGE)
+def tenant(minutes):
+    get_log("tenant", minutes)
+
+
+@cli.command()
+@click.option("--minutes", "-m", type=int, help="Get last n minutes logs", default=DEFAULT_TIME_RANGE)
+def venture(minutes):
+    get_log("venture", minutes)
+
+
+@cli.command()
+@click.option("--minutes", "-m", type=int, help="Get last n minutes logs", default=DEFAULT_TIME_RANGE)
+def sponsor(minutes):
+    get_log("sponsor", minutes)
+
+
+if __name__ == '__main__':
+    cli()

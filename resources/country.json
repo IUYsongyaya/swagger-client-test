@@ -1,0 +1,1517 @@
+[{
+		"c": "中国大陆",
+		"e": "China",
+		"k": "CN",
+		"n": "86",
+		"o": "中国大陆"
+	}, {
+		"c": "香港",
+		"e": "Hong Kong",
+		"k": "HK",
+		"n": "852",
+		"o": "香港"
+	}, {
+		"c": "澳门",
+		"e": "Macau",
+		"k": "MO",
+		"n": "853",
+		"o": "澳門"
+	}, {
+		"c": "台湾",
+		"e": "Taiwan",
+		"k": "TW",
+		"n": "886",
+		"o": "台灣"
+	}, {
+		"c": "阿尔巴尼亚",
+		"e": "Albania",
+		"k": "AL",
+		"n": "355",
+		"o": "Shqipëri"
+	}, {
+		"c": "阿尔及利亚",
+		"e": "Algeria",
+		"k": "DZ",
+		"n": "213",
+		"o": "Algeria"
+	}, {
+		"c": "阿富汗",
+		"e": "Afghanistan",
+		"k": "AF",
+		"n": "93",
+		"o": "‫افغانستان‬‎"
+	}, {
+		"c": "阿根廷",
+		"e": "Argentina",
+		"k": "AR",
+		"n": "54",
+		"o": "Argentina"
+	}, {
+		"c": "阿拉伯联合酋长国",
+		"e": "United Arab Emirates",
+		"k": "AE",
+		"n": "971",
+		"o": "‫الإمارات العربية المتحدة‬‎"
+	}, {
+		"c": "阿鲁巴",
+		"e": "Aruba",
+		"k": "AW",
+		"n": "297",
+		"o": "Aruba"
+	}, {
+		"c": "阿曼",
+		"e": "Oman",
+		"k": "OM",
+		"n": "968",
+		"o": "‫عُمان‬‎"
+	}, {
+		"c": "阿塞拜疆",
+		"e": "Azerbaijan",
+		"k": "AZ",
+		"n": "994",
+		"o": "Azərbaycan"
+	}, {
+		"c": "阿森松岛",
+		"e": "Ascension Island",
+		"k": "AC",
+		"n": "247",
+		"o": "Ascension Island"
+	}, {
+		"c": "埃及",
+		"e": "Egypt",
+		"k": "EG",
+		"n": "20",
+		"o": "‫مصر‬‎"
+	}, {
+		"c": "埃塞俄比亚",
+		"e": "Ethiopia",
+		"k": "ET",
+		"n": "251",
+		"o": "Ethiopia"
+	}, {
+		"c": "爱尔兰",
+		"e": "Ireland",
+		"k": "IE",
+		"n": "353",
+		"o": "Ireland"
+	}, {
+		"c": "爱沙尼亚",
+		"e": "Estonia",
+		"k": "EE",
+		"n": "372",
+		"o": "Eesti"
+	}, {
+		"c": "安道尔",
+		"e": "Andorra",
+		"k": "AD",
+		"n": "376",
+		"o": "Andorra"
+	}, {
+		"c": "安哥拉",
+		"e": "Angola",
+		"k": "AO",
+		"n": "244",
+		"o": "Angola"
+	}, {
+		"c": "安圭拉",
+		"e": "Anguilla",
+		"k": "AI",
+		"n": "1264",
+		"o": "Anguilla"
+	}, {
+		"c": "安提瓜和巴布达",
+		"e": "Antigua & Barbuda",
+		"k": "AG",
+		"n": "1268",
+		"o": "Antigua & Barbuda"
+	}, {
+		"c": "奥地利",
+		"e": "Austria",
+		"k": "AT",
+		"n": "43",
+		"o": "Österreich"
+	}, {
+		"c": "奥兰群岛",
+		"e": "Åland Islands",
+		"k": "AX",
+		"o": "Åland"
+	}, {
+		"c": "澳大利亚",
+		"e": "Australia",
+		"k": "AU",
+		"n": "61",
+		"o": "Australia"
+	}, {
+		"c": "巴巴多斯",
+		"e": "Barbados",
+		"k": "BB",
+		"n": "1246",
+		"o": "Barbados"
+	}, {
+		"c": "巴布亚新几内亚",
+		"e": "Papua New Guinea",
+		"k": "PG",
+		"n": "675",
+		"o": "Papua New Guinea"
+	}, {
+		"c": "巴哈马",
+		"e": "Bahamas",
+		"k": "BS",
+		"n": "1242",
+		"o": "Bahamas"
+	}, {
+		"c": "巴基斯坦",
+		"e": "Pakistan",
+		"k": "PK",
+		"n": "92",
+		"o": "‫پاکستان‬‎"
+	}, {
+		"c": "巴拉圭",
+		"e": "Paraguay",
+		"k": "PY",
+		"n": "595",
+		"o": "Paraguay"
+	}, {
+		"c": "巴勒斯坦",
+		"e": "Palestine",
+		"k": "PS",
+		"n": "970",
+		"o": "‫فلسطين‬‎"
+	}, {
+		"c": "巴林",
+		"e": "Bahrain",
+		"k": "BH",
+		"n": "973",
+		"o": "‫البحرين‬‎"
+	}, {
+		"c": "巴拿马",
+		"e": "Panama",
+		"k": "PA",
+		"n": "507",
+		"o": "Panamá"
+	}, {
+		"c": "巴西",
+		"e": "Brazil",
+		"k": "BR",
+		"n": "55",
+		"o": "Brasil"
+	}, {
+		"c": "白俄罗斯",
+		"e": "Belarus",
+		"k": "BY",
+		"n": "375",
+		"o": "Беларусь"
+	}, {
+		"c": "百慕大",
+		"e": "Bermuda",
+		"k": "BM",
+		"n": "1441",
+		"o": "Bermuda"
+	}, {
+		"c": "保加利亚",
+		"e": "Bulgaria",
+		"k": "BG",
+		"n": "359",
+		"o": "България"
+	}, {
+		"c": "北马里亚纳群岛",
+		"e": "Northern Mariana Islands",
+		"k": "MP",
+		"n": "1",
+		"o": "Northern Mariana Islands"
+	}, {
+		"c": "贝宁",
+		"e": "Benin",
+		"k": "BJ",
+		"n": "229",
+		"o": "Bénin"
+	}, {
+		"c": "比利时",
+		"e": "Belgium",
+		"k": "BE",
+		"n": "32",
+		"o": "Belgium"
+	}, {
+		"c": "冰岛",
+		"e": "Iceland",
+		"k": "IS",
+		"n": "354",
+		"o": "Ísland"
+	}, {
+		"c": "玻利维亚",
+		"e": "Bolivia",
+		"k": "BO",
+		"n": "591",
+		"o": "Bolivia"
+	}, {
+		"c": "波多黎各",
+		"e": "Puerto Rico",
+		"k": "PR",
+		"n": "1787",
+		"o": "Puerto Rico"
+	}, {
+		"c": "波兰",
+		"e": "Poland",
+		"k": "PL",
+		"n": "48",
+		"o": "Polska"
+	}, {
+		"c": "波斯尼亚和黑塞哥维那",
+		"e": "Bosnia & Herzegovina",
+		"k": "BA",
+		"n": "387",
+		"o": "Bosna i Hercegovina"
+	}, {
+		"c": "博茨瓦纳",
+		"e": "Botswana",
+		"k": "BW",
+		"n": "267",
+		"o": "Botswana"
+	}, {
+		"c": "伯利兹",
+		"e": "Belize",
+		"k": "BZ",
+		"n": "501",
+		"o": "Belize"
+	}, {
+		"c": "不丹",
+		"e": "Bhutan",
+		"k": "BT",
+		"n": "975",
+		"o": "འབྲུག"
+	}, {
+		"c": "布基纳法索",
+		"e": "Burkina Faso",
+		"k": "BF",
+		"n": "226",
+		"o": "Burkina Faso"
+	}, {
+		"c": "布隆迪",
+		"e": "Burundi",
+		"k": "BI",
+		"n": "257",
+		"o": "Uburundi"
+	}, {
+		"c": "布韦岛",
+		"e": "Bouvet Island",
+		"k": "BV",
+		"o": "Bouvet Island"
+	}, {
+		"c": "朝鲜",
+		"e": "North Korea",
+		"k": "KP",
+		"n": "850",
+		"o": "북한"
+	}, {
+		"c": "赤道几内亚",
+		"e": "Equatorial Guinea",
+		"k": "GQ",
+		"n": "240",
+		"o": "Guinea Ecuatorial"
+	}, {
+		"c": "丹麦",
+		"e": "Denmark",
+		"k": "DK",
+		"n": "45",
+		"o": "Danmark"
+	}, {
+		"c": "德国",
+		"e": "Germany",
+		"k": "DE",
+		"n": "49",
+		"o": "Deutschland"
+	}, {
+		"c": "迪戈加西亚岛",
+		"e": "Diego Garcia",
+		"k": "DG",
+		"o": "Diego Garcia"
+	}, {
+		"c": "东帝汶",
+		"e": "Timor-Leste",
+		"k": "TL",
+		"n": "670",
+		"o": "Timor-Leste"
+	}, {
+		"c": "多哥",
+		"e": "Togo",
+		"k": "TG",
+		"n": "228",
+		"o": "Togo"
+	}, {
+		"c": "多米尼加共和国",
+		"e": "Dominican Republic",
+		"k": "DO",
+		"n": "1809",
+		"o": "República Dominicana"
+	}, {
+		"c": "多米尼克",
+		"e": "Dominica",
+		"k": "DM",
+		"n": "1767",
+		"o": "Dominica"
+	}, {
+		"c": "俄罗斯",
+		"e": "Russia",
+		"k": "RU",
+		"n": "7",
+		"o": "Россия"
+	}, {
+		"c": "厄瓜多尔",
+		"e": "Ecuador",
+		"k": "EC",
+		"n": "593",
+		"o": "Ecuador"
+	}, {
+		"c": "厄立特里亚",
+		"e": "Eritrea",
+		"k": "ER",
+		"n": "291",
+		"o": "ኤርትራ"
+	}, {
+		"c": "法国",
+		"e": "France",
+		"k": "FR",
+		"n": "33",
+		"o": "France"
+	}, {
+		"c": "法罗群岛",
+		"e": "Faroe Islands",
+		"k": "FO",
+		"n": "298",
+		"o": "Føroyar"
+	}, {
+		"c": "法属波利尼西亚",
+		"e": "French Polynesia",
+		"k": "PF",
+		"n": "689",
+		"o": "Polynésie française"
+	}, {
+		"c": "法属圭亚那",
+		"e": "French Guiana",
+		"k": "GF",
+		"n": "594",
+		"o": "Guyane française"
+	}, {
+		"c": "法属南部领地",
+		"e": "French Southern Territories",
+		"k": "TF",
+		"o": "Terres australes françaises"
+	}, {
+		"c": "法属圣马丁",
+		"e": "St Martin",
+		"k": "MF",
+		"n": "590",
+		"o": "Saint-Martin"
+	}, {
+		"c": "菲律宾",
+		"e": "Philippines",
+		"k": "PH",
+		"n": "63",
+		"o": "Philippines"
+	}, {
+		"c": "芬兰",
+		"e": "Finland",
+		"k": "FI",
+		"n": "358",
+		"o": "Suomi"
+	}, {
+		"c": "佛得角",
+		"e": "Cape Verde",
+		"k": "CV",
+		"n": "238",
+		"o": "Kabu Verdi"
+	}, {
+		"c": "福克兰群岛（马尔维纳斯群岛）",
+		"e": "Falkland Islands",
+		"k": "FK",
+		"n": "500",
+		"o": "Falkland Islands (Islas Malvinas)"
+	}, {
+		"c": "冈比亚",
+		"e": "Gambia",
+		"k": "GM",
+		"n": "220",
+		"o": "Gambia"
+	}, {
+		"c": "刚果（布）",
+		"e": "Congo - Brazzaville",
+		"k": "CG",
+		"n": "242",
+		"o": "Congo-Brazzaville"
+	}, {
+		"c": "刚果（金）",
+		"e": "Congo - Kinshasa",
+		"k": "CD",
+		"n": "243",
+		"o": "Jamhuri ya Kidemokrasia ya Kongo"
+	}, {
+		"c": "哥伦比亚",
+		"e": "Colombia",
+		"k": "CO",
+		"n": "57",
+		"o": "Colombia"
+	}, {
+		"c": "哥斯达黎加",
+		"e": "Costa Rica",
+		"k": "CR",
+		"n": "506",
+		"o": "Costa Rica"
+	}, {
+		"c": "格林纳达",
+		"e": "Grenada",
+		"k": "GD",
+		"n": "1473",
+		"o": "Grenada"
+	}, {
+		"c": "格陵兰",
+		"e": "Greenland",
+		"k": "GL",
+		"n": "299",
+		"o": "Kalaallit Nunaat"
+	}, {
+		"c": "格鲁吉亚",
+		"e": "Georgia",
+		"k": "GE",
+		"n": "995",
+		"o": "საქართველო"
+	}, {
+		"c": "根西岛",
+		"e": "Guernsey",
+		"k": "GG",
+		"o": "Guernsey"
+	}, {
+		"c": "古巴",
+		"e": "Cuba",
+		"k": "CU",
+		"n": "53",
+		"o": "Cuba"
+	}, {
+		"c": "瓜德罗普",
+		"e": "Guadeloupe",
+		"k": "GP",
+		"n": "590",
+		"o": "Guadeloupe"
+	}, {
+		"c": "关岛",
+		"e": "Guam",
+		"k": "GU",
+		"n": "1671",
+		"o": "Guam"
+	}, {
+		"c": "圭亚那",
+		"e": "Guyana",
+		"k": "GY",
+		"n": "592",
+		"o": "Guyana"
+	}, {
+		"c": "哈萨克斯坦",
+		"e": "Kazakhstan",
+		"k": "KZ",
+		"n": "7",
+		"o": "Казахстан"
+	}, {
+		"c": "海地",
+		"e": "Haiti",
+		"k": "HT",
+		"n": "509",
+		"o": "Haiti"
+	}, {
+		"c": "韩国",
+		"e": "South Korea",
+		"k": "KR",
+		"n": "82",
+		"o": "대한민국"
+	}, {
+		"c": "荷兰",
+		"e": "Netherlands",
+		"k": "NL",
+		"n": "31",
+		"o": "Nederland"
+	}, {
+		"c": "荷属加勒比区",
+		"e": "Caribbean Netherlands",
+		"k": "BQ",
+		"n": "599",
+		"o": "Caribbean Netherlands"
+	}, {
+		"c": "荷属圣马丁",
+		"e": "Sint Maarten",
+		"k": "SX",
+		"n": "1721",
+		"o": "Sint Maarten"
+	}, {
+		"c": "赫德岛和麦克唐纳群岛",
+		"e": "Heard & McDonald Islands",
+		"k": "HM",
+		"o": "Heard & McDonald Islands"
+	}, {
+		"c": "黑山",
+		"e": "Montenegro",
+		"k": "ME",
+		"n": "382",
+		"o": "Crna Gora"
+	}, {
+		"c": "洪都拉斯",
+		"e": "Honduras",
+		"k": "HN",
+		"n": "504",
+		"o": "Honduras"
+	}, {
+		"c": "基里巴斯",
+		"e": "Kiribati",
+		"k": "KI",
+		"n": "686",
+		"o": "Kiribati"
+	}, {
+		"c": "吉布提",
+		"e": "Djibouti",
+		"k": "DJ",
+		"n": "253",
+		"o": "Djibouti"
+	}, {
+		"c": "吉尔吉斯斯坦",
+		"e": "Kyrgyzstan",
+		"k": "KG",
+		"n": "996",
+		"o": "Кыргызстан"
+	}, {
+		"c": "几内亚",
+		"e": "Guinea",
+		"k": "GN",
+		"n": "224",
+		"o": "Guinée"
+	}, {
+		"c": "几内亚比绍",
+		"e": "Guinea-Bissau",
+		"k": "GW",
+		"n": "245",
+		"o": "Guiné-Bissau"
+	}, {
+		"c": "加拿大",
+		"e": "Canada",
+		"k": "CA",
+		"n": "1",
+		"o": "Canada"
+	}, {
+		"c": "加纳",
+		"e": "Ghana",
+		"k": "GH",
+		"n": "233",
+		"o": "Gaana"
+	}, {
+		"c": "加纳利群岛",
+		"e": "Canary Islands",
+		"k": "IC",
+		"o": "Canarias"
+	}, {
+		"c": "加蓬",
+		"e": "Gabon",
+		"k": "GA",
+		"n": "241",
+		"o": "Gabon"
+	}, {
+		"c": "柬埔寨",
+		"e": "Cambodia",
+		"k": "KH",
+		"n": "855",
+		"o": "កម្ពុជា"
+	}, {
+		"c": "捷克",
+		"e": "Czechia",
+		"k": "CZ",
+		"n": "420",
+		"o": "Česko"
+	}, {
+		"c": "津巴布韦",
+		"e": "Zimbabwe",
+		"k": "ZW",
+		"n": "263",
+		"o": "Zimbabwe"
+	}, {
+		"c": "喀麦隆",
+		"e": "Cameroon",
+		"k": "CM",
+		"n": "237",
+		"o": "Cameroun"
+	}, {
+		"c": "卡塔尔",
+		"e": "Qatar",
+		"k": "QA",
+		"n": "974",
+		"o": "‫قطر‬‎"
+	}, {
+		"c": "开曼群岛",
+		"e": "Cayman Islands",
+		"k": "KY",
+		"n": "1345",
+		"o": "Cayman Islands"
+	}, {
+		"c": "科科斯（基林）群岛",
+		"e": "Cocos (Keeling) Islands",
+		"k": "CC",
+		"o": "Kepulauan Cocos (Keeling)"
+	}, {
+		"c": "科摩罗",
+		"e": "Comoros",
+		"k": "KM",
+		"n": "269",
+		"o": "‫جزر القمر‬‎"
+	}, {
+		"c": "科索沃",
+		"e": "Kosovo",
+		"k": "XK",
+		"n": "383",
+		"o": "Kosovë"
+	}, {
+		"c": "科特迪瓦",
+		"e": "Côte d’Ivoire",
+		"k": "CI",
+		"n": "225",
+		"o": "Côte d’Ivoire"
+	}, {
+		"c": "科威特",
+		"e": "Kuwait",
+		"k": "KW",
+		"n": "965",
+		"o": "‫الكويت‬‎"
+	}, {
+		"c": "克利珀顿岛",
+		"e": "Clipperton Island",
+		"k": "CP",
+		"o": "Clipperton Island"
+	}, {
+		"c": "克罗地亚",
+		"e": "Croatia",
+		"k": "HR",
+		"n": "385",
+		"o": "Hrvatska"
+	}, {
+		"c": "肯尼亚",
+		"e": "Kenya",
+		"k": "KE",
+		"n": "254",
+		"o": "Kenya"
+	}, {
+		"c": "库克群岛",
+		"e": "Cook Islands",
+		"k": "CK",
+		"n": "682",
+		"o": "Cook Islands"
+	}, {
+		"c": "库拉索",
+		"e": "Curaçao",
+		"k": "CW",
+		"n": "599",
+		"o": "Curaçao"
+	}, {
+		"c": "拉脱维亚",
+		"e": "Latvia",
+		"k": "LV",
+		"n": "371",
+		"o": "Latvija"
+	}, {
+		"c": "莱索托",
+		"e": "Lesotho",
+		"k": "LS",
+		"n": "266",
+		"o": "Lesotho"
+	}, {
+		"c": "老挝",
+		"e": "Laos",
+		"k": "LA",
+		"n": "856",
+		"o": "ລາວ"
+	}, {
+		"c": "黎巴嫩",
+		"e": "Lebanon",
+		"k": "LB",
+		"n": "961",
+		"o": "‫لبنان‬‎"
+	}, {
+		"c": "利比里亚",
+		"e": "Liberia",
+		"k": "LR",
+		"n": "231",
+		"o": "Liberia"
+	}, {
+		"c": "利比亚",
+		"e": "Libya",
+		"k": "LY",
+		"n": "218",
+		"o": "‫ليبيا‬‎"
+	}, {
+		"c": "立陶宛",
+		"e": "Lithuania",
+		"k": "LT",
+		"n": "370",
+		"o": "Lietuva"
+	}, {
+		"c": "列支敦士登",
+		"e": "Liechtenstein",
+		"k": "LI",
+		"n": "423",
+		"o": "Liechtenstein"
+	}, {
+		"c": "留尼汪",
+		"e": "Réunion",
+		"k": "RE",
+		"n": "262",
+		"o": "La Réunion"
+	}, {
+		"c": "卢森堡",
+		"e": "Luxembourg",
+		"k": "LU",
+		"n": "352",
+		"o": "Luxembourg"
+	}, {
+		"c": "卢旺达",
+		"e": "Rwanda",
+		"k": "RW",
+		"n": "250",
+		"o": "U Rwanda"
+	}, {
+		"c": "罗马尼亚",
+		"e": "Romania",
+		"k": "RO",
+		"n": "40",
+		"o": "România"
+	}, {
+		"c": "马达加斯加",
+		"e": "Madagascar",
+		"k": "MG",
+		"n": "261",
+		"o": "Madagasikara"
+	}, {
+		"c": "马恩岛",
+		"e": "Isle of Man",
+		"k": "IM",
+		"o": "Isle of Man"
+	}, {
+		"c": "马耳他",
+		"e": "Malta",
+		"k": "MT",
+		"n": "356",
+		"o": "Malta"
+	}, {
+		"c": "马尔代夫",
+		"e": "Maldives",
+		"k": "MV",
+		"n": "960",
+		"o": "Maldives"
+	}, {
+		"c": "马拉维",
+		"e": "Malawi",
+		"k": "MW",
+		"n": "265",
+		"o": "Malawi"
+	}, {
+		"c": "马来西亚",
+		"e": "Malaysia",
+		"k": "MY",
+		"n": "60",
+		"o": "Malaysia"
+	}, {
+		"c": "马里",
+		"e": "Mali",
+		"k": "ML",
+		"n": "223",
+		"o": "Mali"
+	}, {
+		"c": "马其顿（前南斯拉夫马其顿共和国）",
+		"e": "Macedonia (FYROM)",
+		"k": "MK",
+		"n": "389",
+		"o": "Република Македонија"
+	}, {
+		"c": "马绍尔群岛",
+		"e": "Marshall Islands",
+		"k": "MH",
+		"n": "692",
+		"o": "Marshall Islands"
+	}, {
+		"c": "马提尼克",
+		"e": "Martinique",
+		"k": "MQ",
+		"n": "596",
+		"o": "Martinique"
+	}, {
+		"c": "马约特",
+		"e": "Mayotte",
+		"k": "YT",
+		"o": "Mayotte"
+	}, {
+		"c": "毛里求斯",
+		"e": "Mauritius",
+		"k": "MU",
+		"n": "230",
+		"o": "Moris"
+	}, {
+		"c": "毛里塔尼亚",
+		"e": "Mauritania",
+		"k": "MR",
+		"n": "222",
+		"o": "‫موريتانيا‬‎"
+	}, {
+		"c": "美国",
+		"e": "United States",
+		"k": "US",
+		"n": "1",
+		"o": "United States"
+	}, {
+		"c": "美国本土外小岛屿",
+		"e": "US Outlying Islands",
+		"k": "UM",
+		"o": "U.S. Outlying Islands"
+	}, {
+		"c": "美属萨摩亚",
+		"e": "American Samoa",
+		"k": "AS",
+		"n": "1684",
+		"o": "American Samoa"
+	}, {
+		"c": "美属维尔京群岛",
+		"e": "US Virgin Islands",
+		"k": "VI",
+		"n": "1340",
+		"o": "U.S. Virgin Islands"
+	}, {
+		"c": "蒙古",
+		"e": "Mongolia",
+		"k": "MN",
+		"n": "976",
+		"o": "Монгол"
+	}, {
+		"c": "蒙特塞拉特",
+		"e": "Montserrat",
+		"k": "MS",
+		"n": "1664",
+		"o": "Montserrat"
+	}, {
+		"c": "孟加拉国",
+		"e": "Bangladesh",
+		"k": "BD",
+		"n": "880",
+		"o": "বাংলাদেশ"
+	}, {
+		"c": "秘鲁",
+		"e": "Peru",
+		"k": "PE",
+		"n": "51",
+		"o": "Perú"
+	}, {
+		"c": "密克罗尼西亚",
+		"e": "Micronesia",
+		"k": "FM",
+		"n": "691",
+		"o": "Micronesia"
+	}, {
+		"c": "缅甸",
+		"e": "Myanmar (Burma)",
+		"k": "MM",
+		"n": "95",
+		"o": "မြန်မာ"
+	}, {
+		"c": "摩尔多瓦",
+		"e": "Moldova",
+		"k": "MD",
+		"n": "373",
+		"o": "Republica Moldova"
+	}, {
+		"c": "摩洛哥",
+		"e": "Morocco",
+		"k": "MA",
+		"n": "212",
+		"o": "Morocco"
+	}, {
+		"c": "摩纳哥",
+		"e": "Monaco",
+		"k": "MC",
+		"n": "377",
+		"o": "Monaco"
+	}, {
+		"c": "莫桑比克",
+		"e": "Mozambique",
+		"k": "MZ",
+		"n": "258",
+		"o": "Moçambique"
+	}, {
+		"c": "墨西哥",
+		"e": "Mexico",
+		"k": "MX",
+		"n": "52",
+		"o": "México"
+	}, {
+		"c": "纳米比亚",
+		"e": "Namibia",
+		"k": "NA",
+		"n": "264",
+		"o": "Namibië"
+	}, {
+		"c": "南非",
+		"e": "South Africa",
+		"k": "ZA",
+		"n": "27",
+		"o": "South Africa"
+	}, {
+		"c": "南极洲",
+		"e": "Antarctica",
+		"k": "AQ",
+		"o": "Antarctica"
+	}, {
+		"c": "南乔治亚和南桑威奇群岛",
+		"e": "South Georgia & South Sandwich Islands",
+		"k": "GS",
+		"o": "South Georgia & South Sandwich Islands"
+	}, {
+		"c": "南苏丹",
+		"e": "South Sudan",
+		"k": "SS",
+		"n": "211",
+		"o": "‫جنوب السودان‬‎"
+	}, {
+		"c": "尼泊尔",
+		"e": "Nepal",
+		"k": "NP",
+		"n": "977",
+		"o": "नेपाल"
+	}, {
+		"c": "尼加拉瓜",
+		"e": "Nicaragua",
+		"k": "NI",
+		"n": "505",
+		"o": "Nicaragua"
+	}, {
+		"c": "尼日尔",
+		"e": "Niger",
+		"k": "NE",
+		"n": "227",
+		"o": "Nijar"
+	}, {
+		"c": "尼日利亚",
+		"e": "Nigeria",
+		"k": "NG",
+		"n": "234",
+		"o": "Nigeria"
+	}, {
+		"c": "纽埃",
+		"e": "Niue",
+		"k": "NU",
+		"n": "683",
+		"o": "Niue"
+	}, {
+		"c": "挪威",
+		"e": "Norway",
+		"k": "NO",
+		"n": "47",
+		"o": "Norge"
+	}, {
+		"c": "诺福克岛",
+		"e": "Norfolk Island",
+		"k": "NF",
+		"n": "672",
+		"o": "Norfolk Island"
+	}, {
+		"c": "帕劳",
+		"e": "Palau",
+		"k": "PW",
+		"n": "680",
+		"o": "Palau"
+	}, {
+		"c": "皮特凯恩群岛",
+		"e": "Pitcairn Islands",
+		"k": "PN",
+		"o": "Pitcairn Islands"
+	}, {
+		"c": "葡萄牙",
+		"e": "Portugal",
+		"k": "PT",
+		"n": "351",
+		"o": "Portugal"
+	}, {
+		"c": "日本",
+		"e": "Japan",
+		"k": "JP",
+		"n": "81",
+		"o": "日本"
+	}, {
+		"c": "瑞典",
+		"e": "Sweden",
+		"k": "SE",
+		"n": "46",
+		"o": "Sverige"
+	}, {
+		"c": "瑞士",
+		"e": "Switzerland",
+		"k": "CH",
+		"n": "41",
+		"o": "Schweiz"
+	}, {
+		"c": "萨尔瓦多",
+		"e": "El Salvador",
+		"k": "SV",
+		"n": "503",
+		"o": "El Salvador"
+	}, {
+		"c": "萨摩亚",
+		"e": "Samoa",
+		"k": "WS",
+		"n": "685",
+		"o": "Samoa"
+	}, {
+		"c": "塞尔维亚",
+		"e": "Serbia",
+		"k": "RS",
+		"n": "381",
+		"o": "Србија"
+	}, {
+		"c": "塞拉利昂",
+		"e": "Sierra Leone",
+		"k": "SL",
+		"n": "232",
+		"o": "Sierra Leone"
+	}, {
+		"c": "塞内加尔",
+		"e": "Senegal",
+		"k": "SN",
+		"n": "221",
+		"o": "Senegaal"
+	}, {
+		"c": "塞浦路斯",
+		"e": "Cyprus",
+		"k": "CY",
+		"n": "357",
+		"o": "Κύπρος"
+	}, {
+		"c": "塞舌尔",
+		"e": "Seychelles",
+		"k": "SC",
+		"n": "248",
+		"o": "Seychelles"
+	}, {
+		"c": "沙特阿拉伯",
+		"e": "Saudi Arabia",
+		"k": "SA",
+		"n": "966",
+		"o": "‫المملكة العربية السعودية‬‎"
+	}, {
+		"c": "圣巴泰勒米",
+		"e": "St Barthélemy",
+		"k": "BL",
+		"n": "590",
+		"o": "Saint-Barthélemy"
+	}, {
+		"c": "圣诞岛",
+		"e": "Christmas Island",
+		"k": "CX",
+		"o": "Christmas Island"
+	}, {
+		"c": "圣多美和普林西比",
+		"e": "São Tomé & Príncipe",
+		"k": "ST",
+		"n": "239",
+		"o": "São Tomé e Príncipe"
+	}, {
+		"c": "圣赫勒拿",
+		"e": "St Helena",
+		"k": "SH",
+		"n": "290",
+		"o": "St. Helena"
+	}, {
+		"c": "圣基茨和尼维斯",
+		"e": "St Kitts & Nevis",
+		"k": "KN",
+		"n": "1869",
+		"o": "St. Kitts & Nevis"
+	}, {
+		"c": "圣卢西亚",
+		"e": "St Lucia",
+		"k": "LC",
+		"n": "1758",
+		"o": "St. Lucia"
+	}, {
+		"c": "圣马力诺",
+		"e": "San Marino",
+		"k": "SM",
+		"n": "378",
+		"o": "San Marino"
+	}, {
+		"c": "圣皮埃尔和密克隆群岛",
+		"e": "St Pierre & Miquelon",
+		"k": "PM",
+		"n": "508",
+		"o": "Saint-Pierre-et-Miquelon"
+	}, {
+		"c": "圣文森特和格林纳丁斯",
+		"e": "St Vincent & Grenadines",
+		"k": "VC",
+		"n": "1784",
+		"o": "St. Vincent & Grenadines"
+	}, {
+		"c": "斯里兰卡",
+		"e": "Sri Lanka",
+		"k": "LK",
+		"n": "94",
+		"o": "ශ්‍රී ලංකාව"
+	}, {
+		"c": "斯洛伐克",
+		"e": "Slovakia",
+		"k": "SK",
+		"n": "421",
+		"o": "Slovensko"
+	}, {
+		"c": "斯洛文尼亚",
+		"e": "Slovenia",
+		"k": "SI",
+		"n": "386",
+		"o": "Slovenija"
+	}, {
+		"c": "斯瓦尔巴和扬马延",
+		"e": "Svalbard & Jan Mayen",
+		"k": "SJ",
+		"o": "Svalbard og Jan Mayen"
+	}, {
+		"c": "斯威士兰",
+		"e": "Swaziland",
+		"k": "SZ",
+		"n": "268",
+		"o": "Swaziland"
+	}, {
+		"c": "苏丹",
+		"e": "Sudan",
+		"k": "SD",
+		"n": "249",
+		"o": "‫السودان‬‎"
+	}, {
+		"c": "苏里南",
+		"e": "Suriname",
+		"k": "SR",
+		"n": "597",
+		"o": "Suriname"
+	}, {
+		"c": "索马里",
+		"e": "Somalia",
+		"k": "SO",
+		"n": "252",
+		"o": "Soomaaliya"
+	}, {
+		"c": "所罗门群岛",
+		"e": "Solomon Islands",
+		"k": "SB",
+		"n": "677",
+		"o": "Solomon Islands"
+	}, {
+		"c": "塔吉克斯坦",
+		"e": "Tajikistan",
+		"k": "TJ",
+		"n": "992",
+		"o": "Тоҷикистон"
+	}, {
+		"c": "泰国",
+		"e": "Thailand",
+		"k": "TH",
+		"n": "66",
+		"o": "ไทย"
+	}, {
+		"c": "坦桑尼亚",
+		"e": "Tanzania",
+		"k": "TZ",
+		"n": "255",
+		"o": "Tanzania"
+	}, {
+		"c": "汤加",
+		"e": "Tonga",
+		"k": "TO",
+		"n": "676",
+		"o": "Tonga"
+	}, {
+		"c": "特克斯和凯科斯群岛",
+		"e": "Turks & Caicos Islands",
+		"k": "TC",
+		"n": "1649",
+		"o": "Turks & Caicos Islands"
+	}, {
+		"c": "特里斯坦-达库尼亚群岛",
+		"e": "Tristan da Cunha",
+		"k": "TA",
+		"o": "Tristan da Cunha"
+	}, {
+		"c": "特立尼达和多巴哥",
+		"e": "Trinidad & Tobago",
+		"k": "TT",
+		"n": "1868",
+		"o": "Trinidad & Tobago"
+	}, {
+		"c": "突尼斯",
+		"e": "Tunisia",
+		"k": "TN",
+		"n": "216",
+		"o": "Tunisia"
+	}, {
+		"c": "图瓦卢",
+		"e": "Tuvalu",
+		"k": "TV",
+		"n": "688",
+		"o": "Tuvalu"
+	}, {
+		"c": "土耳其",
+		"e": "Turkey",
+		"k": "TR",
+		"n": "90",
+		"o": "Türkiye"
+	}, {
+		"c": "土库曼斯坦",
+		"e": "Turkmenistan",
+		"k": "TM",
+		"n": "993",
+		"o": "Turkmenistan"
+	}, {
+		"c": "托克劳",
+		"e": "Tokelau",
+		"k": "TK",
+		"n": "690",
+		"o": "Tokelau"
+	}, {
+		"c": "瓦利斯和富图纳",
+		"e": "Wallis & Futuna",
+		"k": "WF",
+		"n": "681",
+		"o": "Wallis & Futuna"
+	}, {
+		"c": "瓦努阿图",
+		"e": "Vanuatu",
+		"k": "VU",
+		"n": "678",
+		"o": "Vanuatu"
+	}, {
+		"c": "危地马拉",
+		"e": "Guatemala",
+		"k": "GT",
+		"n": "502",
+		"o": "Guatemala"
+	}, {
+		"c": "委内瑞拉",
+		"e": "Venezuela",
+		"k": "VE",
+		"n": "58",
+		"o": "Venezuela"
+	}, {
+		"c": "文莱",
+		"e": "Brunei",
+		"k": "BN",
+		"n": "673",
+		"o": "Brunei"
+	}, {
+		"c": "乌干达",
+		"e": "Uganda",
+		"k": "UG",
+		"n": "256",
+		"o": "Uganda"
+	}, {
+		"c": "乌克兰",
+		"e": "Ukraine",
+		"k": "UA",
+		"n": "380",
+		"o": "Україна"
+	}, {
+		"c": "乌拉圭",
+		"e": "Uruguay",
+		"k": "UY",
+		"n": "598",
+		"o": "Uruguay"
+	}, {
+		"c": "乌兹别克斯坦",
+		"e": "Uzbekistan",
+		"k": "UZ",
+		"n": "998",
+		"o": "Oʻzbekiston"
+	}, {
+		"c": "西班牙",
+		"e": "Spain",
+		"k": "ES",
+		"n": "34",
+		"o": "España"
+	}, {
+		"c": "西撒哈拉",
+		"e": "Western Sahara",
+		"k": "EH",
+		"o": "‫الصحراء الغربية‬‎"
+	}, {
+		"c": "希腊",
+		"e": "Greece",
+		"k": "GR",
+		"n": "30",
+		"o": "Ελλάδα"
+	}, {
+		"c": "新加坡",
+		"e": "Singapore",
+		"k": "SG",
+		"n": "65",
+		"o": "Singapore"
+	}, {
+		"c": "新喀里多尼亚",
+		"e": "New Caledonia",
+		"k": "NC",
+		"n": "687",
+		"o": "Nouvelle-Calédonie"
+	}, {
+		"c": "新西兰",
+		"e": "New Zealand",
+		"k": "NZ",
+		"n": "64",
+		"o": "New Zealand"
+	}, {
+		"c": "匈牙利",
+		"e": "Hungary",
+		"k": "HU",
+		"n": "36",
+		"o": "Magyarország"
+	}, {
+		"c": "休达及梅利利亚",
+		"e": "Ceuta & Melilla",
+		"k": "EA",
+		"o": "Ceuta y Melilla"
+	}, {
+		"c": "叙利亚",
+		"e": "Syria",
+		"k": "SY",
+		"n": "963",
+		"o": "‫سوريا‬‎"
+	}, {
+		"c": "牙买加",
+		"e": "Jamaica",
+		"k": "JM",
+		"n": "1876",
+		"o": "Jamaica"
+	}, {
+		"c": "亚美尼亚",
+		"e": "Armenia",
+		"k": "AM",
+		"n": "374",
+		"o": "Հայաստան"
+	}, {
+		"c": "也门",
+		"e": "Yemen",
+		"k": "YE",
+		"n": "967",
+		"o": "‫اليمن‬‎"
+	}, {
+		"c": "伊拉克",
+		"e": "Iraq",
+		"k": "IQ",
+		"n": "964",
+		"o": "‫العراق‬‎"
+	}, {
+		"c": "伊朗",
+		"e": "Iran",
+		"k": "IR",
+		"n": "98",
+		"o": "‫ایران‬‎"
+	}, {
+		"c": "以色列",
+		"e": "Israel",
+		"k": "IL",
+		"n": "972",
+		"o": "‫ישראל‬‎"
+	}, {
+		"c": "意大利",
+		"e": "Italy",
+		"k": "IT",
+		"n": "39",
+		"o": "Italia"
+	}, {
+		"c": "印度",
+		"e": "India",
+		"k": "IN",
+		"n": "91",
+		"o": "भारत"
+	}, {
+		"c": "印度尼西亚",
+		"e": "Indonesia",
+		"k": "ID",
+		"n": "62",
+		"o": "Indonesia"
+	}, {
+		"c": "英国",
+		"e": "United Kingdom",
+		"k": "GB",
+		"n": "44",
+		"o": "United Kingdom"
+	}, {
+		"c": "英属维尔京群岛",
+		"e": "British Virgin Islands",
+		"k": "VG",
+		"n": "1284",
+		"o": "British Virgin Islands"
+	}, {
+		"c": "英属印度洋领地",
+		"e": "British Indian Ocean Territory",
+		"k": "IO",
+		"n": "246",
+		"o": "British Indian Ocean Territory"
+	}, {
+		"c": "约旦",
+		"e": "Jordan",
+		"k": "JO",
+		"n": "962",
+		"o": "‫الأردن‬‎"
+	}, {
+		"c": "越南",
+		"e": "Vietnam",
+		"k": "VN",
+		"n": "84",
+		"o": "Việt Nam"
+	}, {
+		"c": "赞比亚",
+		"e": "Zambia",
+		"k": "ZM",
+		"n": "260",
+		"o": "Zambia"
+	}, {
+		"c": "泽西岛",
+		"e": "Jersey",
+		"k": "JE",
+		"o": "Jersey"
+	}, {
+		"c": "乍得",
+		"e": "Chad",
+		"k": "TD",
+		"n": "235",
+		"o": "Tchad"
+	}, {
+		"c": "直布罗陀",
+		"e": "Gibraltar",
+		"k": "GI",
+		"n": "350",
+		"o": "Gibraltar"
+	}, {
+		"c": "智利",
+		"e": "Chile",
+		"k": "CL",
+		"n": "56",
+		"o": "Chile"
+	}, {
+		"c": "中非共和国",
+		"e": "Central African Republic",
+		"k": "CF",
+		"n": "236",
+		"o": "République centrafricaine"
+	}, {
+		"c": "瑙鲁",
+		"e": "Nauru",
+		"k": "NR",
+		"n": "674",
+		"o": "Nauru"
+	}, {
+		"c": "梵蒂冈",
+		"e": "Vatican City",
+		"k": "VA",
+		"n": "379",
+		"o": "Città del Vaticano"
+	}, {
+		"c": "斐济",
+		"e": "Fiji",
+		"k": "FJ",
+		"n": "679",
+		"o": "Fiji"
+	}
+]

@@ -1,0 +1,36 @@
+venture
+    project
+        GET /projects/{id} 获取项目详情
+    issue:
+        返回的 issuedDate 为list，应该为字符串
+
+tenant:
+    exchange-management
+        POST /exchange
+
+    issue:
+        为何开通了交易所后，仍然获取不到 exchange_id?
+        tenant:
+            exchange-management
+                GET /exchange/exchange-id
+        tenant:
+            /exchange/exchange-status 获取交易所状态-邹凌威
+            ExchangeStatus ====> {'reason': None, 'status': 'pending'}
+
+staff:
+    project
+        /projects/{coinId}/init 初始化项目
+    issue:
+        返回 500 ?
+        Error: HTTP response headers: HTTPHeaderDict({'X-Content-Type-Options': 'nosniff', 'X-XSS-Protection': '1; mode=block', 'Cache-Control': 'no-cache, no-store, max-age=0, must-revalidate', 'Pragma': 'no-cache', 'Expires': '0', 'X-Frame-Options': 'DENY', 'Content-Type': 'application/json;charset=UTF-8', 'Transfer-Encoding': 'chunked', 'Date': 'Mon, 10 Dec 2018 15:11:08 GMT', 'Connection': 'close'})
+HTTP response body: {"timestamp":1544454669336,"status":500,"error":"Internal Server Error","message":"could not execute statement; nested exception is org.hibernate.exception.GenericJDBCException: could not execute statement","path":"/projects/37/init"}
+    下面两个接口什么时候用?
+    audit:
+        GET /tenant-audits/tasks/{id}/individual/audit 个人认证交易所账号初审 - 邹凌威
+        GET /tenant-audits/tasks/{id}/individual/re_audit 个人认证交易所账号复审 - 邹凌威
+
+
+        swagger_client.staff.rest.ApiException: (400)
+Reason: Bad Request
+HTTP response headers: HTTPHeaderDict({'Cache-Control': 'no-cache, no-store, max-age=0, must-revalidate', 'Content-Type': 'application/json;charset=UTF-8', 'Date': 'Mon, 10 Dec 2018 16:04:26 GMT', 'Expires': '0', 'Pragma': 'no-cache', 'X-Content-Type-Options': 'nosniff', 'X-Frame-Options': 'DENY', 'X-Xss-Protection': '1; mode=block', 'Content-Length': '243'})
+HTTP response body: {"timestamp":1544457866971,"status":400,"error":"Bad Request","message":"No enum constant com.kinmall.crush.exchange.controller.model.staff.GetTenantIndividualAuditTasksResponse.IdTypeEnum.ID","path":"/tenant-audits/tasks/41/individual/audit"}

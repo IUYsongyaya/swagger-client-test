@@ -1,0 +1,950 @@
+paths:
+  /accounts/init-captcha:
+    get:
+      tags:
+      - verification
+      summary: 极验初始化
+      description: 极验初始化
+      responses:
+        200:
+          description: OK
+          schema:
+            properties:
+              success:
+                type: string
+                description: 是否成功，成功返回1
+                example: '1'
+              challenge:
+                type: string
+                description: 极验服务端需要用到的参数
+                example: 048ebbe51f829995db76ac4b81546403
+              gt:
+                type: string
+                description: 极验服务端需要用到的参数
+                example: 048ebbe51f829995db76ac4b81546403
+              new_captcha:
+                type: string
+                description: 极验服务端需要用到的参数
+                example: 'true'
+        400:
+          description: 极验初始化失败
+  /sponsor/login:
+    post:
+      tags:
+      - sponsor
+      summary: 账户登录
+      description: 账户登录
+      parameters:
+      - in: body
+        name: body
+        description: 账户登录
+        required: true
+        schema:
+          $ref: '#/definitions/PostLoginRequest'
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/PostLoginResponse'
+          description: OK
+        '401':
+          description: 需要更多认证
+          schema:
+            $ref: '#/definitions/PostUnauthorizedResponse'
+        '400':
+          description: message:"账号或密码不存在"
+        '500':
+          description: 服务器内部错误
+  /sponsor/send-verification-code:
+    post:
+      tags:
+      - sponsor
+      summary: 发送验证码
+      description: 绑定手机号码
+      parameters:
+      - in: body
+        name: body
+        description: 请求手机号码
+        required: true
+        schema:
+          $ref: '#/definitions/PostSendverificationCodeRequest'
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: 发送验证码失败
+        '500':
+          description: 服务器内部错误
+  /sponsor/login-verify:
+    post:
+      tags:
+      - sponsor
+      summary: 登录二次验证
+      description: 登录二次验证
+      parameters:
+      - in: body
+        name: info
+        required: true
+        schema:
+          required:
+          - account
+          - code
+          - baseToken
+          properties:
+            account:
+              type: string
+              description: 账号，邮箱不超过64个字符，手机不超过16
+              example: mailto:hello.world@email.com, number:18645511111
+              minLength: 16
+              maxLength: 64
+            code:
+              type: string
+              description: 验证码
+              example: '666666'
+              minLength: 6
+              maxLength: 6
+            baseToken:
+              description: baseToken 第一个接口返回的参数
+              type: string
+              example: 1234ABas12as12asd
+              maxLength: 200
+      responses:
+        200:
+          schema:
+            $ref: '#/definitions/PostLoginVerifyResponse'
+          description: OK
+        400:
+          description: 验证失败
+  /sponsor/logout:
+    post:
+      tags:
+      - sponsor
+      summary: 账户注销
+      description: 账户注销
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: 注销失败已经注销过了
+        '500':
+          description: 服务器内部错误
+      security:
+      - api_key: []
+  /sponsor/info:
+    post:
+      tags:
+      - sponsor
+      summary: 重置密码之前根据用户名获取绑定的手机和邮箱
+      description: 重置密码之前根据用户名获取绑定的手机和邮箱
+      parameters:
+      - name: body
+        in: body
+        description: 重置密码之前根据用户名获取绑定的手机和邮箱
+        required: true
+        schema:
+          $ref: '#/definitions/PostSponsorInfoRequest'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PostUnauthorizedResponse'
+        '400':
+          description: message:"账号不存在"
+        '500':
+          description: 服务器内部错误
+  /sponsor/set-password:
+    post:
+      tags:
+      - sponsor
+      summary: 重置密码
+      description: 重置密码
+      parameters:
+      - name: body
+        in: body
+        description: 重置密码
+        required: true
+        schema:
+          $ref: '#/definitions/PostRestPasswordRequest'
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: message:"修改密码错误"
+        '403':
+          description: 未登录
+        '500':
+          description: 服务器内部错误
+  /sponsors-ranking:
+    get:
+      tags:
+      - sponsors-managerment
+      summary: 获取保荐方排行榜
+      description: 获取保荐方排行榜
+      parameters:
+      - in: query
+        name: page
+        default: 1
+        description: 页码
+        type: integer
+        required: true
+      - in: query
+        name: realName
+        description: 保荐方名称
+        type: string
+      responses:
+        200:
+          schema:
+            $ref: '#/definitions/GetSponsorRankingListResponse'
+          description: OK
+      security:
+      - api_key: []
+  /projects:
+    get:
+      tags:
+      - sponsors-project
+      summary: 获取项目申请列表
+      description: 获取项目申请列表
+      parameters:
+      - in: query
+        name: page
+        default: 1
+        description: 页码
+        type: integer
+        required: true
+      - in: query
+        name: id
+        description: 申请记录id
+        type: string
+      responses:
+        200:
+          schema:
+            $ref: '#/definitions/GetProjectListResponse'
+          description: OK
+      security:
+      - api_key: []
+  /projects/{id}:
+    get:
+      tags:
+      - sponsors-project
+      summary: 获取项目申请详情
+      description: 获取项目申请详情
+      parameters:
+      - in: path
+        name: id
+        description: 申请记录id
+        type: string
+        required: true
+      responses:
+        200:
+          schema:
+            $ref: '#/definitions/GetProjectResponse'
+          description: OK
+      security:
+      - api_key: []
+    put:
+      tags:
+      - sponsors-project
+      summary: 保荐项目
+      description: 保荐项目
+      parameters:
+      - in: path
+        name: id
+        description: 申请id
+        type: string
+        required: true
+      - in: body
+        name: PutSponsorsProjectRequest
+        required: true
+        schema:
+          type: object
+          description: 状态
+          properties:
+            status:
+              type: string
+              enum:
+              - accept
+              - reject
+              description: accept接受，reject拒绝
+      responses:
+        200:
+          description: OK
+      security:
+      - api_key: []
+  /sponsor-record-success:
+    get:
+      tags:
+      - sponsors-project
+      summary: 获取项目保荐成功列表
+      description: 获取项目保荐成功列表
+      parameters:
+      - in: query
+        name: page
+        default: 1
+        description: 页码
+        type: integer
+        required: true
+      - in: query
+        name: id
+        description: 保荐人id
+        type: string
+      responses:
+        200:
+          schema:
+            $ref: '#/definitions/GetSponsorRecordSuccessListResponse'
+          description: OK
+      security:
+      - api_key: []
+  /sponsor-record-failure:
+    get:
+      tags:
+      - sponsors-project
+      summary: 获取项目保荐失败列表
+      description: 获取项目保荐失败列表
+      parameters:
+      - in: query
+        name: page
+        default: 1
+        description: 页码
+        type: integer
+        required: true
+      - in: query
+        name: id
+        description: 保荐人id
+        type: string
+      responses:
+        200:
+          schema:
+            $ref: '#/definitions/GetSponsorRecordFailureListResponse'
+          description: OK
+      security:
+      - api_key: []
+host: sponsor.kinmall.team
+produces:
+- application/json
+schemes:
+- https
+- http
+securityDefinitions:
+  petstore_auth:
+    type: oauth2
+    authorizationUrl: http://petstore.swagger.io/oauth/dialog
+    flow: implicit
+    scopes:
+      write:pets: modify pets in your account
+      read:pets: read your pets
+  api_key:
+    type: apiKey
+    name: api_key
+    in: header
+definitions:
+  PostLoginRequest:
+    type: object
+    description: 登录传的参数
+    required:
+    - account
+    - password
+    - challenge
+    - seccode
+    - validate
+    properties:
+      account:
+        type: string
+        description: 保荐方账号
+        example: zhansan
+        minLength: 8
+        maxLength: 64
+      password:
+        type: string
+        description: 密码
+        example: ABCD1234$#@!
+        format: password
+        minLength: 8
+        maxLength: 16
+      challenge:
+        type: string
+        description: 极验参数
+        example: 87a2661cb8458e5cee1a5741c13eb218k7
+      seccode:
+        type: string
+        description: 极验参数
+        example: 9be85a4934b0abd5302cf8493feaffa8|jordan
+      validate:
+        type: string
+        description: 极验参数
+        example: 9be85a4934b0abd5302cf8493feaffa8
+  GetSponsorRecordSuccessListResponse:
+    type: object
+    description: 获取项目保荐成功列表
+    properties:
+      meta:
+        $ref: '#/definitions/Pagination'
+      items:
+        type: array
+        description: 保荐成功列表
+        items:
+          type: object
+          description: 消息项
+          properties:
+            id:
+              type: string
+              description: 记录id
+              example: 1
+            projectName:
+              type: string
+              description: 币名/项目名
+              example: ETH
+            logo:
+              type: string
+              description: 项目logo
+              example: image/123.com
+            price:
+              description: 价格
+              type: string
+              example: 2345.5
+            tradingVolume:
+              description: 交易量
+              type: string
+              example: 2345.5
+            marketValue:
+              description: 平台市值
+              type: string
+              example: 2345.5
+            changeExtent:
+              description: 24小时涨跌幅
+              type: string
+              example: +12%
+            listedNum:
+              description: 已上交易所数量
+              type: integer
+              example: 10
+            createdAt:
+              type: string
+              description: 保荐时间
+              format: datetime
+  PostSendverificationCodeRequest:
+    type: object
+    description: 绑定手机号
+    required:
+    - uri
+    - type
+    properties:
+      uri:
+        type: string
+        description: 电话或者邮箱, 例如：mailto:hello.world@email.com, number:18645511111, ...
+        example: number:+8618645511111
+      type:
+        type: string
+        description: LOGIN("login"),REGISTER("register"), FORGET_PWD("forget_pwd"), EDIT_LOGIN_PWD("edit_login_pwd"),EDIT_ASSET_PWD("edit_asset_pwd"), BIND_EMAIL("bind_email"),UNBIND_EMAIL("unbind_email"),BIND_PHONE("bind_phone"),EDIT_PHONE("edit_phone"),UNBIND_PHONE("unbind_phone"),ALTER_GOOGLE("alter_google"), WITHDRAW("withdraw"),BIND_GOOGLE("bind_google"), UNBIND_GOOGLE("unbind_google"), OPEN_GOOGLE("open_google"),PAY("pay")
+        enum:
+        - login
+        - register
+        - forget_pwd
+        - edit_login_pwd
+        - edit_asset_pwd
+        - bind_phone
+        - edit_phone
+        - unbind_phone
+        - alter_google
+        - withdraw
+        - bind_google
+        - unbind_google
+        - open_google
+        - pay
+        example: login
+  GetSponsorRankingListResponse:
+    type: object
+    description: 获取保荐方排行榜
+    properties:
+      meta:
+        $ref: '#/definitions/Pagination'
+      ranking:
+        type: integer
+        description: 当前排名
+        example: 50
+      items:
+        type: array
+        description: 申请列表
+        items:
+          type: object
+          description: 消息项
+          properties:
+            id:
+              type: string
+              description: 保荐方id
+              example: 21324234
+            name:
+              type: string
+              description: 保荐方名称
+              example: 洪兴评级
+            website:
+              type: string
+              description: 官网
+              example: www.baidu.com
+            succesNum:
+              type: integer
+              description: 保荐项目成功数量
+              example: 250
+            failureNum:
+              type: integer
+              description: 保荐项目失败数量
+              example: 250
+            projects:
+              type: array
+              description: 热门项目
+              items:
+                type: object
+                description: 项目
+                properties:
+                  id:
+                    type: string
+                    description: 项目id
+                  logo:
+                    type: string
+                    description: 项目logo
+  PostLoginResponse:
+    type: object
+    description: 账户信息
+    properties:
+      token:
+        description: 会话串
+        type: string
+        example: d41d8cd98f00b204e9800998ecf8427e
+      items:
+        type: object
+        properties:
+          timestamp:
+            description: 时间戳
+            type: string
+            format: date-time
+          ip:
+            description: ip 地址
+            type: string
+            format: ip-address
+          location:
+            description: 位置信息
+            type: string
+        example:
+        - loginAt: '2018-01-22T09:12:43.083Z'
+          ip: 212.23.21.22
+          location: 深圳科兴科学园
+        - loginAt: '2018-01-22T09:12:43.083Z'
+          ip: 118.98.21.54
+          location: 新山-1medini
+  PostSponsorInfoRequest:
+    type: object
+    description: 获取保荐方邮箱手机
+    required:
+    - userName
+    - challenge
+    - seccode
+    - validate
+    properties:
+      userName:
+        type: string
+        description: 保荐方账号
+        example: zhangsan
+      challenge:
+        type: string
+        description: 极验参数
+        example: 87a2661cb8458e5cee1a5741c13eb218k7
+      seccode:
+        type: string
+        description: 极验参数
+        example: 9be85a4934b0abd5302cf8493feaffa8|jordan
+      validate:
+        type: string
+        description: 极验参数
+        example: 9be85a4934b0abd5302cf8493feaffa8
+  PostUnauthorizedResponse:
+    type: object
+    description: 二次认证
+    properties:
+      baseToken:
+        type: string
+        format: baseToken
+        description: 验证
+        example: eyJhbGciOiJIUzUxMiJ9.eyJjcmVhdGVkIjoxNTM3NDk4NTgzNTQzLCJleHAiOjE1Mzc2NzEzODMsInVzZXJpZCI6Ijk1Mjc0MjUwMjIyNDM2MzUyIiwidXNlcm5hbWUiOiIifQ.ibbEDl5OPXCNCpf7HLkwtaP1vieGgFG5GhH6tVtbUddyvj7QL3yS7G0lonSjUe_F75XKcQgv0MTmyncWfZoWVQ
+      email:
+        type: string
+        description: 邮箱
+        example: 1009820785@qq.com
+      phone:
+        type: string
+        description: 手机
+        example: '13288889999'
+  PostRestPasswordRequest:
+    type: object
+    description: 更新密码
+    required:
+    - userName
+    - baseToken
+    - password
+    - code
+    properties:
+      userName:
+        type: string
+        description: 保荐方账号
+        example: zhangsan
+      password:
+        type: string
+        description: 密码
+        example: 123qwe
+      code:
+        type: string
+        description: 验证码
+        example: '666666'
+      baseToken:
+        type: string
+        format: baseToken
+        description: 验证
+        example: eyJhbGciOiJIUzUxMiJ9.eyJjcmVhdGVkIjoxNTM3NDk4NTgzNTQzLCJleHAiOjE1Mzc2NzEzODMsInVzZXJpZCI6Ijk1Mjc0MjUwMjIyNDM2MzUyIiwidXNlcm5hbWUiOiIifQ.ibbEDl5OPXCNCpf7HLkwtaP1vieGgFG5GhH6tVtbUddyvj7QL3yS7G0lonSjUe_F75XKcQgv0MTmyncWfZoWVQ
+  Pagination:
+    type: object
+    description: 获取列表的元请求信息
+    properties:
+      requestedPage:
+        type: integer
+        description: 请求的页码
+        example: 1
+      page:
+        type: integer
+        description: 实际的页码
+      totalPage:
+        type: integer
+        description: 总页码数
+      itemsPerPage:
+        type: integer
+        description: 每页条目数
+      totalCount:
+        type: integer
+        description: 总条数
+      links:
+        type: array
+        description: 相关链接
+        items:
+          type: object
+          description: 链接信息
+          properties:
+            rel:
+              type: string
+              description: 相对于
+              enum:
+              - self
+              - first
+              - previous
+              - next
+              - last
+            link:
+              type: string
+              description: 链接
+  GetProjectListResponse:
+    type: object
+    description: 获取项目申请列表
+    properties:
+      meta:
+        $ref: '#/definitions/Pagination'
+      items:
+        type: array
+        description: 申请列表
+        items:
+          type: object
+          description: 消息项
+          properties:
+            id:
+              type: string
+              description: 项目申请id
+              example: 21324234
+            createdAt:
+              type: string
+              description: 申请时间
+              format: datetime
+            projectName:
+              type: string
+              description: 币名/项目名
+              example: ETH
+            whitePaper:
+              description: 白皮书PDF
+              type: string
+              example: url/pdf123455
+            dataLink:
+              description: 资料链接
+              type: string
+              example: www.baidu.com
+            blockchainType:
+              description: 区块链类型
+              type: string
+              enum:
+              - public_chain
+              - private_chain
+              - smart_contract
+              example: public_chain
+  PostLoginVerifyResponse:
+    type: object
+    description: 账户信息
+    properties:
+      token:
+        description: 会话串
+        type: string
+        example: d41d8cd98f00b204e9800998ecf8427e
+      id:
+        description: 保荐方id
+        type: string
+        example: 1
+      name:
+        description: 保荐方名称
+        type: string
+        example: 洪兴保荐
+      logo:
+        description: 保荐方logo
+        type: string
+        example: image/1
+      summary:
+        description: 保荐方简介
+        type: string
+        example: 这是简介
+      website:
+        description: 保荐方官网
+        type: string
+        example: www.baidu.com
+      email:
+        description: 保荐方邮箱
+        type: string
+        example: 123@qq.com
+      items:
+        type: object
+        properties:
+          timestamp:
+            description: 时间戳
+            type: string
+            format: date-time
+          ip:
+            description: ip 地址
+            type: string
+            format: ip-address
+          location:
+            description: 位置信息
+            type: string
+        example:
+        - loginAt: '2018-01-22T09:12:43.083Z'
+          ip: 212.23.21.22
+          location: 深圳科兴科学园
+        - loginAt: '2018-01-22T09:12:43.083Z'
+          ip: 118.98.21.54
+          location: 新山-1medini
+  GetSponsorRecordFailureListResponse:
+    type: object
+    description: 获取项目保荐失败列表
+    properties:
+      meta:
+        $ref: '#/definitions/Pagination'
+      items:
+        type: array
+        description: 保荐失败列表
+        items:
+          type: object
+          description: 消息项
+          properties:
+            id:
+              type: string
+              description: 记录id
+              example: 1
+            appliedId:
+              type: string
+              description: 项目申请id
+              example: 21324234
+            projectName:
+              type: string
+              description: 币名/项目名
+              example: ETH
+            whitePaper:
+              description: 白皮书PDF
+              type: string
+              example: url/pdf123455
+            blockchainType:
+              description: 区块链类型
+              type: string
+              enum:
+              - public_chain
+              - private_chain
+              - smart_contract
+              example: public_chain
+            dataLink:
+              description: 资料链接
+              type: string
+              example: www.baidu.com
+            remark:
+              description: 备注
+              type: string
+              example: 项目有毒
+            appliedAt:
+              type: string
+              description: 申请时间
+              format: datetime
+            createdAt:
+              type: string
+              description: 驳回时间
+              format: datetime
+  GetProjectResponse:
+    type: object
+    description: 获取项目详情
+    properties:
+      projectInfo:
+        type: object
+        properties:
+          id:
+            description: 项目申请ID
+            type: string
+            example: 123
+          projectName:
+            description: 项目名
+            type: string
+            example: 比特币
+          whitePaper:
+            description: 白皮书PDF
+            type: string
+            example: url/pdf123455
+          officialWebsite:
+            description: 官方网站
+            type: string
+            example: www.xxxx.com
+          communities:
+            type: array
+            description: 社群
+            items:
+              type: object
+              description: 记录项
+              properties:
+                type:
+                  type: string
+                  description: 社群类型
+                value:
+                  type: string
+                  description: 地址
+            example:
+            - type: QQ
+              value: http://editoasda.asafa.sd
+            - type: github
+              value: http://editoasda.asafa.sd
+            - type: facebook
+              value: http://editoasda.asafa.sd
+          email:
+            description: 电子邮箱
+            type: string
+            example: 1234832456@qq.com
+          appliedAt:
+            type: string
+            format: date-time
+            description: 申请时间
+            example: '2018-08-08'
+          listedExchange:
+            type: integer
+            description: 上架交易所
+            example: '190'
+          areaCode:
+            description: 电话区号
+            type: string
+            example: '+86'
+          cellphone:
+            description: 手机号
+            type: string
+            example: '13510022445'
+          telephone:
+            description: 固定电话号
+            type: string
+            example: 12874846
+          projectPoster:
+            description: 项目广告图
+            type: string
+            example: url/image123455
+          description:
+            type: string
+            description: 项目简介
+            example: 以太坊（英文Ethereum）是一个开源的有智能合约功能的公共区块链平台，通过其专用加密货币以太币（Ether）提供去中心化的虚拟机（“以太虚拟机” Ethereum Virtual Machine）来处理点对点合约。
+          open:
+            description: 是否公示
+            type: boolean
+            example: false
+          accessMethod:
+            description: 接入方式（refuse：拒绝接入、verification：需要验证、accept：无需验证）
+            type: string
+            enum:
+            - refuse
+            - verification
+            - accept
+            example: verification
+      coinInfo:
+        type: object
+        properties:
+          id:
+            description: 币ID
+            type: string
+            example: 123
+          shortName:
+            description: 币简称
+            type: string
+            example: BTC
+          fullName:
+            description: 币全称
+            type: string
+            example: BitCoin
+          issuePrice:
+            description: 发行价
+            type: string
+            example: '2.24545'
+          issuedVolume:
+            description: 发行量
+            type: string
+            example: '1000000'
+          circulationVolume:
+            description: 流通量
+            type: string
+            example: '1000000'
+          issuedAt:
+            type: string
+            format: date-time
+            description: 发行时间
+            example: '2018-08-08'
+          blockchainType:
+            description: 区块链类型
+            type: string
+            enum:
+            - public_chain
+            - private_chain
+            - smart_contract
+            example: public_chain
+          dataLink:
+            description: 资料链接
+            type: string
+            example: www.baidu.com
+          blockBrowser:
+            description: 区块浏览器
+            type: string
+            example: www.baidu.com
+          logo:
+            description: 币LOGO
+            type: string
+            example: url/image456455
+          holdersNumber:
+            description: 持有人数
+            type: string
+            example: 100
+swagger: '2.0'
+info:
+  title: kinmall 平台接口（保荐方平台端）
+  description: |-
+    `kinmall` 平台接口（保荐方平台端）
+     当前接口为 `sponsor` 端
+  version: 2.0.0
+  termsOfService: https://kinmall.team/terms/
+  contact:
+    email: api@kinmall.team
+tags:
+- name: sponsors-project
+  description: 保荐项目管理-王文洋
+- name: sponsors-managerment
+  description: 保荐方用户管理-王文洋
+- name: verification
+  description: 验证相关-李欣
+- name: sponsor
+  description: 保荐方相关-王文洋
+consumes:
+- application/json

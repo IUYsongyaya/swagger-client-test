@@ -1,0 +1,17 @@
+# coding: utf-8
+
+# flake8: noqa
+
+{{>partial_header}}
+
+from __future__ import absolute_import
+
+# import apis into sdk package
+{{#apiInfo}}{{#apis}}from {{packageName}}.venture.api.{{classVarName}} import {{classname}}
+{{/apis}}{{/apiInfo}}
+# import ApiClient
+from {{packageName}}.venture.api_client import ApiClient
+from {{packageName}}.venture.configuration import Configuration
+# import models into sdk package
+{{#models}}{{#model}}from {{packageName}}.venture.models.{{classFilename}} import {{classname}}
+{{/model}}{{/models}}

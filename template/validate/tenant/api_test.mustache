@@ -1,0 +1,42 @@
+# coding: utf-8
+
+{{>partial_header}}
+import pytest
+import json
+from test.tenant.id_settings import *
+from test.tenant.staff import Staff
+from test.tenant.tenant import Tenant
+from test.tenant.venture import Venture
+from test.tenant.sponsor import Sponsor
+from test.tenant.main import Main
+
+
+@pytest.fixture(scope="function")
+def setup(request):
+    _staff = Staff(CONFIG.STAFF_INDEX)
+    _tenant = Tenant(CONFIG.TENANT_INDEX)
+    _venture = Venture(CONFIG.VENTURE_INDEX)
+    _sponsor = Sponsor(CONFIG.SPONSOR_INDEX)
+    _main = Main(CONFIG.MAIN_INDEX)
+
+    def finalize():
+        pass
+
+    request.addfinalizer(finalize)
+    return _staff, _main, _tenant, _venture, _sponsor
+
+
+class {{#operations}}Test{{classname}}:
+    """{{classname}} pytest stubs"""
+
+    {{#operation}}
+    def test_{{operationId}}(self, setup):
+        """Test case for {{{operationId}}}
+{{#summary}}
+        {{{summary}}}  # noqa: E501
+{{/summary}}
+        """
+        pass
+
+   {{/operation}}
+{{/operations}}

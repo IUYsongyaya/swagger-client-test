@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>crush 平台接口(用户管理后台端) -- 测试报告</title>
+    <style>
+        h1 { text-align: center; margin: 40px 0px; }
+        
+        
+        
+        
+        
+        
+        
+
+        #reports {
+            font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        #reports td, #reports th {
+            border: 1px solid #ddd;
+            padding: 8px;
+            width: 200px;
+        }
+
+        #reports tr:nth-child(even){background-color: #f2f2f2;}
+
+        #reports tr:hover {background-color: #ddd;}
+
+        #reports th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #205081;
+            color: white;
+        }
+
+        .module { font-weight: bold; font-size: 20px; color: #3b4151; margin: 20px 0px;}
+        .project { margin: 20px 0px; }
+    </style>
+</head>
+<body>
+    <h1>crush 平台接口(用户管理后台端) -- 测试报告</h1>
+    <div class="project">
+        
+            <div class="module">verification 验证相关-李欣</div>
+            <table id="reports">
+                <tr>
+                    <th>api地址</th>
+                    <th>功能</th>
+                    <th>测试结果</th>
+                    <th>原因</th>
+                </tr>
+                
+                <tr>
+                    <td>/init-captcha</td>
+                    <td>极验初始化</td>
+                    
+                        <td style="color: green">测试通过</td>
+                    
+                    <td></td>
+                </tr>
+                
+                <tr>
+                    <td>/init-googleauth</td>
+                    <td>谷歌验证初始化</td>
+                    
+                        <td style="color: red">测试失败</td>
+                    
+                    <td>name字段不能为空</td>
+                </tr>
+                
+                <tr>
+                    <td>/get-verification-code</td>
+                    <td>获取验证码</td>
+                    
+                        <td style="color: red">测试失败</td>
+                    
+                    <td>验证码不能为空</td>
+                </tr>
+                
+            </table>
+        
+        
+            <div class="module">【用户解锁场景测试】场景测试</div>
+            <table id="reports">
+                <tr>
+                    <th>步骤</th>
+                    <th>描述</th>
+                    <th>测试结果</th>
+                    <th>原因</th>
+                </tr>
+                
+                <tr>
+                    <td>第1步</td>
+                    <td>获取用户信息</td>
+                    
+                        <td style="color: green">测试通过</td>
+                    
+                    <td></td>
+                </tr>
+                
+                <tr>
+                    <td>第2步</td>
+                    <td>用户解锁</td>
+                    
+                        <td style="color: green">测试通过</td>
+                    
+                    <td></td>
+                </tr>
+                
+                <tr>
+                    <td>第3步</td>
+                    <td>对比用户信息</td>
+                    
+                        <td style="color: red">测试失败</td>
+                    
+                    <td>两次获取的信息不一致</td>
+                </tr>
+                
+            </table>
+        
+            <div class="module">【资金管理测试】场景测试</div>
+            <table id="reports">
+                <tr>
+                    <th>步骤</th>
+                    <th>描述</th>
+                    <th>测试结果</th>
+                    <th>原因</th>
+                </tr>
+                
+                <tr>
+                    <td>第1步</td>
+                    <td>获取用户币数量</td>
+                    
+                        <td style="color: green">测试通过</td>
+                    
+                    <td></td>
+                </tr>
+                
+                <tr>
+                    <td>第2步</td>
+                    <td>提币操作</td>
+                    
+                        <td style="color: green">测试通过</td>
+                    
+                    <td></td>
+                </tr>
+                
+                <tr>
+                    <td>第3步</td>
+                    <td>获取用户币数量</td>
+                    
+                        <td style="color: red">测试失败</td>
+                    
+                    <td>提币后数量一样</td>
+                </tr>
+                
+            </table>
+        
+    </div>
+</body>
+</html>

@@ -1,0 +1,233 @@
+version: v1.0
+module: staff
+name: crush 平台接口(用户管理后台端) -- 测试报告
+scenarios:
+  test_money_manage:
+    description: '资金管理场景测试'
+    steps:
+    - comment: 查询币的数量
+      name: step1
+      url: /verify
+      method: get
+      params: {page: 1}
+      body: {account: 'robin', password: '123456'}
+      auth: {api_key: 'bbbbbb'}
+      output:
+        id: $.store.book[1].id
+        name: $.store.book[1].title
+        createTime: $..author
+      asserts:
+      - field: name
+        type: equal
+        expected: Sword of Honour
+      - field: createTime
+        type: not None
+      - field: createTime
+        type: equal
+        expected: ['Nigel Rees', 'Evelyn Waugh', 'Herman Melville', 'J. R. R. Tolkien']
+    - comment: 开始提币
+      name: step2
+      require:
+      - step1
+      url: /bbbb/{id}/{name}
+      path:
+        id: $step1.id
+        name: robin
+      params: {'page': 1}
+      body: {'account': 'robin2', 'password': '0123456'}
+      auth: {'api_key': 'aaxxffabb'}
+      asserts:
+      - type: equal
+        field: name
+        expected: Sayings of the Century
+      - type: equal
+        field: id
+        expected: 1
+      - type: equal
+        field: name
+        expected: robin
+      output:
+        id: $.store.book[0].id
+        name: $.store.book[0].title
+  test_money_password:
+    description: '资金密码场景测试'
+    setup:
+    - test_money_manage
+    steps:
+    - comment: 登录
+      name: step1
+      url: /balance/getflow
+      asserts:
+      - type: equal
+        field: name
+        expected: Sayings of the Century
+      - type: not None
+        field: createTime
+      output:
+        id: $.store.book[0].id
+        name: $.store.book[0].title
+        createTime: $.store.book[0].title
+    - comment: 设置资金密码
+      name: step2
+      require:
+      - step1
+      path:
+        id: $step1.id
+        name: robin
+      url: /bbbb/{id}/{name}
+      asserts:
+      - type: equal
+        field: name
+        expected: Sayings of the Century
+      - type: equal
+        field: id
+        expected: 1
+      - type: equal
+        field: name
+        expected: Sayings of the Century
+      output:
+        id: $.store.book[0].id
+        name: $.store.book[0].title
+    - comment: 查询是否设置资金密码
+      name: step3
+      require:
+      - step1
+      path:
+        id: $step1.id
+        name: robin
+      url: /aaa/{id}/{name}
+      asserts:
+      - type: equal
+        field: $step1.name
+        expected: robin
+      - type: equal
+        field: id
+        expected: 1
+      - type: equal
+        field: name
+        expected: robin
+      output:
+        id: $.store.book[0].id
+        name: $.store.book[0].title
+        createTime: $.store.book[0].title
+  test_recharge:
+    description: '充币场景测试'
+    setup:
+    - test_money_password
+    steps:
+    - comment: 登录
+      name: step1
+      url: /abc/cd
+      asserts:
+      - type: equal
+        field: name
+        expected: robin
+      - type: not None
+        field: createTime
+      output:
+        id: $.store.book[0].id
+        name: $.store.book[0].title
+        createTime: $.store.book[0].title
+    - comment: 设置资金密码
+      name: step2
+      require:
+      - step1
+      path:
+        id: $step1.id
+        name: robin
+      url: /bbbb/{id}/{name}
+      asserts:
+      - type: equal
+        field: $step1.name
+        expected: robin
+      - type: equal
+        field: id
+        expected: 1
+      - type: equal
+        field: name
+        expected: robin
+      output:
+        id: $.store.book[0].id
+        name: $.store.book[0].title
+    - comment: 查询是否设置资金密码
+      name: step3
+      require:
+      - step1
+      path:
+        id: $step1.id
+        name: robin
+      url: /aaa/{id}/{name}
+      asserts:
+      - type: equal
+        field: $step1.name
+        expected: robin2
+      - type: equal
+        field: id
+        expected: 2
+      - type: equal
+        field: name
+        expected: robin3
+      output:
+        id: $.store.book[0].id
+        name: $.store.book[0].title
+        createTime: $.store.book[0].title
+  test_withdraw:
+    description: '提币场景测试'
+    setup:
+    - test_recharge
+    steps:
+    - comment: 登录
+      name: step1
+      url: /abc/cd
+      asserts:
+      - type: equal
+        field: name
+        expected: robin
+      - type: not None
+        field: createTime
+      output:
+        id: $.store.book[2].id
+        name: $.store.book[0].title
+        createTime: $.store.book[0].title
+    - comment: 设置资金密码
+      name: step2
+      require:
+      - step1
+      path:
+        id: $step1.id
+        name: robin
+      url: /bbbb/{id}/{name}
+      asserts:
+      - type: equal
+        field: $step1.name
+        expected: robin
+      - type: equal
+        field: id
+        expected: 1
+      - type: equal
+        field: name
+        expected: robin
+      output:
+        id: $.store.book[0].id
+        name: $.store.book[0].title
+    - comment: 查询是否设置资金密码
+      name: step3
+      require:
+      - step1
+      path:
+        id: $step1.id
+        name: robin
+      url: /aaa/{id}/{name}
+      asserts:
+      - type: equal
+        field: $step1.name
+        expected: robin
+      - type: equal
+        field: id
+        expected: 1
+      - type: equal
+        field: name
+        expected: robin3
+      output:
+        id: $.store.book[1].id
+        name: $.store.book[0].title

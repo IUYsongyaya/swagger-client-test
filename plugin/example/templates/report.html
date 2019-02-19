@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ name }}</title>
+    <style>
+        h1 { text-align: center; margin: 40px 0px; }
+        {#table { width: 100%; margin-top: 20px; border-collapse: collapse; }#}
+        {#table th { text-align: left; line-height: 50px; }#}
+        {#table td { width: 120px; }#}
+        {#td, th {#}
+        {#    border: 1px solid #dddddd;#}
+        {#    text-align: left;#}
+        {#    padding: 8px;#}
+
+        #reports {
+            font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        #reports td, #reports th {
+            border: 1px solid #ddd;
+            padding: 8px;
+            width: 200px;
+        }
+
+        #reports tr:nth-child(even){background-color: #f2f2f2;}
+
+        #reports tr:hover {background-color: #ddd;}
+
+        #reports th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #205081;
+            color: white;
+        }
+
+        .module { font-weight: bold; font-size: 20px; color: #3b4151; margin: 20px 0px;}
+        .project { margin: 20px 0px; }
+    </style>
+</head>
+<body>
+    <h1>{{ name }}</h1>
+    <div class="project">
+        {% for module in project.modules %}
+            <div class="module">{{ module.name }}</div>
+            <table id="reports">
+                <tr>
+                    <th>api地址</th>
+                    <th>功能</th>
+                    <th>测试结果</th>
+                    <th>原因</th>
+                </tr>
+                {% for item in module.api %}
+                <tr>
+                    <td>{{ item.url }}</td>
+                    <td>{{ item.description }}</td>
+                    {% if item.result %}
+                        <td style="color: green">测试通过</td>
+                    {% else %}
+                        <td style="color: red">测试失败</td>
+                    {% endif %}
+                    <td>{{ item.reason }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        {% endfor %}
+        {% for scence in project.scenarios %}
+            <div class="module">【{{ scence.name }}】场景测试</div>
+            <table id="reports">
+                <tr>
+                    <th>步骤</th>
+                    <th>描述</th>
+                    <th>测试结果</th>
+                    <th>原因</th>
+                </tr>
+                {% for item in scence.steps %}
+                <tr>
+                    <td>第{{ loop.index }}步</td>
+                    <td>{{ item.description }}</td>
+                    {% if item.result %}
+                        <td style="color: green">测试通过</td>
+                    {% else %}
+                        <td style="color: red">测试失败</td>
+                    {% endif %}
+                    <td>{{ item.reason }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        {% endfor %}
+    </div>
+</body>
+</html>

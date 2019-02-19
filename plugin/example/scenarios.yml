@@ -1,0 +1,133 @@
+version: v1.0
+module: staff
+name: crush 平台接口【账户资产】测试报告
+scenarios:
+  test_money_manage:
+    description: 登录
+    steps:
+    - comment: 注册
+      name: step1
+      url: /verify
+      output:
+        id: $.store.book[1].id
+        name: $.store.book[1].title
+      asserts:
+      - field: name
+        type: equal
+        expected: Sword of Honour
+    - comment: 登录
+      name: step2
+      require:
+      - step1
+      url: /bbbb/{id}/{name}
+      path:
+        id: $step1.id
+        name: robin
+      asserts:
+      - type: equal
+        field: name
+        expected: Sayings of the Century
+      output:
+        id: $.store.book[0].id
+        name: $.store.book[0].title
+  test_money_password:
+    description: 设置资金密码
+    setup:
+    - test_money_manage
+    steps:
+    - comment: 设置资金密码
+      name: step1
+      url: /verify
+      output:
+        id: $.store.book[1].id
+        name: $.store.book[1].title
+      asserts:
+      - field: name
+        type: equal
+        expected: Sword of Honour
+  test_get_money:
+    description: 获取账户资产
+    setup:
+    - test_money_password
+    steps:
+    - comment: 获取账户资产
+      name: step1
+      url: /verify
+      output:
+        id: $.store.book[1].id
+        name: $.store.book[1].title
+      asserts:
+      - field: name
+        type: equal
+        expected: Sword of Honour
+  test_recharge:
+    description: 充币
+    setup:
+    - test_money_password
+    steps:
+    - comment: 充币成功
+      name: step1
+      url: /verify
+      output:
+        id: $.store.book[1].id
+        name: $.store.book[1].title
+      asserts:
+      - field: name
+        type: equal
+        expected: Sword of Honour
+    - comment: 获取账户充币记录
+      name: step2
+      url: /verify
+      output:
+        id: $.store.book[1].id
+        name: $.store.book[1].title
+      asserts:
+      - field: name
+        type: equal
+        expected: Sword of Honour
+    - comment: 获取收支记录
+      name: step3
+      url: /verify
+      output:
+        id: $.store.book[1].id
+        name: $.store.book[1].title
+      asserts:
+      - field: name
+        type: equal
+        expected: Sword of Honour
+  test_withdraw:
+    description: 新增提币地址
+    setup:
+    - test_money_password
+    steps:
+    - comment: 获取提币地址
+      name: step1
+      url: /verify
+      output:
+        id: $.store.book[1].id
+        name: $.store.book[1].title
+      asserts:
+      - field: name
+        type: equal
+        expected: Sword of Honour
+    - comment: 新增提币地址
+      name: step2
+      url: /verify
+      output:
+        id: $.store.book[1].id
+        name: $.store.book[1].title
+      asserts:
+      - field: name
+        type: equal
+        expected: Sword of Honour
+    - comment: 获取提币地址
+      name: step3
+      url: /verify
+      output:
+        id: $.store.book[1].id
+        name: $.store.book[1].title
+      asserts:
+      - field: name
+        type: equal
+        expected: Sword of Honour
+

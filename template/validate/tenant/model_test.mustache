@@ -1,0 +1,28 @@
+# coding: utf-8
+
+{{>partial_header}}
+
+from __future__ import absolute_import
+
+import unittest
+
+{{#models}}
+{{#model}}
+import {{packageName}}.tenant
+from {{packageName}}.tenant.models.{{classFilename}} import {{classname}}  # noqa: E501
+from {{packageName}}.tenant.rest import ApiException
+
+
+class Test{{classname}}:
+    """{{classname}} unit test stubs"""
+
+
+    def test{{classname}}(self):
+        """Test {{classname}}"""
+        # FIXME: construct object with mandatory attributes with example values
+        # model = {{packageName}}.models.{{classFilename}}.{{classname}}()  # noqa: E501
+        pass
+
+{{/model}}
+{{/models}}
+

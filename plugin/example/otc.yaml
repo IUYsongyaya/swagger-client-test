@@ -1,0 +1,1108 @@
+swagger: '2.0'
+info: {title: otc, version: 0.0.1 }
+tags:
+- name: account
+  description: 账号相关-李欣
+- name: asset-management
+  description: 资产管理(otc)
+- name: advertisement
+  description: 广告相关-胡小刚
+- name: order
+  description: 订单相关-胡小刚
+- name: balance
+  description: 账目相关-胡小刚
+- name: paymode
+  description: 支付方式相关-胡小刚
+
+paths:
+  /advertise/createAd:
+    post:
+      tags:
+      - advertisement
+      summary: "新建广告"
+      description: "新建广告"
+      parameters:
+      - in: body
+        name: body
+        required: true
+        schema:
+          $ref: "#/definitions/CreateAdRequest"
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/CreateAdResp"
+        400:
+          description: "身份校验不通过"
+        403:
+          description: "参数不对"
+        500:
+          description: "服务器内部错误"
+
+  /advertise/update:
+    post: 
+      tags: 
+      - advertisement
+      summary: "更新广告"
+      description: "更新广告"
+      parameters:
+      - in: body
+        name: body        
+        required: true
+        schema:
+          $ref: "#/definitions/AdvertisementInfo"
+      responses:
+        200:
+          description: OK
+        400:
+          description: "身份校验不通过"
+        403:
+          description: "参数不对"
+        500:
+          description: "服务器内部错误"
+
+  /advertise/delete:
+    post:
+      tags:
+      - advertisement
+      summary: "删除广告"
+      description: "删除广告"
+      parameters:
+      - in: query
+        name: adId
+        type: string
+        required: true
+        description: "广告id"
+      responses:
+        200:
+          description: OK
+        400:
+          description: "身份校验不通过"
+        403:
+          description: "参数不对"
+        500:
+          description: "服务器内部错误"
+
+  /advertise/myList:
+    get:
+      tags:
+      - advertisement
+      summary: 查看广告记录
+      description: 查看广告记录
+      parameters:
+      - in: query
+        name: page
+        description: 页数从1开始
+        type: string
+        default: 1
+        required: false
+      - in: query
+        name: pageSize
+        description: 页面大小
+        type: string
+        default: 5
+        required: false
+      responses:
+        200:
+          schema:
+            $ref: '#/definitions/AdListResp'
+          description: OK
+        400:
+          description: "身份校验不通过"
+        403:
+          description: "参数不对"
+        500:
+          description: "服务器内部错误"
+
+  /advertise/onlineList:
+    get:
+      tags:
+      - advertisement
+      summary: 获取在线的广告列表
+      description: 获取在线的广告列表
+      parameters:
+      - in: query
+        name: currencyId
+        type: string
+        description: 数字币id
+        required: true
+      - in: query
+        name: type
+        description: '交易类型 1 买币广告 2 卖币广告'
+        type: string
+        required: true
+      - in: query
+        name: page
+        description: 页数从1开始
+        type: string
+        default: 1
+        required: false
+      - in: query
+        name: pageSize
+        description: 页面大小
+        type: string
+        default: 5
+        required: false
+      responses:
+        200:
+          schema:
+            $ref: '#/definitions/AdListResp'
+          description: OK
+        400:
+          description: "身份校验不通过"
+        403:
+          description: "参数不对"
+        500:
+          description: "服务器内部错误"
+
+  /advertise/get:
+    get:
+      tags:
+      - advertisement
+      summary: 获取一条广告
+      description: 获取一条广告
+      parameters:
+      - in: query
+        name: adId
+        type: string
+        description: 广告id
+        required: true
+      responses:
+        200:
+          schema:
+            $ref: '#/definitions/AdvertisementInfo'
+          description: OK
+        400:
+          description: "身份校验不通过"
+        403:
+          description: "参数不对"
+        500:
+          description: "服务器内部错误"
+
+  /advertise/puton:
+    post:
+      tags:
+      - advertisement
+      summary: 把广告上线
+      description: 把广告上线
+      parameters:
+      - in: query
+        name: adId
+        type: string
+        description: 广告id
+        required: true
+      responses:
+        200:
+          description: OK
+        400:
+          description: "身份校验不通过"
+        403:
+          description: "参数不对"
+        500:
+          description: "服务器内部错误"
+
+  /advertise/putoff:
+    post:
+      tags:
+      - advertisement
+      summary: 把广告下线
+      description: 把广告下线
+      parameters:
+      - in: query
+        name: adId
+        type: string
+        description: 广告id
+        required: true
+      responses:
+        200:
+          description: OK
+        400:
+          description: "身份校验不通过"
+        403:
+          description: "参数不对"
+        500:
+          description: "服务器内部错误"
+
+  /order/create:
+    post:
+      tags:
+      - order
+      summary: "创建订单"
+      description: "创建订单"
+      parameters:
+      - in: query
+        name: adId
+        description: "广告id"
+        type: string
+        required: true
+      - in: query
+        name: amount
+        description: "数量"
+        type: string
+        required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/CreateOrderResp"
+        400:
+          description: "身份校验不通过"
+        403:
+          description: "参数不对"
+        500:
+          description: "服务器内部错误"
+
+  /order/get:
+    get:
+      tags:
+      - order
+      summary: "获取订单信息"
+      description: "获取订单信息"
+      parameters:
+      - in: query
+        name: orderId
+        description: "订单id"
+        type: string
+        required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/OrderInfo'
+        400:
+          description: "身份校验不通过"
+        403:
+          description: "参数不对"
+        500:
+          description: "服务器内部错误"
+
+  /order/cancel:
+    post:
+      tags:
+      - order
+      summary: "取消订单"
+      description: "取消订单"
+      parameters:
+      - in: query
+        name: orderId
+        type: string
+        description: "订单id"
+        required: true
+      responses:
+        200:
+          description: OK
+        400:
+          description: "身份校验不通过"
+        403:
+          description: "参数不对"
+        500:
+          description: "服务器内部错误"
+
+  /order/selectPaymode:
+    post:
+      tags:
+      - order
+      summary: "设置支付方式"
+      description: "设置支付方式"
+      parameters:
+      - in: query
+        name: orderId
+        description: "订单id"
+        type: string
+        required: true
+      - in: query
+        name: paymodeId
+        description: "支付方式id"
+        type: string
+        required: true
+      responses:
+        200:
+          description: OK
+        400:
+          description: "身份校验不通过"
+        403:
+          description: "参数不对"
+        500:
+          description: "服务器内部错误"
+
+  /order/sellerConfirm:
+    post:
+      tags:
+      - order
+      summary: "卖家确认已支付"
+      description: "卖家确认已支付"
+      parameters:
+      - in: query
+        name: orderId
+        description: "订单id"
+        type: string
+        required: true
+      responses:
+        200:
+          description: OK
+        400:
+          description: "身份校验不通过"
+        403:
+          description: "参数不对"
+        500:
+          description: "服务器内部错误"
+
+  /order/buyerPaid:
+    post:
+      tags:
+      - order
+      summary: "买家确认付款"
+      description: "买家确认付款"
+      parameters:
+      - in: query
+        name: orderId
+        description: "订单id"
+        type: string
+        required: true
+      responses:
+        200:
+          description: OK
+        400:
+          description: "身份校验不通过"
+        403:
+          description: "参数不对"
+        500:
+          description: "服务器内部错误"
+
+  /order/complain:
+    post:
+      tags:
+      - order
+      summary: "发起申诉"
+      description: "发起申诉"
+      parameters:
+      - in: query
+        name: orderId
+        description: "订单id"
+        type: string
+        required: true
+      - in: query
+        name: complain
+        description: "申诉内容"
+        type: string
+        required: true
+      responses:
+        200:
+          description: OK
+        400:
+          description: "身份校验不通过"
+        403:
+          description: "参数不对"
+        500:
+          description: "服务器内部错误"         
+
+  /order/cancelTimes:
+    get:
+      tags:
+      - order
+      summary: "查询过去24小时已取消的订单总数"
+      description: "查询过去24小时已取消的订单总数"
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/OrderCancelTimesResp'
+        400:
+          description: "身份校验不通过"
+        403:
+          description: "参数不对"
+        500:
+          description: "服务器内部错误"
+
+  /order/list:
+    get:
+      tags:
+      - order
+      summary: 查看订单列表
+      description: 查看订单列表
+      parameters:
+      - in: query
+        name: page
+        description: 页数从1开始 默认1
+        type: string
+        default: 1
+        required: false
+      - in: query
+        name: pageSize
+        description: 页面大小 默认5
+        type: string
+        default: 5
+        required: false
+      responses:
+        200:
+          schema:
+            $ref: '#/definitions/OrderListResp'
+          description: OK
+        400:
+          description: "身份校验不通过"
+        403:
+          description: "参数不对"
+        500:
+          description: "服务器内部错误"
+
+  /balance/list:
+    get:
+      tags:
+      - balance
+      summary: "查询账目"
+      description: "查询账目"
+      parameters:
+      - in: query
+        name: userId
+        description: "用户Id"
+        type: integer
+        required: true
+      - in: query
+        name: page
+        type: integer
+        description: "页数"
+        required: false
+      - in: query
+        name: pageSize
+        description: "页面大小"
+        type: integer
+        required: false
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/QueryBalanceResp"
+        400:
+          description: "身份校验不通过"
+        403:
+          description: "参数不对"
+        500:
+          description: "服务器内部错误"
+
+  /balance/getflow:
+    get:
+      tags:
+      - balance
+      summary: "查询流水"
+      description: "查询流水"
+      parameters:
+      - in: query
+        name: userId
+        description: "用户Id"
+        type: integer
+        required: true
+      - in: query
+        name: page
+        type: integer
+        description: "页数"
+        required: false
+      - in: query
+        name: pageSize
+        description: "页面大小"
+        type: integer
+        required: false
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/QueryBalanceFowResp"
+        400:
+          description: "身份校验不通过"
+        403:
+          description: "参数不对"
+        500:
+          description: "服务器内部错误"
+
+  /paymode/myList:
+    get:
+      tags:
+      - paymode
+      summary: "查询自己支付方式列表"
+      description: "查询自己支付方式列表"
+      parameters:
+      - in: query
+        name: page
+        description: "页号 1开始 默认是1"
+        type: integer
+        required: false
+      - in: query
+        name: pageSize
+        type: integer
+        description: "页面大小 默认是5"
+        required: false
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/QueryPaymodeListResp"
+        400:
+          description: "身份校验不通过"
+        403:
+          description: "参数不对"
+        500:
+          description: "服务器内部错误"
+
+  /paymode/userList:
+    get:
+      tags:
+      - paymode
+      summary: "查询用户已开启的支付方式列表"
+      description: "查询用户已开启的支付方式列表"
+      parameters:
+      - in: query 
+        name: userId
+        description: "用户Id"
+        type: string
+        required: true
+      - in: query
+        name: page
+        description: "页号 1开始 默认是1"
+        type: integer
+        required: false
+      - in: query
+        name: pageSize
+        type: integer
+        description: "页面大小 默认是5"
+        required: false
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/QueryPaymodeListResp"
+        400:
+          description: "身份校验不通过"
+        403:
+          description: "参数不对"
+        500:
+          description: "服务器内部错误"
+
+  /paymode/get:
+    get:
+      tags:
+      - paymode
+      summary: "查询单个记录"
+      description: "查询单个记录"
+      parameters:
+      - in: query 
+        name: id
+        description: "记录id"
+        type: string
+        required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/PaymodeInfo"
+        400:
+          description: "身份校验不通过"
+        403:
+          description: "参数不对"
+        500:
+          description: "服务器内部错误"
+
+  /paymode/add:
+    post:
+      tags:
+      - paymode
+      summary: "新增支付方式"
+      description: "新增支付方式"
+      parameters:
+      - in: body
+        name: body
+        description: "新增支付方式请求"
+        required: true
+        schema:
+          $ref: '#/definitions/PostPaymodeRequest'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/PostPaymodeResponse"
+        400:
+          description: "身份校验不通过"
+        403:
+          description: "参数不对"
+        500:
+          description: "服务器内部错误"          
+
+  /paymode/update:
+    post:
+      tags:
+      - paymode
+      summary: "支付方式"
+      description: "修改支付方式"
+      parameters:
+      - in: body
+        name: body
+        description: "修改支付方式请求"
+        required: true
+        schema:
+          $ref: '#/definitions/PaymodeInfo'
+      responses:
+        200:
+          description: OK
+        400:
+          description: "身份校验不通过"
+        403:
+          description: "参数不对"
+        500:
+          description: "服务器内部错误" 
+          
+  /accounts/profile:
+    get:
+      tags:
+      - account
+      summary: 获取用户个人资料
+      description: 获取用户个人资料
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/GetProfileResponse'
+          description: OK
+        '403':
+          description: 身份过期
+        '500':
+          description: 服务器内部错误
+      security:
+      - api_key: []
+
+    put:
+      tags:
+      - account
+      summary: 修改用户个人资料
+      description: 修改用户个人资料
+      parameters:
+      - in: body
+        name: body
+        description: 请求修改
+        required: true
+        schema:
+          $ref: '#/definitions/PutProfileRequest'
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/PutProfileResponse'
+          description: OK
+        '403':
+          description: 身份过期
+        '400':
+          description: 错误请求重复提交
+        '500':
+          description: 服务器内部错误
+      security:
+      - api_key: []
+      
+  /asset-mgmt/assets:
+    get:
+      tags: ["asset-management"]
+      summary: 获取账户资产
+      description: 获取账户资产
+      responses:
+        200:
+          schema:
+            $ref: '#/definitions/GetAssetsResponse'
+          description: OK
+        404:
+          description: 发送失败
+      security:
+      - api_key: []
+
+securityDefinitions: {api_key: {type: apiKey, name: n, in: header}}
+
+definitions:
+  GetAssetsResponse:
+    type: array
+    description: 资产详情列表
+    items:
+      type: object
+      description: 资产详情
+      properties:
+        coinName:
+          type: string
+          description: 币简称
+          example: "BTC"
+        balance:
+          type: string
+          description: 可用金额
+          example: 11.0
+        frozen:
+          type: string
+          description: 冻结金额
+          example: 12.0
+  GetProfileResponse:
+    type: object
+    description: 账户详情
+    properties:
+      name:
+        type: string
+        description: 账户登录名
+        example: "张三"
+
+  PutProfileRequest:
+    type: object
+    description: 账户详情
+    required: [name]
+    properties:
+      name:
+        type: string
+        format: name
+        description: 用户姓名
+        example: 张三
+  PutProfileResponse:
+    type: object
+    description: 账户详情
+    properties:
+      uid:
+        type: integer
+        description: 账户ID
+      name:
+        type: string
+        description: 账户登录名
+
+  CreateAdRequest:
+    type: object
+    description: "新建广告请求"
+    properties:
+      type:
+        description: "交易类型 1 买币广告 2 卖币广告"
+        type: integer
+      currencyId:
+        description: "币种id"
+        type: string
+      price:
+        description: "价格"
+        type: string
+      amount:
+        description: "数量"
+        type: string
+      minLimit:
+        description: "最小交易额度"
+        type: string
+      maxLimit:
+        description: "最大交易额度"
+        type: string
+      remark:
+        description: "交易备注"
+        type: string
+
+  CreateAdResp:
+    type: object
+    description: 新建广告响应
+    properties:
+      adId:
+        description: 广告Id
+        type: string
+        example: 260804284445233152
+
+  AdvertisementInfo:
+    type: object
+    description: "广告信息"
+    properties:
+      adId:
+        description: "广告Id"
+        type: string
+      userId:
+        description: "用户Id"
+        type: string
+      status:
+        description: "广告状态"
+        type: integer
+      amount:
+        description: "交易数量"
+        type: string
+      tradeType:
+        description: "交易类型 1 买币广告 2 卖币广告"
+        type: integer
+      currencyId:
+        description: "数字币id"
+        type: string
+      price:
+        description: "价格"
+        type: string
+      minLimit:
+        description: "最小交易限额 单位元"
+        type: string
+      maxLimit:
+        description: "最大交易限额 单位元"
+        type: string
+      remark:
+        description: "交易备注信息"
+        type: string
+
+  AdListResp:
+    description: 广告列表
+    properties:
+      meta:
+        $ref: '#/definitions/Pagination'
+      items:
+        type: array
+        description: 广告列表
+        items:
+          type: object
+          description: 广告记录
+          $ref: '#/definitions/AdvertisementInfo'
+  CreateOrderResp:
+    type: object
+    description: 新建订单响应
+    properties:
+      orderId:
+        description: 订单id
+        type: string
+        example: 262311126518337536
+
+  OrderInfo:
+    type: object
+    description: "订单信息"
+    properties:
+      userId:
+        description: "下单用户Id"
+        type: string
+      orderId:
+        description: "订单Id"
+        type: string
+      adId:
+        description: "广告id"
+        type: string
+      sellerId:
+        description: "卖家id"
+        type: string
+      buyerId:
+        description: "买家id"
+        type: string
+      currencyId:
+        description: "币种id"
+        type: string
+      paymodeId:
+        description: "支付方式id"
+        type: string
+      type:
+        description: "订单类型 1 买单 2 卖单"
+        type: integer
+      payNote:
+        description: "付款备注码"
+        type: string
+      amount:
+        description: "数量"
+        type: string
+      price:
+        description: "价格"
+        type: string
+      total:
+        description: "总价"
+        type: string
+      status:
+        description: "订单状态"
+        type: integer
+      complainId:
+        description: "申诉记录id"
+        type: integer
+      orderTime:
+        description: "下单时间戳（秒）"
+        type: integer
+      cancelTime:
+        description: "取消时间（秒）"
+        type: integer
+      paidTime:
+        description: "支付时间（秒）"
+        type: integer
+      completeTime:
+        description: "完成时间（秒）"
+        type: integer
+
+  OrderListResp:
+    description: 订单列表
+    properties:
+      meta:
+        $ref: '#/definitions/Pagination'
+      items:
+        type: array
+        description: 广告列表
+        items:
+          type: object
+          description: 广告记录
+          properties:
+            schema:
+              $ref: '#/definitions/OrderInfo'
+  
+  OrderCancelTimesResp:
+    description: "取消次数查询响应"
+    properties:
+      times:
+        description: "取消次数"
+        type: integer
+        example: 3
+
+  BalanceInfo:
+    type: object
+    description: "otc账目信息"
+    properties:
+      userId:
+        description: "用户Id"
+        type: string
+      currencyId:
+        description: "数字币id"
+        type: string
+      available:
+        description: "有效余额"
+        type: string
+      frozed:
+        description: "冻结余额"
+        type: string
+  
+  BalanceFlowInfo:
+    type: object
+    description: "otc账目流水"
+    properties:
+      userId:
+        description: "用户Id"
+        type: string
+      operation:
+        description: "交易动作 1 冻结 2 解冻 3 买入 4 卖出 5 转入 6 转出"
+        type: integer   
+      currencyId:
+        description: "数字币id"
+        type: string      
+      amount:
+        description: "数量"
+        type: string
+      createTime:
+        description: "记录时间"
+        type: string
+        example: "2018-11-16T06:30:58.000+0000"
+
+
+  QueryBalanceResp:
+    description: 账目列表
+    properties:
+      meta:
+        $ref: '#/definitions/Pagination'
+      items:
+        type: array
+        description: 账目列表
+        items:
+          type: object
+          description: 账目记录
+          $ref: '#/definitions/BalanceInfo'
+
+  QueryBalanceFowResp:
+    description: 账户流水列表
+    properties:
+      meta:
+        $ref: '#/definitions/Pagination'
+      items:
+        type: array
+        description: 流水列表
+        items:
+          type: object
+          description: 流水记录
+          $ref: '#/definitions/BalanceFlowInfo'
+
+  PaymodeInfo:
+    type: object
+    description: "支付方式信息"
+    properties:
+      id:
+        description: "记录id"
+        type: string
+      userId:
+        description: "用户Id"
+        type: string
+      type:
+        description: "支付类型 1 微信  2 支付宝 3 银行"
+        type: integer
+      account:
+        description: "账号 微信支付宝或者银行卡号"
+        type: string
+      qrcode:
+        description: "二维码地址"
+        type: string
+      bankName:
+        description: "银行名字"
+        type: string
+      branchName:
+        description: "支行名字"
+        type: string
+      status:
+        description: "状态 0 初始值 1 启用 2 禁用"
+        type: integer
+
+  PostPaymodeRequest:
+    type: object
+    description: "支付方式信息"
+    properties:
+      type:
+        description: "支付类型 1 微信  2 支付宝 3 银行"
+        type: integer
+      account:
+        description: "账号 微信支付宝或者银行卡号"
+        type: string
+      qrcode:
+        description: "二维码地址"
+        type: string
+      bankName:
+        description: "银行名字"
+        type: string
+      branchName:
+        description: "支行名字"
+        type: string
+
+  PostPaymodeResponse:
+    type: object
+    description: "新建支付方式响应"
+    properties:
+      id:
+        description: "记录id"
+        type: string
+
+  QueryPaymodeListResp:
+    description: 支付方式列表
+    properties:
+      meta:
+        $ref: '#/definitions/Pagination'
+      items:
+        type: array
+        description: 支付方式列表
+        items:
+          type: object
+          description: 支付方式记录
+          $ref: '#/definitions/PaymodeInfo'
+
+  Pagination:
+    type: object
+    description: 获取列表的源请求信息
+    properties:
+      requestedPage:
+        type: integer
+        description: 请求的页码
+        example: 1
+      page:
+        type: integer
+        description: 实际的页码
+      totalPage:
+        type: integer
+        description: 总页码数
+      itemsPerPage:
+        type: integer
+        description: 每页条目数
+      totalCount:
+        type: integer
+        description: 总条数
+      links:
+        type: array
+        description: 相关链接
+        items:
+          type: object
+          description: 链接信息
+          properties:
+            rel:
+              type: string
+              description: 相对于
+              enum:
+              - self
+              - first
+              - previous
+              - next
+              - last
+            link:
+              type: string
+              description: 链接

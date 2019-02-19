@@ -1,0 +1,7 @@
+requires
+pytest
+Faker
+ruamel.yaml
+jsonpath
+jinja2
+sqlalchemy

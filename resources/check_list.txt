@@ -1,0 +1,97 @@
+crush-main:
+    exchange 交易所相关
+        GET /exchanges/exchanges 交易所排行列表-邹凌威
+
+    market 市场相关
+        GET /markets 获取交易对市场列表-邹凌威
+    project:
+        GET /projects/{id} 获取项目详情
+        GET /projects/coins 获取币种列表
+        GET /projects 获取项目列表
+        GET /projects/search 搜索项目名称列表
+
+crush-staff:
+    staff-management:
+        POST /login 账号登陆
+        GET /staffs/info 登录成功后获取职员详情
+
+    account-management:
+        POST /accounts/verify 验证码验证
+
+    audit:
+        GET /accounts/individual-audits 个人用户实名审核列表 - 李欣
+        POST /accounts/individual-audits 提交个人用户实名审核 - 李欣
+
+    sponsors-management:
+        POST /staff/sponsors 新增保荐方信息
+
+crush-tenant:
+    verification:
+        POST /accounts/verifyLoginOrPassword 验证码验证
+
+    account:
+        POST /accounts/register 注册用户
+        POST /accounts/login 账户登录
+        POST /accounts/logout 账户注销
+        POST /accounts/bind-phone 绑定手机号
+        GET /accounts/account-info 获取账户状态信息
+        POST /accounts/certifications/individual 申请个人实名认证
+        POST /accounts/certifications/company　申请企业实名认证
+
+    exchange-management:
+        GET /tags 获取标签信息
+        GET /exchange/exchange-name-verify 验证交易所名称状态
+        GET /exchange/exchange-status 获取交易所状态
+        GET /exchange/exchange-id 获取交易所id
+        GET /exchange 获取交易所详情
+		POST /exchange 提交交易所申请信息
+
+    exchange-management:
+        GET /tags 获取标签信息-邹凌威
+
+crush-venture:
+    project:
+        GET /projects 获取项目列表
+        POST /applications/check-project-name 校验项目名称是否已存在
+        POST /applications 申请项目
+        GET /applications 查看申请列表
+        PUT /applications/{id}/set-sponsor 设置项目保荐机构
+        GET /applications/num 获取申请中的项目数量
+        GET /applications/{id} 查看申请详情
+        PUT /applications/{id} 修改申请信息
+        GET /projects 获取项目列表
+        GET /projects/{id} 获取项目详情
+        GET /projects/coins 获取币种列表
+        GET /contacts/invite-number 获取项目未处理的邀请记录数量
+        GET /contacts/check 判断项目与交易所是否已经申请对接
+        PUT /applications/{id}/set-sponsor 设置项目保荐机构
+
+    account:
+        POST /accounts/login 账户登录
+        POST /accounts/register 注册用户
+        POST /accounts/certifications/individual 申请个人实名认证
+        GET /accounts/account-info 获取账户状态信息
+
+    sponsors-management:
+        GET /sponsors 项目方获取保荐方列表
+
+    project-management：
+        GET /projects/{id}/contacts 获取对接交易所列表
+
+
+crush-sponsor:
+    sponsor:
+        POST /sponsor/login 账号登陆
+        POST /sponsor/login-verify 登录二次验证
+        GET /sponsors-ranking 获取保荐方排行榜
+        GET /projects 获取项目申请列表
+        GET /projects/{id} 获取项目申请详情
+        PUT /projects/sponsor 保荐项目
+        GET /sponsor-record-success 获取项目保荐成功列表
+        GET /sponsor-record-failure 获取项目保荐失败列表
+
+    sponsors-project 保荐项目管理-王文洋
+
+        GET /projects 获取项目申请列表
+        PUT /projects/sponsor 保荐项目
+
